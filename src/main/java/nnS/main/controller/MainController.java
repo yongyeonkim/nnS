@@ -13,6 +13,7 @@ public class MainController {
 	@RequestMapping(value="/main")
     public ModelAndView main(CommandMap commandMap) throws Exception{
     	ModelAndView mv = new ModelAndView("/member/main/main");
+    	
     	return mv; 
     }
 }
