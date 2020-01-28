@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+
 <meta charset="UTF-8">
 <style type="text/css">
 
@@ -70,17 +73,38 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 </head>
 <body>
 
-  <div id="content">
    <div id="vertical_tab-container">
       <ul>
-         <li class="selected"><a href="goodsList">전체상품</a></li>
-         <li><a href="goodsList">인기상품</a></li>
-         <li><a href="goodsList">신규상품</a></li>
-         <li><a href="goodsList">카테고리</a></li>
+         <li class="selected"><a href="shop">전체상품</a></li>
+         <li><a href="shop">인기상품</a></li>
+         <li><a href="shop">신규상품</a></li>
+         <li><a href="shop">카테고리</a></li>
       </ul>
    </div>
    <div id="main-container">
-	<table border="1" align="center">
+   
+   		<table class="board_list">
+		<colgroup>
+			<col width="10%" />
+			<col width="*" />
+			<col width="15%" />
+			<col width="20%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th scope="col">글번호</th>
+				<th scope="col">제목</th>
+				<th scope="col">조회수</th>
+				<th scope="col">작성일</th>
+				<th scope="col">작성시간</th>
+			</tr>
+		</thead>
+		<tbody>
+		
+		</tbody>
+		</table>
+   
+	<!-- <table border="1" align="center">
 		<li>
           전체상품
       	</li>
@@ -126,9 +150,75 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
             </td>
           </tr>
       </table>
-	</table>
+	</table> -->
    </div>
-</div>
+   
+	<div id="PAGE_NAVI"></div>
+    <input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
+    
+    <%@ include file="/WEB-INF/include/include-body.jspf" %>
+    
+	
 
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			fn_selectGoodsList(1);
+		});
+
+		function fn_selectGoodsList(pageNo) {
+			var comAjax = new ComAjax();
+			comAjax.setUrl("<c:url value='/shop/selectGoodsList' />");
+			comAjax.setCallback("fn_selectGoodsListCallback");
+			comAjax.addParam("PAGE_INDEX", pageNo);
+			comAjax.addParam("PAGE_ROW", 15);
+			comAjax.ajax();
+		}
+
+		function fn_selectGoodsListCallback(data) {
+			var total = data.TOTAL;
+			var body = $("table>tbody");
+			body.empty();
+			if (total == 0) {
+				var str = "<tr>" + "<td colspan='4'>조회된 결과가 없습니다.</td>"
+						+ "</tr>";
+				body.append(str);
+			} else {
+				var params = {
+					divId : "PAGE_NAVI",
+					pageIndex : "PAGE_INDEX",
+					totalCount : total,
+					recordCount : 15,
+					eventName : "fn_selectGoodsList"
+				};
+				gfn_renderPaging(params);
+
+				var str = "";
+				$.each(
+								data.list,
+								function(key, value) {
+									str += "<tr>"
+											+ "<td>"
+											+ value.GOODS_NUM
+											+ "</td>"
+											+ "<td class='title'>"
+											+ "<a href='#this' name='title'>"
+											+ value.GOODS_TITLE
+											+ "</a>"
+											+ "<input type='hidden' id='IDX' value=" + value.GOODS_NUM + ">"
+											+ "</td>" + "<td>" + value.GOODS_COUNT
+											+ "</td>" + "<td>" + value.GOODS_DATE
+											+ "</td>" + "<td>" + value.GOODS_TIME
+											+ "</td>" + "</tr>";
+								});
+				body.append(str);
+
+				/* $("a[name='title']").on("click", function(e) { //제목
+					e.preventDefault();
+					fn_openBoardDetail($(this));
+				}); */
+			}
+		}
+	</script>
 </body>
 </html>

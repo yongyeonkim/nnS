@@ -6,7 +6,9 @@
 	<select id="selectGoodsList" parameterType="hashmap" resultType="hashmap">
 		<include refid="common.pagingPre"/>
 		<![CDATA[
-			SELECT  G.GOODS_NUM,
+			SELECT  
+					ROW_NUMBER() OVER (ORDER BY G.GOODS_NUM DESC) RNUM,
+					G.GOODS_NUM,
 			        G.GOODS_TITLE,
 			        G.GOODS_PRICE,
 			        M.MEM_ID,
@@ -18,7 +20,7 @@
 			        G.GOODS_STATUS,
 			        G.GOODS_THUMBNAIL,
 			        G.GOODS_TSTATUS,
-			        NVL(GL.TOTAL_COUNT, 0) AS TOTAL_COUNT
+			        NVL(GL.TOTAL_COUNT, 0) AS TOTAL_COUNT2
 			FROM    GOODS G,
 			        (
 			         SELECT  MEM_NUM, MEM_ID
