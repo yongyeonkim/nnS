@@ -155,7 +155,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
             <col width="15%">
             <col width="*"/>
          </colgroup>
-         <center><h2>자유게시판 작성</h2></center>
+         <center><h2>자유게시판 수정</h2></center>
          <tbody>
          	<tr>
          		<td scope="row">분류</td>
@@ -177,18 +177,18 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          	</tr>
          	<tr>
          		<td>작성자</td>
-         		<td><input type="text" id="writer" name="WRITER" class="wdp_90"></input></td>         	
+         		<td><input type="text" id="writer" name="WRITER" class="wdp_90" value="${map.WRITER }"></input></td>         	
          	</tr>
          	
          	<tr>
          		<td>제목</td>
-         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90"/></td>
+         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90" value="${map.TITLE}"/></td>
          	</tr>
          	
          	<tr>
          		<td>내용</td>
          		<td colspan="3" class="view_text">
-                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
+                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS" value="${map.CONTENT }"></textarea>
                </td>
          	</tr>
          	<tr>
