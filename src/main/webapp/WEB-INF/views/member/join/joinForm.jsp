@@ -168,13 +168,17 @@
 					생년월일<input type="text" id="mem_birth" name="mem_birth"> 
 				</div>
 				
-					성별<input type="radio" id="mem_gen_man" name="mem_gen_man">
-						<input type="radio" id="mem_gen_woman" name="mem_gen_woman"> 
+				<div>
+					<form>
+						<input type="radio" name="mem_gen" value="남성"/>남성
+						<input type="radio" name="mem_gen" value="여성"/>여성
+					</form>
+				</div>
 				
 				<div>
 					<input type="hidden" id="mem_email" name="mem_email">
 					이메일<input type="text" id="email1" name="email1"> 
-					<p>@</p>
+					@
 					<input type="text" id="email2" name="email2" value=""> 
 				
 					<select id="email">
@@ -188,7 +192,7 @@
 				
 				<div>
 					<input type="hidden" id="mem_phone" name="mem_phone">
-					<select id="phone1" name="phone1">
+					휴대전화<select id="phone1" name="phone1">
 						<option value="010">010</option>
 						<option value="011">011</option>
 						<option value="016">016</option>
@@ -196,10 +200,22 @@
 						<option value="018">018</option>
 						<option value="019">019</option>
 					</select> 
-					<p>-</p>
-					<input type="number" id="phone2" name="phone2"> 
-					<p>-</p>
-					<input type="number" id="phone3" name="phone3">
+					
+					-<input type="number" id="phone2" name="phone2"> 
+					
+					-<input type="number" id="phone3" name="phone3">
+				</div>
+				
+				<div>
+					우편번호<input type="text" id="zipcode" name="zipcode">
+				</div>
+				
+				<div>
+					집 주소<input type="text" id="address1" name="address1">
+				</div>
+				
+				<div>
+					상세 주소<input type="text" id="address2" name="address2">
 				</div>
 			
 				<div>
@@ -222,8 +238,8 @@
 					</div>
 				</div>
 			</div>
-			<button id="join">가입완료</button>
-			<button onclick="back();" type="button">취소하기</button>
+			<button id="join">회원가입</button>
+			<button onclick="back();" type="button">취소</button>
 
 		</form>
 
