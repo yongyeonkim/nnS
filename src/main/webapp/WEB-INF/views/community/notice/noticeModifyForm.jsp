@@ -141,8 +141,8 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 <div id="content">
    <div id="vertical_tab-container">
       <ul>
-         <li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
+         <li class="selected"><a href="noticeList">공지사항</a></li>
+         <li><a href="boardList">자유게시판</a></li>
          <li><a href="reportList">신고게시판</a></li>
          <li><a href="qnaList">Q&A게시판</a></li>
       </ul>
@@ -155,7 +155,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
             <col width="15%">
             <col width="*"/>
          </colgroup>
-         <center><h2>자유게시판 작성</h2></center>
+         <center><h2>공지사항 수정</h2></center>
          <tbody>
          	<tr>
          		<td scope="row">분류</td>
@@ -164,6 +164,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
             		<select name="keyField">
 					
 					<!-- <option value="choice">선택</option>-->
+					<option value="notice">공지사항</option>
 					
 					<option value="board">자유게시판</option>
 
@@ -177,18 +178,18 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          	</tr>
          	<tr>
          		<td>작성자</td>
-         		<td><input type="text" id="writer" name="WRITER" class="wdp_90"></input></td>         	
+         		<td><input type="text" id="writer" name="WRITER" class="wdp_90" value="${map.WRITER}"></input></td>         	
          	</tr>
          	
          	<tr>
          		<td>제목</td>
-         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90"/></td>
+         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90" value="${map.TITLE}"/></td>
          	</tr>
          	
          	<tr>
          		<td>내용</td>
          		<td colspan="3" class="view_text">
-                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
+                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS" value="${map.CONTNET}"></textarea>
                </td>
          	</tr>
          	<tr>
@@ -223,12 +224,12 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       $(document).ready(function(){
          $("#list").on("click", function(e){ //목록으로 버튼
             e.preventDefault();
-            fn_openBoardList();
+            fn_openNoticeList();
          });
          
          $("#write").on("click", function(e){ //작성하기 버튼
             e.preventDefault();
-            fn_insertBoard();
+            fn_insertNotice();
          });
          $("#addFile").on("click", function(e){
             e.preventDefault();
@@ -240,15 +241,15 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          });
       });
       
-      function fn_openBoardList(){
+      function fn_openNoticeList(){
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/cummunity/boardList' />");
+         comSubmit.setUrl("<c:url value='/nnS/cummunity/noticeList' />");
          comSubmit.submit();
       }
       
-      function fn_insertBoard(){
+      function fn_insertNotice(){
          var comSubmit = new ComSubmit("frm");
-         comSubmit.setUrl("<c:url value='/nnS/community/boardWrite' />");
+         comSubmit.setUrl("<c:url value='/nnS/community/noticeWrite' />");
          comSubmit.submit();
       }
       

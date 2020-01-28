@@ -143,10 +143,11 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 <div id="content">
 	<div id="vertical_tab-container">
 	<ul>
-		<li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
-         <li><a href="reportList">신고게시판</a></li>
-         <li><a href="qnaList">Q&A게시판</a></li>
+		<li><a href="accountModify">회원정보 변경</a></li>
+         <li><a href="pwModify">비밀번호 변경</a></li>
+         <li><a href="myInfoDelete">회원탈퇴</a></li>
+         <li class="selected"><a href="reportList">신고내역</a></li>
+         <li><a href="qnaList">Q&A</a></li>
 	</ul>
 	</div>
 	<div id="main-container">
@@ -157,27 +158,20 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			<col width="15%"/>
 			<col width="35%"/>
 		</colgroup>
-		<caption><h2>자유게시판</h2></caption>
+		<caption><h2>내 신고내역</h2></caption>
 		<p/>
 		<tbody>
 			<tr>
-				<th scope="row">글 번호</th>
-				<td>${map.NUM }
+				<th scope="row">신고유형</th>
+				<td>${map.STATUS }
 				<input type="hidden" id="NUM" name="NUM" value="${map.NUM }"></td>
-				<th scope="row">조회수</th>
-				<td>${map.COUNT }</td>
-			</tr>
-			<tr>
-				<th scope="row">작성자</th>
-				<td>${map.WRITER }</td>
-				<th scope="row">작성일자</th>
-				<td>${map.DATE }</td>
 			</tr>
 			<tr>
 				<th scope="row">제목</th>
 				<td colspan="3">${map.TITLE }</td>
 			</tr>
 			<tr>
+				<th scope="row">내용</th>
 				<td colspan="4"><pre>${map.CONTENT }</pre></td>
 			</tr>
 			<tr>
@@ -195,8 +189,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	<center>
 	<br/>
 	<a href="#this" class="btn" id="list">목록으로</a>
-	<a href="#this" class="btn" id="update">수정하기</a>
-	<a href="#this" class="btn" id="delete">삭제하기</a>
+	<a href="#this" class="btn" id="delete">신고취소</a>
 	</center>
 	<br/>
 	<center>
@@ -224,54 +217,42 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	
 
 	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#list").on("click", function(e){ //목록으로 버튼
-				e.preventDefault();
-				fn_openBoardList();
-			});
-			
-			$("#update").on("click", function(e){ //수정하기 버튼
-				e.preventDefault();
-				fn_openBoardUpdate();
-			});
-			$("#delete").on("click", function(e){ //삭제하기 버튼
-				e.preventDefault();
-				fn_deleteBoard();
-			});
-			$("a[name='file']").on("click", function(e){
-				e.preventDefault();
-				fn_downloadFile($(this).attr('id'));
-			});
+	$(document).ready(function(){
+		$("#list").on("click", function(e){ //목록으로 버튼
+			e.preventDefault();
+			fn_openReportList();
 		});
-		
-		function fn_openBoardList(){
-			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/boardList' />");
-			comSubmit.submit();
-		}
-		
-		function fn_openBoardUpdate(){
-			var idx = "${map.NUM}";
-			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/boardUpate' />");
-			comSubmit.addParam("NUM", num);
-			comSubmit.submit();
-		}
+
+		$("#delete").on("click", function(e){ //삭제하기 버튼
+			e.preventDefault();
+			fn_deleteReport();
+		});
+		$("a[name='file']").on("click", function(e){
+			e.preventDefault();
+			fn_downloadFile($(this).attr('id'));
+		});
+	});
 	
-		function fn_deleteBoard(){
-			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/deleteBoard' />");
-			comSubmit.addParam("NUM", $("#NUM").val());
-			comSubmit.submit();
-			
-		}
-		function fn_downloadFile(obj){
-			var idx=obj;
-			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/common/downloadFile'/>");
-			comSubmit.addParam("NUM",num);
-			comSubmit.submit();
-		}
+	function fn_openReportList(){
+		var comSubmit = new ComSubmit();
+		comSubmit.setUrl("<c:url value='/nnS/member/myPage/reportList' />");
+		comSubmit.submit();
+	}
+
+	function fn_deleteReport(){
+		var comSubmit = new ComSubmit();
+		comSubmit.setUrl("<c:url value='/nnS/member/myPage/Report' />");
+		comSubmit.addParam("NUM", $("#NUM").val());
+		comSubmit.submit();
+		
+	}
+	function fn_downloadFile(obj){
+		var idx=obj;
+		var comSubmit = new ComSubmit();
+		comSubmit.setUrl("<c:url value='/nnS/common/downloadFile'/>");
+		comSubmit.addParam("NUM",num);
+		comSubmit.submit();
+	}
 	</script>
 </body>
 </html>

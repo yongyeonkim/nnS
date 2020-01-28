@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>notice</title>
+	<title>myReport</title>
 	<meta charset="EUC-KR">
 	<style type="text/css">
 
@@ -143,28 +143,28 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 <div id="content">
 	<div id="vertical_tab-container">
 	<ul>
-		<li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
-         <li><a href="reportList">신고게시판</a></li>
-         <li><a href="qnaList">Q&A게시판</a></li>
+		<li><a href="accountModify">회원정보 변경</a></li>
+         <li><a href="pwModify">비밀번호 변경</a></li>
+         <li><a href="myInfoDelete">회원탈퇴</a></li>
+         <li class="selected"><a href="reportList">신고내역</a></li>
+         <li><a href="qnaList">Q&A</a></li>
 	</ul>
 	</div>
 	<div id="main-container">
-	<table border="1" align="center" class="notice_list">
+	<table border="1" align="center" class="report_list">
 		<colgroup>
 			<col width="10%" />
 			<col width="*" />
 			<col width="15%" />
 			<col width="20%" />
 		</colgroup>
-		<caption><h2>공지사항</h2></caption>
+		<caption><h2>내신고내역</h2></caption>
 		<thead>
 			<tr>
-				<th scope="col">글번호</th>
+				<th scope="col">신고건수</th>
 				<th scope="col">제목</th>
-				<th scope="col">작성자</th>
-				<th scope="col">작성일</th>
-				<th scope="col">조회수</th>
+				<th scope="col">신고일자</th>
+				<th scope="col">상태</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -174,10 +174,10 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 						<tr>
 							<td>${row.NUM }</td>
 							<td class="title"><a href="#this" name="title">${row.TITLE }</a>
-								<input type="hidden" id="IDX" value="${row.NUM }"></td>
-							<td>${row.WRITER }</td>
+								<input type="hidden" id="NUM" value="${row.NUM }"></td>
+							<td>${row.TITLE }</td>
 							<td>${row.DATE }</td>
-							<td>${row.COUNT }</td>
+							<td>${row.STATUS }</td>
 						</tr>
 					</c:forEach>
 				</c:when>
@@ -196,40 +196,25 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 
 	<br />
  
-	<%-- <c:if test="${session_member_name == 'admin' }"> 
-		<a href="#this" class="btn" id="write">글쓰기</a>
-	</c:if> --%>
-	
 
 	<script type="text/javascript">
 		$(document).ready(function() {
 			fn_selectBoardList(1);
-			$("#write").on("click", function(e) { //글쓰기 버튼
-				e.preventDefault();
-				fn_openBoardWrite();
-			});
-
 			$("a[name='title']").on("click", function(e) { //제목 
 				e.preventDefault();
 				fn_openBoardDetail($(this));
 			});
 		});
 
-		function fn_openBoardWrite() {
-			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeWriteForm' />");
-			comSubmit.submit();
-		}
-	
 		function fn_openBoardDetail(obj) {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeDetail' />");
+			comSubmit.setUrl("<c:url value='/nnS/myPage/boardDetail' />");
 			comSubmit.addParam("NUM", obj.parent().find("#NUM").val());
 			comSubmit.submit();
 		}
 		function fn_selectBoardList(pageNo) {
 			var comAjax = new ComAjax();
-			comAjax.setUrl("<c:url value='/nnS/selectBoardList' />");
+			comAjax.setUrl("<c:url value='/nnS/myPage/selectBoardList' />");
 			comAjax.setCallback("fn_selectBoardListCallback");
 			comAjax.addParam("PAGE_INDEX", pageNo);
 			comAjax.addParam("PAGE_ROW", 15);
@@ -267,7 +252,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 											+ "<a href='#this' name='title'>"
 											+ value.TITLE
 											+ "</a>"
-											+ "<input type='hidden' id='IDX' value=" + value.NUM + ">"
+											+ "<input type='hidden' id='NUM' value=" + value.NUM + ">"
 											+ "</td>" + "<td>" + value.COUNT
 											+ "</td>" + "<td>" + value.DATE
 											+ "</td>" + "</tr>";
