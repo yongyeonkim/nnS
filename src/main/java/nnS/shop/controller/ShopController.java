@@ -1,23 +1,49 @@
 package nnS.shop.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import nnS.common.common.CommandMap;
+import nnS.shop.service.ShopServiceImpl;
+
 @Controller
 public class ShopController {
 
+	@Resource(name="shopService")
+	private ShopServiceImpl shopService;
+	
 	@RequestMapping(value="/shop")
 	public ModelAndView shopMain() throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsList");
-
 		return mv;
+	}
+	
+	@RequestMapping(value="/shop/selectGoodsList")
+	public ModelAndView selectGoodsList(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("jsonView");
+    	
+    	List<Map<String,Object>> list = shopService.selectGoodsList(commandMap.getMap());
+    	mv.addObject("list", list);
+        if(list.size() > 0){
+            mv.addObject("TOTAL", list.get(0).get("TOTAL_COUNT"));
+        }
+        else{
+            mv.addObject("TOTAL", 0);
+        }
+    	
+    	return mv;
 	}
 	
 	@RequestMapping(value="/shop/allGoodsList")
 	public ModelAndView shopAllGoodsList() throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsList");
-
+		
 		return mv;
 	}
 	
