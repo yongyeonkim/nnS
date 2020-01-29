@@ -7,16 +7,17 @@ import org.springframework.stereotype.Repository;
 
 import nnS.common.dao.AbstractDAO;
 
-@Repository("NoticeDAO")
+@Repository("noticeDAO")
 public class NoticeDAO extends AbstractDAO {
 
-	// 공지사항 리스트(페이징)
+	// 공지사항 리스트
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectNoticeList(Map<String, Object> map) throws Exception{
 		return (List<Map<String,Object>>)selectPagingList("notice.selectNoticeList", map);
 	}
 	
 	// 공지사항 상세보기
+	@SuppressWarnings("unchecked")
 	public Map<String,Object> selectNoticeDetail(Map<String, Object> map) throws Exception{
 		return (Map<String, Object>)selectOne("notice.selectNoticeDetail", map);
 	}

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Footer 시작 -->
 <div id="footer">
 	<div class="foot_area">
@@ -36,7 +37,7 @@
 				</div>
 			
 				<div class="qrcode">
-					<p><img src="resources/images/mainlogo.png" style="width:100px;height: auto;"/></p>
+					<p><img src="<c:url value="/resources/images/mainlogo.png"/>" style="width:100px;height: auto;"/></p>
 					<div class="utilMenu_unit2">
 						<p class="escrow_info">나눠써샵은 통신판매중개자로서 중고거래마켓 나눠써샵의 거래 당사자가 아니며,<br/>입점판매가 등록한 상품정보 및 거래에 대해 책임을 지지 않습니다.<br/>
 					</div>

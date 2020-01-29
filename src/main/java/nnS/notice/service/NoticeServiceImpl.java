@@ -14,7 +14,7 @@ import nnS.notice.dao.NoticeDAO;;
 public class NoticeServiceImpl implements NoticeService {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	@Resource(name="NoticeDAO")
+	@Resource(name="noticeDAO")
 	private NoticeDAO noticeDAO;
 
 	@Override

@@ -1,4 +1,8 @@
-<%@page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="<c:url value='/js/common.js?version=3'/>" charset="utf-8"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -143,8 +147,8 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 <div id="content">
 	<div id="vertical_tab-container">
 	<ul>
-		<li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
+		<li class="selected"><a href="noticeList">공지사항</a></li>
+         <li><a href="boardList">자유게시판</a></li>
          <li><a href="reportList">신고게시판</a></li>
          <li><a href="qnaList">Q&A게시판</a></li>
 	</ul>
@@ -168,38 +172,38 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			</tr>
 		</thead>
 		<tbody>
-			<%-- <c:choose>
+			 <c:choose>
 				<c:when test="${fn:length(list) > 0}">
-					<c:forEach items="${list }" var="row">
+					<c:forEach items="${list}" var="row">
 						<tr>
-							<td>${row.NUM }</td>
-							<td class="title"><a href="#this" name="title">${row.TITLE }</a>
-								<input type="hidden" id="IDX" value="${row.NUM }"></td>
-							<td>${row.WRITER }</td>
-							<td>${row.DATE }</td>
-							<td>${row.COUNT }</td>
+							<td>${row.NOTICE_NUM }</td>
+							<td class="title"><a href="#this" name="title">${row.NOTICE_TITLE }</a>
+								<input type="hidden" id="IDX" value="${row.NOTICE_NUM }"></td>
+							<td>${row.MEM_ID }</td>
+							<td>${row.NOTICE_DATE }</td>
+							<td>${row.NOTICE_COUNT }</td>
 						</tr>
 					</c:forEach>
 				</c:when>
-				<c:otherwise> --%>
-	
+				<c:otherwise>
 					<tr>
 						<td colspan="5">조회된 결과가 없습니다.</td>
 					</tr>
- 			<!-- 	/c:otherwise /c:choose -->
+ 			 	</c:otherwise> 
+ 			 </c:choose>
 		</tbody>
 	</table>
+		<div align="right">
+	<!--  	<:if test="${session_member_name == 'admin' }"> -->
+			<a href="#write" class="btn" id="write">글쓰기</a>
+	<!-- 	</:if>  -->
+		</div>
 	</div>
 	</div>
 	<div id="PAGE_NAVI"></div>
 	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
 
-	<br />
- 
-	<%-- <c:if test="${session_member_name == 'admin' }"> 
-		<a href="#this" class="btn" id="write">글쓰기</a>
-	</c:if> --%>
-	
+	<br />	
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -214,22 +218,22 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				fn_openBoardDetail($(this));
 			});
 		});
-
+		
 		function fn_openBoardWrite() {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeWriteForm' />");
+			comSubmit.setUrl("<c:url value='/community/noticeWriteForm' />");
 			comSubmit.submit();
 		}
 	
 		function fn_openBoardDetail(obj) {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeDetail' />");
+			comSubmit.setUrl("<c:url value='/community/noticeDetail' />");
 			comSubmit.addParam("NUM", obj.parent().find("#NUM").val());
 			comSubmit.submit();
 		}
 		function fn_selectBoardList(pageNo) {
 			var comAjax = new ComAjax();
-			comAjax.setUrl("<c:url value='/nnS/selectBoardList' />");
+			comAjax.setUrl("<c:url value='/community/noticeListPaging' />");
 			comAjax.setCallback("fn_selectBoardListCallback");
 			comAjax.addParam("PAGE_INDEX", pageNo);
 			comAjax.addParam("PAGE_ROW", 15);
