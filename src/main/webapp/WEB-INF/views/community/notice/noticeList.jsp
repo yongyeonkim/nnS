@@ -76,6 +76,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	border-bottom: 1px dashed #ddd;
 	font-size: 1.8em;
 }
+
 .goodsTab_content h3 a{
 	color: #254588;
 }
@@ -160,6 +161,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			<col width="*" />
 			<col width="15%" />
 			<col width="20%" />
+			<col width="5%" />
 		</colgroup>
 		<caption><h2>공지사항</h2></caption>
 		<thead>
@@ -167,30 +169,12 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				<th scope="col">글번호</th>
 				<th scope="col">제목</th>
 				<th scope="col">작성자</th>
-				<th scope="col">작성일</th>
+				<th scope="col">작성일시</th>
 				<th scope="col">조회수</th>
 			</tr>
 		</thead>
 		<tbody>
-			 <c:choose>
-				<c:when test="${fn:length(list) > 0}">
-					<c:forEach items="${list}" var="row">
-						<tr>
-							<td>${row.NOTICE_NUM }</td>
-							<td class="title"><a href="#this" name="title">${row.NOTICE_TITLE }</a>
-								<input type="hidden" id="IDX" value="${row.NOTICE_NUM }"></td>
-							<td>${row.MEM_ID }</td>
-							<td>${row.NOTICE_DATE }</td>
-							<td>${row.NOTICE_COUNT }</td>
-						</tr>
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-					<tr>
-						<td colspan="5">조회된 결과가 없습니다.</td>
-					</tr>
- 			 	</c:otherwise> 
- 			 </c:choose>
+			<!-- 스크립트를 통해 게시글에 대한 정보가 담김 -->
 		</tbody>
 	</table>
 		<div align="right">
@@ -245,7 +229,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			var body = $("table>tbody");
 			body.empty();
 			if (total == 0) {
-				var str = "<tr>" + "<td colspan='4'>조회된 결과가 없습니다.</td>"
+				var str = "<tr align=\"center\">" + "<td colspan='5'>조회된 결과가 없습니다.</td>"
 						+ "</tr>";
 				body.append(str);
 			} else {
@@ -262,19 +246,21 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				var str = "";
 				$.each(
 								data.list,
-								function(key, value) {
-									str += "<tr>"
-											+ "<td>"
-											+ value.NUM
-											+ "</td>"
-											+ "<td class='title'>"
-											+ "<a href='#this' name='title'>"
-											+ value.TITLE
-											+ "</a>"
-											+ "<input type='hidden' id='IDX' value=" + value.NUM + ">"
-											+ "</td>" + "<td>" + value.COUNT
-											+ "</td>" + "<td>" + value.DATE
-											+ "</td>" + "</tr>";
+								
+				function(key, value) {
+					str += "<tr style=\"text-align: center\">"
+							+ "<td>"
+							+ value.RNUM
+							+ "</td>"
+							+ "<td class='title'>"
+							+ "<a href='#this' name='title'>"
+							+ value.NOTICE_TITLE
+							+ "</a>"
+							+ "<input type='hidden' id='IDX' value=" + value.NOTICE_NUM + ">"
+							+ "</td>" + "<td>" + value.MEM_ID
+							+ "</td>" + "<td>" + new Date(value.NOTICE_DATE).toLocaleString()
+							+ "</td>" + "<td>" + value.NOTICE_COUNT
+							+ "</td>" + "</tr>";
 								});
 				body.append(str);
 
