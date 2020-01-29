@@ -159,25 +159,24 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 					            <form id="frm" method="post" action="findIdResult">
 								<br>
 									* 이름 <input type="text" name="MEM_NAME" id="MEM_NAME"><br>
-									<input type="hidden" id="MEM_EMAIL" name="MEM_EMAIL">
 									<div>
 										<input type="hidden" id="mem_email" name="mem_email">
-										* Email<input type="text" id="email1" name="email1"> 
+										* Email<input type="text" id="findIdEmail1" name="findIdEmail1"> 
 										@
-										<input type="text" id="email2" name="email2" value=""> 
+										<input type="text" id="findIdEmail2" name="findIdEmail2" value=""> 
 				
-										<select id="email">
-											<option>직접입력</option>
-											<option>naver.com</option>
-											<option>hanmail.net</option>
-											<option>gmail.com</option>
-											<option>nate.com</option>
+										<select id="email" name="email">
+											<option value="self">직접입력</option>
+											<option value="naver.com">naver.com</option>
+											<option value="hanmail.net">hanmail.net</option>
+											<option value="gmail.com">gmail.com</option>
+											<option value="nate.com">nate.com</option>
 										</select> 
 									</div>
 								</form>
 								<p/>
 								<button id="findid" onclick="fsubmitid();">찾기</button>
-								<input type="button" value="취소" onclick="document.location.href='/nnS/main'"/>
+								<input type="button" value="취소" onclick="back()"/>
 								
 								<table align="center">
 
@@ -190,25 +189,24 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 					            <form id="frm" method="post" action="findPwResult">
 									<br>
 									* 아이디 <input type="text" name="MEM_ID" id="MEM_ID"><br>
-									<input type="hidden" id="MEM_EMAIL" name="MEM_EMAIL">
 									<div>
 										<input type="hidden" id="mem_email" name="mem_email">
-										* Email<input type="text" id="email1" name="email1"> 
+										* Email<input type="text" id="findPwEmail1" name="findPwEmail1"> 
 										@
-										<input type="text" id="email2" name="email2" value=""> 
+										<input type="text" id="findPwEmail2" name="findPwEmail2" value=""> 
 				
-										<select id="email">
-											<option>직접입력</option>
-											<option>naver.com</option>
-											<option>hanmail.net</option>
-											<option>gmail.com</option>
-											<option>nate.com</option>
+										<select id="email2" name="email2">
+											<option value="self">직접입력</option>
+											<option value="naver.com">naver.com</option>
+											<option value="hanmail.net">hanmail.net</option>
+											<option value="gmail.com">gmail.com</option>
+											<option value="nate.com">nate.com</option>
 										</select> 
 									</div>
 								</form>
 								<p/>
 									<button id="findpw" onclick="fsubmitpw();">찾기</button>
-									<input type="button" value="취소" onclick="document.location.href='/nnS/main'"/>
+									<input type="button" value="취소" onclick="back()"/>
 
 									
 									<div>
@@ -226,6 +224,38 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript">
+
+	$(function(){   
+	   $(document).ready(function(){
+	      $('select[name=email]').change(function() {
+	         if($(this).val()=="self"){
+	            $('#findIdEmail2').val("");
+	            $("#findIdEmail2").attr("readonly", false);
+	            $('#findIdEmail2').focus();
+	         } else {
+	            $('#findIdEmail2').val($(this).val());
+	            $("#findIdEmail2").attr("readonly", true);
+	         }
+	      });
+	   });
+	   });
+	   
+	
+	$(function(){   
+	   $(document).ready(function(){
+	      $('select[name=email2]').change(function() {
+	         if($(this).val()=="self"){
+	            $('#findPwEmail2').val("");
+	            $("#findPwEmail2").attr("readonly", false);
+	            $('#findPwEmail2').focus();
+	         } else {
+	            $('#findPwEmail2').val($(this).val());
+	            $("#findPwEmail2").attr("readonly", true);
+	         }
+	      });
+	   });
+	   });   
+
 function fsubmitid(){
 	
 	if(id.MEM_ID!=null && id.MEM_ID!=''){
@@ -243,10 +273,17 @@ function fsubmitid(){
 
 
 function fsubmitpw(){	
+	
+	${eCheck}
+	
 	if(id.MEM_ID!=null&&id.MEM_ID!=''){
 		str+="임시 비밀번호를 회원님의 이메일로 발송하였습니다"
 	}
 	body.append(str);
+}
+
+function back(){
+	history.go(-1);
 }
 
 $(document).ready(function() {

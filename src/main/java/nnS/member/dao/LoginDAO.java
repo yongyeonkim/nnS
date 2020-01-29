@@ -21,10 +21,10 @@ public class LoginDAO extends AbstractDAO{
 		return (Map<String, Object>) selectOne("login.findIdWithPhone", map);
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> findPwWithEmail(Map<String, Object> map) throws Exception {
+	
+	public int findPwWithEmail(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		return (Map<String, Object>) selectOne("login.findPwWithEmail", map);
+		return (Integer)selectOne("login.findPwWithEmail", map);
 	}
 
 	public void updateTempPw(Map<String,Object> map) throws Exception {

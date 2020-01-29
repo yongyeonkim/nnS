@@ -1,28 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=euc-kr"%>
 <html>
 <head><title>로그인</title>
-<link href="style.css" rel="stylesheet" type="text/css">
    
    </style>
+   <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
    <script language="javascript">
+   
     
       function begin(){
-         document.myform.id.focus();
+         document.myform.MEM_ID.focus();
        }
        function checkIt(){
-         if(!document.myform.id.value){
+         if(!document.myform.MEM_ID.value){
            alert("아이디를 입력하지 않으셨습니다.");
            document.myform.id.focus();
            return false;
          }
-         if(!document.myform.passwd.value){
+         if(!document.myform.MEM_PW.value){
            alert("비밀번호를 입력하지 않으셨습니다.");
            document.myform.passwd.focus();
            return false;
          }
          
          
-       } 
+       }
+       
+       function fsubmit(){
+    		var id = $("#MEM_ID")[0].value;
+    		var pw = $("#MEM_PW")[0].value;
+    		if(id==null || id==''){
+    			alert("아이디를 입력하세요.");
+    			return false;
+    		}
+    		if(pw==null || pw==''){
+    			alert("비밀번호를 입력하세요.");
+    			return false;
+    		}
+    		if($(".Checkbox__CheckboxStd-ifp1yz-1").is(":checked")){
+    			var id = $("#MEM_ID").val();
+    			document.cookie = "storedId="+id;
+    			document.cookie = "idStore=true";
+    		}else{
+    			document.cookie = "storedId=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    			document.cookie = "idStore=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    		}
+    		var cookie = document.cookie.match('(^|;) ?'+'storedId'+'=([^;]*)(;|$)');
+    		myform.submit();
+    	}
+       
        </script>
        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
        <script type="text/javascript">
@@ -51,6 +76,8 @@
     	        }
     	    });
     	});
+       
+       
     	 
     	function setCookie(cookieName, value, exdays){
     	    var exdate = new Date();
@@ -83,7 +110,7 @@
   
 </head>
 <BODY onload="begin()">
-<form name="myform" action="login" method="post" onSubmit="return checkIt()">
+<form name="myform" action="login" method="post">
 
   <div>
   
@@ -92,15 +119,15 @@
   
     
    <div>
-   아이디 <INPUT type="text" name="id" id="userId" size="15" maxlength="12">
+   아이디 <INPUT type="text" name="MEM_ID" id="MEM_ID" size="15" maxlength="12">
    
    </div>
    
    <div>
-     비밀번호<INPUT type=password name="passwd"  size="15" maxlength="12">
+     비밀번호<INPUT type=password name="MEM_PW" id="MEM_PW" size="15" maxlength="12">
    </div>
    <div>
-      <INPUT type=submit value="로그인">
+      <input type="button" value="로그인" onclick="fsubmit();">
    </div>
     <div>
       <input type="checkbox" value="idSaveCheck">아이디저장
