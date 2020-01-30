@@ -32,7 +32,7 @@
 	</select>
 	
 	<!-- 비밀번호 찾기 -->
-	<select id="findPwWithEmail" parameterType="hashmap" resultType="hashmap">
+	<select id="findPwWithEmail" parameterType="hashmap" resultType="Integer">
 	<![CDATA[
 		SELECT  COUNT(*)
 		FROM    MEMBER
@@ -54,5 +54,7 @@
 	AND     MEM_DEL_GB = 'N'
 	]]>
 	</update>
+	
+	
 
 </mapper>

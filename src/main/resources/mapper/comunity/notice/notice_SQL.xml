@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+
+<!-- 공지사항 리스트-->
+<select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
+	<include refid="common.pagingPre"/>
+<![CDATA[
+
+	SELECT  ROW_NUMBER() OVER (ORDER BY N.NOTICE_NUM DESC) RNUM,
+			N.NOTICE_NUM,
+	        N.NOTICE_TITLE,
+	        M.MEM_ID,
+	        N.NOTICE_DATE,
+	        TO_CHAR(N.NOTICE_DATE,'hh24:mi:ss') AS NOTICE_TIME,
+	        N.NOTICE_COUNT
+	FROM    NOTICE N,
+	        (
+	        SELECT  MEM_NUM, MEM_ID
+	        FROM    MEMBER
+	        ) M
+	WHERE   N.NOTICE_WRITER = M.MEM_NUM
+	AND     NOTICE_DEL_GB = 'N'
+	
+]]>
+	<include refid="common.pagingPost"/>
+</select>
+
+<!-- 공지사항 상세보기 -->
+<select id="selectNoticeDetail" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+
+	SELECT  N.NOTICE_NUM,
+	        N.NOTICE_TITLE,
+	        M.MEM_ID,
+	        N.NOTICE_CONTENT,
+	        N.NOTICE_DATE,
+	        TO_CHAR(N.NOTICE_DATE,'hh24:mi:ss') AS NOTICE_TIME,
+	        N.NOTICE_COUNT
+	FROM    NOTICE N,
+	        (
+	        SELECT  MEM_NUM, MEM_ID
+	        FROM    MEMBER
+	        ) M
+	WHERE   N.NOTICE_WRITER = M.MEM_NUM
+	AND     N.NOTICE_NUM = #{NOTICE_NUM}
+	AND     NOTICE_DEL_GB = 'N'
+	
+]]>
+</select>
+
+<!-- 공지사항 작성 -->
+<insert id="insertNotice" parameterType="hashmap">
+<![CDATA[
+
+	INSERT
+	INTO    NOTICE  (
+	                NOTICE_NUM,
+	                NOTICE_TITLE,
+	                NOTICE_WRITER,
+	                NOTICE_CONTENT
+	                )
+	VALUES          (
+	                NOTICE_SEQ.nextval,
+	                #{NOTICE_TITLE},
+	                '2',
+	                #{NOTICE_CONTENT}
+	                )
+	
+]]>
+</insert>
+
+<!-- 공지사항 수정 -->
+<update id="updateNoticeModify" parameterType="hashmap" >
+<![CDATA[
+	
+	UPDATE  NOTICE
+	SET     NOTICE_TITLE = #{NOTICE_TITLE},
+	        NOTICE_CONTENT = #{NOTICE_CONTENT},
+	        NOTICE_DATE = #{NOTICE_DATE}
+	WHERE   NOTICE_NUM = #{NOTICE_NUM}
+	
+]]>
+</update>
+
+<!-- 공지사항 삭제 -->
+<update id="deleteNotice" parameterType="hashmap" >
+<![CDATA[
+	
+	UPDATE  NOTICE
+	SET     NOTICE_TITLE = #{NOTICE_TITLE},
+	        NOTICE_CONTENT = #{NOTICE_CONTENT},
+	        NOTICE_DATE = #{NOTICE_DATE}
+	WHERE   NOTICE_NUM = #{NOTICE_NUM}
+	
+]]>
+</update>
+</mapper>

@@ -1,4 +1,8 @@
-<%@page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="<c:url value='/js/common.js?version=3'/>" charset="utf-8"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -72,6 +76,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	border-bottom: 1px dashed #ddd;
 	font-size: 1.8em;
 }
+
 .goodsTab_content h3 a{
 	color: #254588;
 }
@@ -143,8 +148,8 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 <div id="content">
 	<div id="vertical_tab-container">
 	<ul>
-		<li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
+		<li class="selected"><a href="noticeList">공지사항</a></li>
+         <li><a href="boardList">자유게시판</a></li>
          <li><a href="reportList">신고게시판</a></li>
          <li><a href="qnaList">Q&A게시판</a></li>
 	</ul>
@@ -156,6 +161,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			<col width="*" />
 			<col width="15%" />
 			<col width="20%" />
+			<col width="5%" />
 		</colgroup>
 		<caption><h2>공지사항</h2></caption>
 		<thead>
@@ -163,43 +169,25 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				<th scope="col">글번호</th>
 				<th scope="col">제목</th>
 				<th scope="col">작성자</th>
-				<th scope="col">작성일</th>
+				<th scope="col">작성일시</th>
 				<th scope="col">조회수</th>
 			</tr>
 		</thead>
 		<tbody>
-			<%-- <c:choose>
-				<c:when test="${fn:length(list) > 0}">
-					<c:forEach items="${list }" var="row">
-						<tr>
-							<td>${row.NUM }</td>
-							<td class="title"><a href="#this" name="title">${row.TITLE }</a>
-								<input type="hidden" id="IDX" value="${row.NUM }"></td>
-							<td>${row.WRITER }</td>
-							<td>${row.DATE }</td>
-							<td>${row.COUNT }</td>
-						</tr>
-					</c:forEach>
-				</c:when>
-				<c:otherwise> --%>
-	
-					<tr>
-						<td colspan="5">조회된 결과가 없습니다.</td>
-					</tr>
- 			<!-- 	/c:otherwise /c:choose -->
+			<!-- 스크립트를 통해 게시글에 대한 정보가 담김 -->
 		</tbody>
 	</table>
+		<div align="right">
+	<!--  	<:if test="${session_member_name == 'admin' }"> -->
+			<a href="#write" class="btn" id="write">글쓰기</a>
+	<!-- 	</:if>  -->
+		</div>
 	</div>
 	</div>
 	<div id="PAGE_NAVI"></div>
 	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
 
-	<br />
- 
-	<%-- <c:if test="${session_member_name == 'admin' }"> 
-		<a href="#this" class="btn" id="write">글쓰기</a>
-	</c:if> --%>
-	
+	<br />	
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -214,22 +202,22 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				fn_openBoardDetail($(this));
 			});
 		});
-
+		
 		function fn_openBoardWrite() {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeWriteForm' />");
+			comSubmit.setUrl("<c:url value='/community/noticeWriteForm' />");
 			comSubmit.submit();
 		}
 	
 		function fn_openBoardDetail(obj) {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeDetail' />");
+			comSubmit.setUrl("<c:url value='/community/noticeDetail' />");
 			comSubmit.addParam("NUM", obj.parent().find("#NUM").val());
 			comSubmit.submit();
 		}
 		function fn_selectBoardList(pageNo) {
 			var comAjax = new ComAjax();
-			comAjax.setUrl("<c:url value='/nnS/selectBoardList' />");
+			comAjax.setUrl("<c:url value='/community/noticeListPaging' />");
 			comAjax.setCallback("fn_selectBoardListCallback");
 			comAjax.addParam("PAGE_INDEX", pageNo);
 			comAjax.addParam("PAGE_ROW", 15);
@@ -241,7 +229,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			var body = $("table>tbody");
 			body.empty();
 			if (total == 0) {
-				var str = "<tr>" + "<td colspan='4'>조회된 결과가 없습니다.</td>"
+				var str = "<tr align=\"center\">" + "<td colspan='5'>조회된 결과가 없습니다.</td>"
 						+ "</tr>";
 				body.append(str);
 			} else {
@@ -258,19 +246,21 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				var str = "";
 				$.each(
 								data.list,
-								function(key, value) {
-									str += "<tr>"
-											+ "<td>"
-											+ value.NUM
-											+ "</td>"
-											+ "<td class='title'>"
-											+ "<a href='#this' name='title'>"
-											+ value.TITLE
-											+ "</a>"
-											+ "<input type='hidden' id='IDX' value=" + value.NUM + ">"
-											+ "</td>" + "<td>" + value.COUNT
-											+ "</td>" + "<td>" + value.DATE
-											+ "</td>" + "</tr>";
+								
+				function(key, value) {
+					str += "<tr style=\"text-align: center\">"
+							+ "<td>"
+							+ value.RNUM
+							+ "</td>"
+							+ "<td class='title'>"
+							+ "<a href='#this' name='title'>"
+							+ value.NOTICE_TITLE
+							+ "</a>"
+							+ "<input type='hidden' id='IDX' value=" + value.NOTICE_NUM + ">"
+							+ "</td>" + "<td>" + value.MEM_ID
+							+ "</td>" + "<td>" + new Date(value.NOTICE_DATE).toLocaleString()
+							+ "</td>" + "<td>" + value.NOTICE_COUNT
+							+ "</td>" + "</tr>";
 								});
 				body.append(str);
 

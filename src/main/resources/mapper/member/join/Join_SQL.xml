@@ -6,7 +6,7 @@
 	
 	
 	<!-- id중복확인 -->
-	<select id="selectIdCheck" parameterType="hashMap" resultType="Integer">
+	<select id="selectIdCheck" parameterType="hashMap" resultType="Int">
 	<![CDATA[
     	SELECT  COUNT(*)
 		FROM    MEMBER
@@ -15,7 +15,7 @@
 	</select>
 	
 	<!-- 이메일 인증 확인 -->
-	<select id="verifyMember" parameterType="hashMap" resultType="Integer">
+	<select id="verifyMember" parameterType="hashMap" resultType="hashmap">
 	<![CDATA[
 		SELECT  MEM_VERIFY
 		FROM    MEMBER
