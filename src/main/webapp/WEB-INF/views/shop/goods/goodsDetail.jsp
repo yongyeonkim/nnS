@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <meta charset="UTF-8">
 <style type="text/css">
 
@@ -143,38 +144,46 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 </head>
 <body>
 
-  <div id="content">
-   <div id="vertical_tab-container">
-      <ul>
-         <li class="selected"><a href="goodsList">전체상품</a></li>
-         <li><a href="allgoodsList">인기상품</a></li>
-         <li><a href="newgoodsList">신규상품</a></li>
-         <li><a href="goodsList">카테고리</a></li>
-      </ul>
-   </div>
-   <div id="main-container">
+<div id="content">
+	<div id="vertical_tab-container">
+		<ul>
+			<li class="selected"><a href="goodsList">전체상품</a></li>
+			<li><a href="allgoodsList">인기상품</a></li>
+			<li><a href="newgoodsList">신규상품</a></li>
+			<li><a href="goodsList">카테고리</a></li>
+		</ul>
+	</div>
+	<div id="main-container">
 		<table border="1" align="center">
 		<tbody>
 			<tr>
 				<td>
 					<table border="1" align="center">
+						<colgroup>
+							<col width="15%"/>
+							<col width="35%"/>
+							<col width="15%"/>
+							<col width="35%"/>
+						</colgroup>
+						<caption>상품 상세</caption>
 						<tbody>
 							<tr colspan="2">
 								<td rowspan="2">
 									<img src="https://m.sandboxstore.net/web/product/big/201812/fc5894526dadbe5e309f0eb69df14097.jpg"
 										alt="" width="202" height="202" />
 								</td>
-								<td colspan="2">
-									브랜드 : ${GOODS_BRAND}<br /> 
-									모델명 : ${GOODS_MODEL} <br />	<!-- 테이블에 없음 --> 
-									성별 : ${GOODS_GEN} <br /><!-- 테이블에 없음 --> 
-									좋아요 : ${GOODS_LIKE_COUNT} <br /><!-- 테이블에 없음 --> 
-									중고상태 : ${GOODS_STATUS}
+								<td>
+									브랜드 : ${map.GOODS_BRAND}<br />
+									모델명 : ${map.GOODS_TITLE} <br />	<!-- 테이블에 없음 --> 
+									성별 : ${map.GOODS_NUM} <br /><!-- 테이블에 없음 --> 
+									좋아요 : ${GOODS_LIKE_COUNT} <br /><!-- 테이블에 없음 -->
+									중고상태 : ${map.GOODS_STATUS}
+									<input type="hidden" id="IDX" name="IDX" value="${map.GOODS_NUM}">
 								</td>
 							</tr>
 							<tr>
 								<td>
-									판매가 : ${GOODS}<br /> 
+									판매가 : ${map.GOODS_PRICE}<br /> 
 									할인가 : ${GOODS}<br /><!-- 테이블에 없음 --> 
 									배송비: ${GOODS} <br /><!-- 테이블에 없음 --> 
 									======================= <br /><!-- 테이블에 없음 --> 
@@ -202,7 +211,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 					    <div class="goodsTab_container">
 					        <div id="goodsTab1" class="goodsTab_content">
 					            <h2>상품정보</h2>
-					            <p>상품에 대한 정보가 있음</p>
+					            <p>${map.GOODS_CONTENT}</p>
 					        </div>
 					        <div id="goodsTab2" class="goodsTab_content">
 					             <h2>상품문의</h2>
@@ -244,5 +253,62 @@ $(document).ready(function() {
 
 });
 </script>
+	
+	<a href="#this" class="btn" id="list">목록으로</a>
+	<a href="#this" class="btn" id="update">수정하기</a>
+	<a href="#this" class="btn" id="delete">삭제하기</a>
+	
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#list").on("click", function(e){ //목록으로 버튼
+				e.preventDefault();
+				fn_openGoodsList();
+			});
+			
+			$("#update").on("click", function(e){ //수정하기 버튼
+				e.preventDefault();
+				fn_goodsModify();
+			});
+			$("#delete").on("click", function(e){ //삭제하기 버튼
+				e.preventDefault();
+				fn_deleteGoods();
+			});
+			$("a[name='file']").on("click", function(e){
+				e.preventDefault();
+				fn_downloadFile($(this).attr('id'));
+			});
+		});
+		
+		function fn_openGoodsList(){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop' />");
+			comSubmit.submit();
+		}
+		
+		function fn_goodsModify(){
+			var GOODS_NUM = "${map.GOODS_NUM}";
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop/goodsModifyForm' />");
+			comSubmit.addParam("GOODS_NUM", GOODS_NUM);
+			comSubmit.submit();
+		}
+	
+		function fn_deleteGoods(){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop/goodsDelete' />");
+			comSubmit.addParam("GOODS_NUM", $("#IDX").val());
+			comSubmit.submit();
+			
+		}
+		function fn_downloadFile(obj){
+			var idx=obj;
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/common/downloadFile.do'/>");
+			comSubmit.addParam("IDX",idx);
+			comSubmit.submit();
+		}
+	</script>
+
 </body>
 </html>

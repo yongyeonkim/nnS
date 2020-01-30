@@ -28,6 +28,7 @@ import nnS.member.service.MailService;
 
 @Controller
 public class JoinController {
+	Logger log = Logger.getLogger(this.getClass());
    
    @Resource(name="mailService")
    private MailService mailService;
@@ -52,6 +53,13 @@ public class JoinController {
       System.out.println(idCheck);
       
       return idCheck;
+   }
+   
+   @RequestMapping(value = "/memberVerify")
+   public ModelAndView insertMember(CommandMap commandMap) throws Exception{
+	   joinService.insertMember(commandMap.getMap());
+	   ModelAndView mv = new ModelAndView("/member/join/joinConfirm");
+	   return mv;
    }
    
    /*
@@ -82,7 +90,7 @@ public class JoinController {
     * return mv; }
     */
    
-   @RequestMapping(value="/createEmailCheck.do", method=RequestMethod.GET)
+   @RequestMapping(value="/createEmailCheck", method=RequestMethod.GET)
    @ResponseBody
    public boolean createEmailCheck(@RequestParam String userEmail, @RequestParam int random, HttpServletRequest req){
    //이메일 인증
@@ -97,7 +105,7 @@ public class JoinController {
    return mailService.send(subject, sb.toString(), "gksn9573@gmail.com", userEmail, null);
    }
    
-   @RequestMapping(value="/emailAuth.do", method=RequestMethod.GET)
+   @RequestMapping(value="/emailAuth", method=RequestMethod.GET)
    @ResponseBody
    public ResponseEntity<String> emailAuth(@RequestParam String authCode, @RequestParam String random, HttpSession session){
    String originalJoinCode = (String) session.getAttribute("authCode");
