@@ -131,9 +131,9 @@
 			VALUES
 			                    (
 			                    GOODS_IMAGE_SEQ.NEXTVAL,
-			                    #{GOODS_IMAGE_PARENT},
-			                    #{GOODS_IMAGE_ORG},
-			                    #{GOODS_IMAGE_STD}
+			                    #{BOARD_IDX},
+			                    #{FILES_ORG},
+			                    #{FILES_STD}
 			                    )
 		]]> 
 	</insert>
