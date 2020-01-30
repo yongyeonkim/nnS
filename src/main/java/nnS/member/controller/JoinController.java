@@ -55,6 +55,13 @@ public class JoinController {
       return idCheck;
    }
    
+   @RequestMapping(value = "/memberVerify")
+   public ModelAndView insertMember(CommandMap commandMap) throws Exception{
+	   joinService.insertMember(commandMap.getMap());
+	   ModelAndView mv = new ModelAndView("/member/join/joinConfirm");
+	   return mv;
+   }
+   
    /*
     * @RequestMapping(value = "/nnS//join/emailAuth", method = RequestMethod.POST)
     * //회원가입 할 경우 해당 이메일 인증을 요구하는 링크를 첨부한 이메일을 발송 public ModelAndView

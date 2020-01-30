@@ -30,8 +30,8 @@ public class LoginController {
 	@Resource(name = "loginService")
 	private LoginService loginService;
 
-	//@Resource(name = "mailSender")
-	//private JavaMailSender mailSender;
+	// @Resource(name = "mailSender")
+	// private JavaMailSender mailSender;
 
 	@RequestMapping(value = "/loginForm") // 로그인 폼
 	public ModelAndView loginForm() throws Exception {
@@ -47,25 +47,28 @@ public class LoginController {
 
 		HttpSession session = request.getSession();
 
-		/*
-		 * Map<String, Object> chk = loginService.loginCheck(commandMap.getMap());
-		 * Map<String, Object> banChk =
-		 * adminBanService.banDateCheck(commandMap.getMap()); if (chk==null) { // 아이디가
-		 * 있는지 없는지를 확인 message = "해당 아이디가 존재하지 않습니다."; } else { if
-		 * (chk.get("MEM_PW").equals(commandMap.get("MEM_PW"))) { if
-		 * (chk.get("MEM_VERIFY").equals("Y")) { // 이메일 인증을 했을ㄸ ㅐ if (banChk==null ||
-		 * ((BigDecimal)banChk.get("EXP_DATE")).doubleValue() <= 0) {// 모든 조건을 충족시키면
-		 * 로그인! session.setAttribute("MEM_ID", commandMap.get("MEM_ID"));
-		 * session.setAttribute("MEM_KIND", chk.get("MEM_KIND")); } else { // 제재기한이 아직
-		 * 남았을 때 java.text.SimpleDateFormat sdf = new
-		 * java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); message = "회원님은 " +
-		 * sdf.format(banChk.get("BAN_REMOVAL_DATE")) + "까지 이용이 제재되었습니다."; url =
-		 * "/main"; } } else { // 이메일 인증을 완료하지 않았을 떄 message = "이메일 인증을 완료해주세요."; url =
-		 * "/main"; }
-		 * 
-		 * } else { // 비밀번호가 일치하지 않을 때 message = "비밀번호가 맞지 않습니다."; } }
-		 * mv.addObject("message",message); mv.addObject("url",url);
-		 */
+		
+		Map<String, Object> chk = loginService.loginCheck(commandMap.getMap());
+		//Map<String, Object> banChk = adminBanService.banDateCheck(commandMap.getMap());
+		if (chk==null) { // 아이디가 있는지 없는지를 확인
+			message = "해당 아이디가 존재하지 않습니다.";
+		} else {
+			if (chk.get("MEM_PW").equals(commandMap.get("MEM_PW"))) {
+				if (chk.get("MEM_VERIFY").equals("Y")) { // 이메일 인증을 했을ㄸ ㅐ
+						session.setAttribute("MEM_ID", commandMap.get("MEM_ID")); 
+						session.setAttribute("MEM_KIND", chk.get("MEM_KIND"));
+				} else { // 이메일 인증을 완료하지 않았을 떄
+					message = "이메일 인증을 완료해주세요.";
+					url = "/main";
+				}
+
+			} else { // 비밀번호가 일치하지 않을 때
+				message = "비밀번호가 맞지 않습니다.";
+			}
+		}
+		mv.addObject("message",message);
+		mv.addObject("url",url);
+		 
 		return mv;
 	}
 
