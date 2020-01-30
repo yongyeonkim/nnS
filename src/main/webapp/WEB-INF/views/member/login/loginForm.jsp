@@ -3,10 +3,10 @@
 <head><title>로그인</title>
    
    </style>
-   <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
-   <script language="javascript">
-   
-    
+   <%-- <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script> --%>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   <script type="text/javascript">
+
       function begin(){
          document.myform.MEM_ID.focus();
        }
@@ -21,8 +21,7 @@
            document.myform.passwd.focus();
            return false;
          }
-         
-         
+
        }
        
        function fsubmit(){
@@ -48,9 +47,6 @@
     		myform.submit();
     	}
        
-       </script>
-       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-       <script type="text/javascript">
        $(document).ready(function(){
     	   
     	    // 저장된 쿠키값을 가져와서 ID 칸에 넣어준다. 없으면 공백으로 들어감.
@@ -105,19 +101,13 @@
     	    }
     	    return unescape(cookieValue);
     	}
-    	</script>
+   </script>
 
   
 </head>
 <BODY onload="begin()">
 <form name="myform" action="login" method="post">
 
-  <div>
-  
-  </div>
- 
-  
-    
    <div>
    아이디 <INPUT type="text" name="MEM_ID" id="MEM_ID" size="15" maxlength="12">
    
