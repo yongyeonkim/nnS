@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
@@ -15,9 +16,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Component("fileUtils")
 public class FileUtils {
-	private static final String filePath = "/Users/kyy/Documents/YongYeon/sts_jspProgramming/nnS/src/file/";
+	//private static final String filePath = "/Users/kyy/Documents/YongYeon/sts_jspProgramming/nnS/src/file/";
 	
 	public List<Map<String, Object>> parseInsertFileInfo(Map<String, Object> map, HttpServletRequest request) throws Exception{
+		String filePath_temp = request.getSession().getServletContext().getRealPath("") + "/file/"; //request.getContextPath() + "/file/";
+		System.out.println(filePath_temp);
+		
 		MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)request; 
 		Iterator<String> iterator = multipartHttpServletRequest.getFileNames(); 
 		
@@ -28,38 +32,36 @@ public class FileUtils {
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>(); 
 		Map<String, Object> listMap = null; 
 		String boardIdx = (String)map.get("IDX"); 
-		File file = new File(filePath);
+		File file = new File(filePath_temp);
 		
 		if(file.exists() == false){ 
-			System.out.println("2");
 			file.mkdirs(); 
 		} 
 		
 		
 		while(iterator.hasNext()){ 
-			System.out.println("3");
 			multipartFile = multipartHttpServletRequest.getFile(iterator.next()); 
 			
-			if(multipartFile.isEmpty() == false){ 
-				System.out.println("4");
+			if(multipartFile.isEmpty() == false){
 				originalFileName = multipartFile.getOriginalFilename(); 
 				originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf(".")); 
 				storedFileName = CommonUtils.getRandomString() + originalFileExtension; 
-				file = new File(filePath + storedFileName); 
+				file = new File(filePath_temp + storedFileName); 
 				multipartFile.transferTo(file); 
-				listMap = new HashMap<String,Object>(); 
-				listMap.put("GOODS_IMAGE_PARENT", Integer.parseInt(boardIdx)); 
-				listMap.put("GOODS_IMAGE_ORG", originalFileName); 
-				listMap.put("GOODS_IMAGE_STD", storedFileName); 
-				//listMap.put("FILE_SIZE", multipartFile.getSize()); 
+				listMap = new HashMap<String,Object>();
+				listMap.put("BOARD_IDX", Integer.parseInt(boardIdx)); 
+				listMap.put("FILES_ORG", originalFileName); 
+				listMap.put("FILES_STD", storedFileName); 
+				listMap.put("FILES_SIZE", multipartFile.getSize()); 
 				list.add(listMap); 
 			}
 		} 
-		System.out.println("1234");
 		return list; 
 	}
 	
 	public List<Map<String, Object>> parseUpdateFileInfo(Map<String, Object> map, HttpServletRequest request) throws Exception{
+		String filePath_temp = request.getSession().getServletContext().getRealPath("") + "/file/"; //request.getContextPath() + "/file/";
+		System.out.println(filePath_temp);
 		
 		MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)request; 
 		Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
@@ -84,13 +86,13 @@ public class FileUtils {
 				originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf(".")); 
 				storedFileName = CommonUtils.getRandomString() + originalFileExtension; 
 				
-				multipartFile.transferTo(new File(filePath + storedFileName)); 
+				multipartFile.transferTo(new File(filePath_temp + storedFileName)); 
 				listMap = new HashMap<String,Object>(); 
 				listMap.put("IS_NEW",  "Y");
-				listMap.put("GOODS_IMAGE_PARENT", boardIdx); 
-				listMap.put("GOODS_IMAGE_ORG", originalFileName); 
-				listMap.put("GOODS_IMAGE_STD", storedFileName); 
-				//listMap.put("FILE_SIZE", multipartFile.getSize()); 
+				listMap.put("BOARD_IDX", boardIdx); 
+				listMap.put("FILES_ORG", originalFileName); 
+				listMap.put("FILES_STD", storedFileName); 
+				listMap.put("FILE_SIZE", multipartFile.getSize()); 
 				list.add(listMap); 
 			}
 			else {
