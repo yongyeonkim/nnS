@@ -1,19 +1,36 @@
 package nnS.shop.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import nnS.common.common.CommandMap;
 import nnS.shop.service.ShopServiceImpl;
 
 @Controller
-public class ShopController {
+public class ShopController{
 
 	@Resource(name="shopService")
 	private ShopServiceImpl shopService;
@@ -62,19 +79,21 @@ public class ShopController {
 	}
 	
 	@RequestMapping(value="/shop/goodsWriteForm")
-	public ModelAndView goodsWriteForm() throws Exception{
+	public ModelAndView goodsWriteForm(CommandMap commandMap) throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
 
 		return mv;
 	}
 
-	@RequestMapping(value="/shop/goodsWrite")
-	public ModelAndView goodsWrite() throws Exception{
+	@RequestMapping(value="/shop/goodsWrite", method = RequestMethod.POST)
+	public ModelAndView goodsWrite(CommandMap commandMap, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteResult");
 
+		shopService.insertGoods(commandMap.getMap(), request);
+		
 		return mv;
 	}
-
+	
 	@RequestMapping(value="/shop/goodsModifyForm")
 	public ModelAndView goodsModifyForm() throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
