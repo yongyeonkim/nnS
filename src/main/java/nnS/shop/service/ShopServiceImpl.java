@@ -1,5 +1,6 @@
 package nnS.shop.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,45 @@ public class ShopServiceImpl implements ShopService {
 
 		*/
 		
+	}
+	
+	@Override
+	public Map<String, Object> selectGoodsDetail(Map<String, Object> map) throws Exception {
+		shopDAO.updateHitCnt(map);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> tempMap = shopDAO.selectGoodsDetail(map);
+		resultMap.put("map", tempMap);
 		
+		/*
+		 * List<Map<String, Object>> list = shopDAO.selectFileList(map);
+		 * resultMap.put("list", list);
+		 */
+		
+		return resultMap;
+	}
+	
+	@Override
+	public void updateGoods(Map<String, Object> map, HttpServletRequest request) throws Exception{
+		shopDAO.updateGoods(map);
+		
+		/*
+		shopDAO.deleteFileList(map);
+		List<Map<String, Object>> list = fileUtils.parseUpdateFileInfo(map, request);
+		Map<String, Object> tempMap = null;
+		for(int i=0, size=list.size(); i<size; i++) {
+			tempMap = list.get(i);
+			if(tempMap.get("IS_NEW").equals("Y")){
+				shopDAO.insertFile(tempMap);
+			}else {
+				shopDAO.updateFile(tempMap);
+			}
+		}
+		*/
+	}
+	
+	@Override
+	public void deleteGoods(Map<String, Object> map) throws Exception {
+		shopDAO.deleteGoods(map);
 	}
 	
 

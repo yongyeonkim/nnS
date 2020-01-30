@@ -156,6 +156,82 @@
 		]]>
 	</update>
 	
+	<!-- 주환 -->
+	<update id="updateHitCnt" parameterType="hashmap">
+		<![CDATA[
+			UPDATE	GOODS 
+			SET
+					GOODS_COUNT = GOODS_COUNT + 1
+			WHERE
+					GOODS_NUM = #{GOODS_NUM}
+		]]>
+	</update>
+	
+	<select id="selectGoodsDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT  G.GOODS_NUM,
+			        M.MEM_ID,
+			        G.GOODS_TITLE,
+			        G.GOODS_CONTENT,
+			        G.GOODS_PRICE,
+			        G.GOODS_REGION,
+			        G.GOODS_CATEGORY,
+			        G.GOODS_HASH,
+			        G.GOODS_DCOST,
+			        G.GOODS_BRAND,
+			        G.GOODS_COUNT,
+			        TO_CHAR(G.GOODS_DATE,'YYYY.MM.DD') AS GOODS_DATE,
+			        TO_CHAR(G.GOODS_DATE,'hh24:mi:ss') AS GOODS_TIME,
+			        G.GOODS_STATUS,
+			        G.GOODS_THUMBNAIL,
+			        G.GOODS_TSTATUS
+			FROM    GOODS G,
+			        (
+			         SELECT MEM_NUM, MEM_ID
+			         FROM   MEMBER
+			        ) M
+			WHERE   G.GOODS_SELLER = M.MEM_NUM
+			AND     G.GOODS_NUM = #{GOODS_NUM}
+			AND     G.GOODS_DEL_GB = 'N'		
+		]]>
+	</select>
+	
+	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				GOODS_IMAGE_NUM,
+				GOODS_IMAGE_ORG,
+			FROM
+				GOODS_IMAGE 
+			WHERE 
+				GOODS_IMAGE_PARENT = #{GOODS_IMAGE_PARENT} 
+				AND GOODS_IMAGE_DEL_GB = 'N'
+		]]>
+	</select>
+	
+	<update id="updateGoods" parameterType="hashmap">
+		<![CDATA[
+			UPDATE  GOODS
+			SET     GOODS_TITLE = #{GOODS_TITLE},
+			        GOODS_CONTENT = #{GOODS_CONTENT},
+			        GOODS_PRICE = #{GOODS_PRICE},
+			        GOODS_BRAND = #{GOODS_BRAND}
+			WHERE   GOODS_NUM = #{IDX}
+			AND     GOODS_DEL_GB = 'N'
+			AND     GOODS_TSTATUS = 'N'
+		]]>
+	</update>
+	
+	<update id="goodsDelete" parameterType="hashmap">
+		<![CDATA[
+			UPDATE GOODS
+			SET
+				GOODS_DEL_GB = 'Y'
+			WHERE
+				GOODS_NUM = #{GOODS_NUM}
+		]]>
+	</update>
+	
        
 </mapper>
 

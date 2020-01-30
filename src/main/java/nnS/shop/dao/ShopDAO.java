@@ -27,5 +27,24 @@ public class ShopDAO extends AbstractDAO {
 		update("shop.updateGoodsThumbnail", map);
 	}
 	
+	public void updateHitCnt(Map<String, Object> map) throws Exception{
+		update("shop.updateHitCnt", map);
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectGoodsDetail(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>) selectOne("shop.selectGoodsDetail", map);
+	}
+	@SuppressWarnings("unchecked")
+	public List<Map<String,Object>> selectFileList(Map<String,Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("shop.selectFileList", map);
+	}
+	
+	public void updateGoods(Map<String, Object> map) throws Exception{
+		update("shop.updateGoods", map);
+	}
+	
+	public void deleteGoods(Map<String, Object> map) throws Exception{
+		update("shop.goodsDelete", map);
+	}
 	
 }

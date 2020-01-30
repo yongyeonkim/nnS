@@ -95,30 +95,44 @@ public class ShopController{
 	}
 	
 	@RequestMapping(value="/shop/goodsModifyForm")
-	public ModelAndView goodsModifyForm() throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
+	public ModelAndView goodsModifyForm(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("/shop/goods/goodsModifyForm");
 
+		Map<String,Object> map = shopService.selectGoodsDetail(commandMap.getMap());
+		mv.addObject("map", map.get("map"));
+		/* mv.addObject("list",map.get("list")); */
+		
 		return mv;
 	}
 	
 	@RequestMapping(value="/shop/goodsModify")
-	public ModelAndView goodsModify() throws Exception{
+	public ModelAndView goodsModify(CommandMap commandMap, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteResult");
 
+		shopService.updateGoods(commandMap.getMap(), request);
+		mv.addObject("IDX", commandMap.get("IDX"));
+		
 		return mv;
 	}
 	
 	@RequestMapping(value="/shop/goodsDelete")
-	public ModelAndView goodsDelete() throws Exception{
-		ModelAndView mv = new ModelAndView("redirect:/shop/allgoodsList");
-
+	public ModelAndView goodsDelete(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/shop");
+		
+		shopService.deleteGoods(commandMap.getMap());
+		
 		return mv;
 	}
 	
+	// 상품 상세보기
 	@RequestMapping(value="/shop/goodsDetail")
-	public ModelAndView goodsDetail() throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsDetail");
-
+	public ModelAndView goodsDetail(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("/shop/goods/goodsDetail"); 
+		
+		Map<String,Object> map = shopService.selectGoodsDetail(commandMap.getMap());
+		mv.addObject("map", map.get("map"));
+		/* mv.addObject("list",map.get("list")); */
+		
 		return mv;
 	}
 	

@@ -72,7 +72,7 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 </style>
 </head>
 <body>
-
+	<h2 align=center>상품목록</h2>
    <div id="vertical_tab-container">
       <ul>
          <li class="selected"><a href="shop">전체상품</a></li>
@@ -100,7 +100,24 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 			</tr>
 		</thead>
 		<tbody>
-		
+			<c:choose>
+				<c:when test="${fn:length(list) > 0}">
+					<c:forEach items="${list}" var="row">
+						<tr>
+							<td>${row.GOODS_NUM}</td>
+							<td class="title"><a href="#this" name="title">${row.GOODS_TITLE}</a>
+								<input type="hidden" id="IDX" value="${row.GOODS_NUM}"></td>
+							<td>${row.GOODS_COUNT}</td>
+							<td>${row.GOODS_DATE}</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<tr>
+						<td colspan="4">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+			</c:choose>
 		</tbody>
 		</table>
    
@@ -164,8 +181,32 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 <script type="text/javascript">
 		$(document).ready(function() {
 			fn_selectGoodsList(1);
-		});
+			
+			$("#write").on("click", function(e) { //상품등록 버튼
+				e.preventDefault();
+				fn_goodsWrite();
+			});
 
+			$("a[name='title']").on("click", function(e) { //제목 
+				e.preventDefault();
+				fn_goodsDetail($(this));
+			});
+			
+		});
+		
+		function fn_goodsWrite() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop/goodsWrite' />");
+			comSubmit.submit();
+		}
+	
+		function fn_goodsDetail(obj) {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop/goodsDetail' />");
+			comSubmit.addParam("GOODS_NUM", obj.parent().find("#IDX").val());
+			comSubmit.submit();
+		}
+		
 		function fn_selectGoodsList(pageNo) {
 			var comAjax = new ComAjax();
 			comAjax.setUrl("<c:url value='/shop/selectGoodsList' />");
@@ -213,10 +254,10 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 								});
 				body.append(str);
 
-				/* $("a[name='title']").on("click", function(e) { //제목
+				$("a[name='title']").on("click", function(e) { //제목
 					e.preventDefault();
-					fn_openBoardDetail($(this));
-				}); */
+					fn_goodsDetail($(this));
+				});
 			}
 		}
 	</script>

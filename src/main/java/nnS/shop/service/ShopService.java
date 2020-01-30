@@ -11,4 +11,10 @@ public interface ShopService {
 	
 	void insertGoods(Map<String, Object> map, HttpServletRequest request) throws Exception;
 
+	Map<String, Object> selectGoodsDetail(Map<String, Object> map) throws Exception;
+	
+	void updateGoods(Map<String, Object> map, HttpServletRequest request) throws Exception;
+	
+	void deleteGoods(Map<String, Object> map) throws Exception;
+	
 }
