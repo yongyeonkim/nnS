@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<script src="<c:url value='/resources/js/common.js'/>" charset="utf-8"></script>
 <script type="text/javascript">
 	var onSearch = function(){	
 		submit();
@@ -10,7 +10,7 @@
 
 <!--  Header 영역 -->
 <div class="header_area">
-	<h1><a href="" title="nnS#"><img class="main_image" src="resources/images/mainlogo.png" alt="nnS#"/></a></h1>
+	<h1><a href="" title="nnS#"><img class="main_image" src="<c:url value="/resources/images/mainlogo.png"/>" alt="nnS#"/></a></h1>
 	<div class="search_main">
 		<div class="search_inner">
 			<form action="" method="post">
@@ -42,7 +42,7 @@
 </div>
 
 <!-- 내상점 / 커뮤니티 창일 경우에 띄워주는 메뉴 시작 -->
-<%-- <c:if test="${session_shopAndComunity}"> --%>
+<%-- <c:if test="${session_shopAndCommunity}"> --%>
 	<div class="tab_cate">    
 		<div class="tabs_area">  
 			<ul class="tabs">

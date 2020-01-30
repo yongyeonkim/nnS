@@ -21,9 +21,9 @@
 	</definition>
 	
 	<!-- admin -->
-	<definition name="admin" template="/WEB-INF/views/layout/admin/layout.jsp">
+<!-- 	<definition name="admin" template="/WEB-INF/views/layout/admin/layout.jsp">
 		<put-attribute name="body" value="/WEB-INF/views/layout/admin/container.jsp" />
-	</definition>
+	</definition> -->
 	
 	<!-- main -->
 	<definition name="main" extends="default">
@@ -94,7 +94,7 @@
 		<put-attribute name="body" value="/WEB-INF/views/community/notice/noticeDetail.jsp" />
 	</definition>
 	
-	<definition name="noticeWriteForm" extends="admin">
+	<definition name="noticeWriteForm" extends="default">
 		<put-attribute name="body" value="/WEB-INF/views/community/notice/noticeWriteForm.jsp" />
 	</definition>
 	
