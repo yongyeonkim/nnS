@@ -81,5 +81,81 @@
 		<include refid="common.pagingPost"/>
 	</select>
 
+	<insert id="insertGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+			SELECT GOODS_SEQ.NEXTVAL FROM DUAL	
+		</selectKey>
+		<![CDATA[
+			INSERT
+			INTO    GOODS
+			                (
+			                GOODS_NUM,
+			                GOODS_SELLER,
+			                GOODS_TITLE,
+			                GOODS_CONTENT,
+			                GOODS_PRICE,
+			                GOODS_REGION,
+			                GOODS_CATEGORY,
+			                GOODS_HASH,
+			                GOODS_DCOST,
+			                GOODS_BRAND,
+			                GOODS_STATUS
+			                )
+			VALUES          
+			                (
+			                #{IDX},
+			                (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = #{MEM_ID}),
+			                #{GOODS_TITLE},
+			                #{smarteditor},
+			                #{GOODS_PRICE},
+			                #{GOODS_REGION},
+			                #{GOODS_CATEGORY},
+			                #{GOODS_HASH},
+			                #{GOODS_DCOST},
+			                #{GOODS_BRAND},
+			                #{GOODS_STATUS}
+			                )
+		]]>
+	</insert>
+	<!--  -->
+	<insert id="insertFile" parameterType="hashmap"> 
+		<![CDATA[ 
+			INSERT
+			INTO    GOODS_IMAGE
+			                    (
+			                    GOODS_IMAGE_NUM,
+			                    GOODS_IMAGE_PARENT,
+			                    GOODS_IMAGE_ORG,
+			                    GOODS_IMAGE_STD
+			                    )
+			VALUES
+			                    (
+			                    GOODS_IMAGE_SEQ.NEXTVAL,
+			                    #{GOODS_IMAGE_PARENT},
+			                    #{GOODS_IMAGE_ORG},
+			                    #{GOODS_IMAGE_STD}
+			                    )
+		]]> 
+	</insert>
+	
+	<update id="updateGoodsThumbnail" parameterType="hashmap">
+		<![CDATA[
+			UPDATE  GOODS 
+			SET     GOODS_THUMBNAIL = (
+			                    SELECT  GOODS_IMAGE_STD
+			                    FROM    (
+			                            SELECT  GOODS_IMAGE_STD 
+			                            FROM    GOODS_IMAGE 
+			                            WHERE   GOODS_IMAGE_PARENT = #{IDX}
+			                            AND     GOODS_IMAGE_DEL_GB = 'N'
+			                            ORDER BY GOODS_IMAGE_NUM ASC
+			                            )
+			                    WHERE   ROWNUM <= 1
+			                    )
+			WHERE   GOODS_NUM = #{IDX}
+		]]>
+	</update>
+	
+       
 </mapper>
 
