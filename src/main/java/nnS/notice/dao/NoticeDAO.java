@@ -22,9 +22,25 @@ public class NoticeDAO extends AbstractDAO {
 		return (Map<String, Object>)selectOne("notice.selectNoticeDetail", map);
 	}
 	
+	//공지사항 조회수 증가
+	public void updateCount(Map<String, Object> map) throws Exception{
+		update("notice.updateCount", map);
+	}
+
+	// 공지사항 상세보기 -파일
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectFileList(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("notice.selectNoticeFileList", map);
+	}
+	
 	// 공지사항 작성
 	public void insertNotice(Map<String, Object> map) throws Exception{
 		insert("notice.insertNotice", map);
+	}
+	
+	// 파일 추가
+	public void insertFile(Map<String, Object> map) throws Exception{
+		insert("notice.insertFile", map);
 	}
 	
 	// 공지사항 수정
@@ -36,4 +52,5 @@ public class NoticeDAO extends AbstractDAO {
 	public void deleteNotice(Map<String, Object> map) throws Exception{
 		update("notice.deleteNotice", map);
 	}
+
 }
