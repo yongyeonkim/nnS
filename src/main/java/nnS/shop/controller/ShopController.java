@@ -81,7 +81,7 @@ public class ShopController{
 	@RequestMapping(value="/shop/goodsWriteForm")
 	public ModelAndView goodsWriteForm(CommandMap commandMap) throws Exception{
 		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
-
+		mv.addObject("request_type", "write");
 		return mv;
 	}
 
@@ -96,10 +96,12 @@ public class ShopController{
 	
 	@RequestMapping(value="/shop/goodsModifyForm")
 	public ModelAndView goodsModifyForm(CommandMap commandMap) throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsModifyForm");
+		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
 
 		Map<String,Object> map = shopService.selectGoodsDetail(commandMap.getMap());
 		mv.addObject("map", map.get("map"));
+		mv.addObject("list", map.get("list"));
+		mv.addObject("request_type", "modify");
 		/* mv.addObject("list",map.get("list")); */
 		
 		return mv;
