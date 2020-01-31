@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<script src="<c:url value='/resources/js/common.js'/>" charset="utf-8"></script>
 <script type="text/javascript">
 	var onSearch = function(){	
 		submit();
@@ -10,14 +10,20 @@
 
 <!--  Header 영역 -->
 <div class="header_area">
-	<h1><a href="" title="nnS#"><img class="main_image" src="resources/images/mainlogo.png" alt="nnS#"/></a></h1>
+	<h1><a href="" title="nnS#"><img class="main_image" src="<c:url value="/resources/images/mainlogo.png"/>" alt="nnS#"/></a></h1>
 	<div class="search_main">
 		<div class="search_inner">
-			<form action="" method="post">
+			<form action="/nnS/shop" method="post">
 				<fieldset>
 					<legend>검색</legend>
-					<input type="text" class="txt" placeholder="Search" name="search"/>&nbsp;
-					<input type="button" value="검색" class="search_btn" onClick="onSearch()"/>
+					<select name="searchType">
+					  <option value="n">-----</option>
+					  <option value="title">상품명</option>
+					  <option value="content">내용</option>
+					  <option value="brand">브랜드</option>
+ 					</select>
+					<input type="text" class="txt" placeholder="Search" name="keyword"/>&nbsp;
+					<input type="submit" value="검색" class="search_btn" onClick="onSearch()"/>
 				</fieldset>
 			</form>
 		</div>
@@ -42,7 +48,7 @@
 </div>
 
 <!-- 내상점 / 커뮤니티 창일 경우에 띄워주는 메뉴 시작 -->
-<%-- <c:if test="${session_shopAndComunity}"> --%>
+<%-- <c:if test="${session_shopAndCommunity}"> --%>
 	<div class="tab_cate">    
 		<div class="tabs_area">  
 			<ul class="tabs">

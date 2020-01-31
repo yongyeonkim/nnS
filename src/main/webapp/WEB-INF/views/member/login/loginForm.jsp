@@ -1,31 +1,87 @@
 <%@ page language="java" contentType="text/html; charset=euc-kr"%>
 <html>
 <head><title>로그인</title>
-<link href="style.css" rel="stylesheet" type="text/css">
+   <style>
+   @import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+	
+	html {
+		height: 100%;
+	}
+	
+	body {
+	    width:100%;
+	    height:100%;
+	    margin: 0;
+  		padding-top: 80px;
+  		padding-bottom: 40px;
+  		font-family: "Nanum Gothic", arial, helvetica, sans-serif;
+  		background-repeat: no-repeat;
+  		background:linear-gradient(to bottom right, #ffffff, #ffffff);
+	}
+	
+    .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	}
+	
+	.form-signin .form-control {
+  		position: relative;
+  		height: auto;
+  		-webkit-box-sizing: border-box;
+     	-moz-box-sizing: border-box;
+        	 box-sizing: border-box;
+  		padding: 10px;
+  		font-size: 16px;
+	}
+
    
    </style>
-   <script language="javascript">
-    
+   <%-- <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script> --%>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   <script type="text/javascript">
+
       function begin(){
-         document.myform.id.focus();
+         document.myform.MEM_ID.focus();
        }
        function checkIt(){
-         if(!document.myform.id.value){
+         if(!document.myform.MEM_ID.value){
            alert("아이디를 입력하지 않으셨습니다.");
            document.myform.id.focus();
            return false;
          }
-         if(!document.myform.passwd.value){
+         if(!document.myform.MEM_PW.value){
            alert("비밀번호를 입력하지 않으셨습니다.");
            document.myform.passwd.focus();
            return false;
          }
-         
-         
-       } 
-       </script>
-       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-       <script type="text/javascript">
+
+       }
+       
+       function fsubmit(){
+    		var id = $("#MEM_ID")[0].value;
+    		var pw = $("#MEM_PW")[0].value;
+    		if(id==null || id==''){
+    			alert("아이디를 입력하세요.");
+    			return false;
+    		}
+    		if(pw==null || pw==''){
+    			alert("비밀번호를 입력하세요.");
+    			return false;
+    		}
+    		if($(".Checkbox__CheckboxStd-ifp1yz-1").is(":checked")){
+    			var id = $("#MEM_ID").val();
+    			document.cookie = "storedId="+id;
+    			document.cookie = "idStore=true";
+    		}else{
+    			document.cookie = "storedId=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    			document.cookie = "idStore=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    		}
+    		var cookie = document.cookie.match('(^|;) ?'+'storedId'+'=([^;]*)(;|$)');
+    		myform.submit();
+    	}
+       
        $(document).ready(function(){
     	   
     	    // 저장된 쿠키값을 가져와서 ID 칸에 넣어준다. 없으면 공백으로 들어감.
@@ -51,6 +107,8 @@
     	        }
     	    });
     	});
+       
+       
     	 
     	function setCookie(cookieName, value, exdays){
     	    var exdate = new Date();
@@ -78,37 +136,44 @@
     	    }
     	    return unescape(cookieValue);
     	}
-    	</script>
-
+   </script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   
 </head>
-<BODY onload="begin()">
-<form name="myform" action="login" method="post" onSubmit="return checkIt()">
+<body onload="begin()" cellpadding="0" cellspacing="0" marginleft="0" margintop="0" width="100%" height="100%" align="center">
+	<form name="myform" action="login" method="post" class="form-signin">
+		<div class="card align-middle" style="width:20rem; border-radius:20px;">
+			<div>
+				<div class="card-title" style="margin-top:30px;">
+					<h2 class="card-title text-center" style="color:#113366;">로그인 폼</h2>
+				</div>
+				
+				<div class="card-body">	
+					<INPUT type="text" name="MEM_ID" id="MEM_ID" size="15" maxlength="12" class="form-control" placeholder="Your ID"><br>  
+				</div>
+   
+				<div class="card-body">
+					<INPUT type=password name="MEM_PW" id="MEM_PW" size="15" maxlength="12" class="form-control" placeholder="Password"> <br>
+				</div>
+			
+				<div class="card-body">
+					<input type="button" class="btn btn-lg btn-primary btn-block" value="로그인" onclick="fsubmit();">
+				</div>
+			
+				<div class="checkbox" align="center">
+					<label>
+						<input type="checkbox" value="remember-me" >아이디저장
+					</label>
+				</div> 
 
-  <div>
-  
-  </div>
- 
-  
     
-   <div>
-   아이디 <INPUT type="text" name="id" id="userId" size="15" maxlength="12">
-   
-   </div>
-   
-   <div>
-     비밀번호<INPUT type=password name="passwd"  size="15" maxlength="12">
-   </div>
-   <div>
-      <INPUT type=submit value="로그인">
-   </div>
-    <div>
-      <input type="checkbox" value="idSaveCheck">아이디저장
-    </div> 
-    <div>
-      <a href="joinForm">회원가입</a>|<a href="findId">ID/PW 찾기</a>
+			</div>
+		</div>
+	</form>
+	
+	<div align="center">
+		<input type="button" value="회원가입" onclick="location.href='/nnS/joinForm'"/><input type="button" value="ID/PW 찾기" onclick="location.href='/nnS/findId'"/>
     </div>
-</form>
 
-</BODY>
+</body>
 </HTML>

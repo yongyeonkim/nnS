@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="EUC-KR">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
@@ -165,31 +166,21 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 					
 					<!-- <option value="choice">선택</option>-->
 					<option value="notice">공지사항</option>
-					
 					<option value="board">자유게시판</option>
-
 					<option value="report">신고게시판</option>
-
 					<option value="qna">Q&A게시판</option>
-
 				</select>
             	</td>
-         		
          	</tr>
-         	<tr>
-         		<td>작성자</td>
-         		<td><input type="text" id="writer" name="WRITER" class="wdp_90"></input></td>         	
-         	</tr>
-         	
          	<tr>
          		<td>제목</td>
-         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90"/></td>
+         		<td colspan="3"><input type="text" id="NOTICE_TITLE" name="NOTICE_TITLE" class="wdp_90"/></td>
          	</tr>
          	
          	<tr>
          		<td>내용</td>
          		<td colspan="3" class="view_text">
-                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
+                  <textarea rows="20" cols="100" title="내용" id="NOTICE_CONTENT" name="NOTICE_CONTENT"></textarea>
                </td>
          	</tr>
          	<tr>
@@ -198,20 +189,17 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          		<div id="fileDiv">
         		 	<p>
             		<input type="file" name="file_0" id="file">
-            		<a href="#this" class="btn" id="delete" name="delete">삭제</a>
             		<a href="#this" class="btn" id="addFile">파일 추가</a>
          			</p>
      			 </div>
      			 </td>
          	</tr>
-            
          </tbody>
       </table>
-      
       <br/><br/>
       <center>
-      <a href="#this" class="btn" id="write">작성하기</a>
-      <a href="#this" class="btn" id="list">목록으로</a>
+	      <a href="#write" class="btn" id="write">작성하기</a>
+	      <a href="#list" class="btn" id="list">목록으로</a>
       </center>
    </form>
    
@@ -243,13 +231,13 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       
       function fn_openNoticeList(){
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/cummunity/noticeList' />");
+         comSubmit.setUrl("<c:url value='/community/noticeList' />");
          comSubmit.submit();
       }
       
       function fn_insertNotice(){
          var comSubmit = new ComSubmit("frm");
-         comSubmit.setUrl("<c:url value='/nnS/community/noticeWrite' />");
+         comSubmit.setUrl("<c:url value='/community/noticeWrite' />");
          comSubmit.submit();
       }
       
