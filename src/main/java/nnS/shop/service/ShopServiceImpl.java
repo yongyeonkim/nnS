@@ -29,12 +29,12 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public void insertGoods(Map<String, Object> map, HttpServletRequest request) throws Exception {
 		shopDAO.insertGoods(map);
-		
+		System.out.println("****12132* " + map);
 		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(map, request);
 		for(int i = 0, size=list.size(); i < size; i++) {
 			shopDAO.insertFile(list.get(i));
 		}
-		System.out.println("***** " + map);
+		
 		shopDAO.insertGoodsThumbnail(map);
 		
 		/*
@@ -73,8 +73,10 @@ public class ShopServiceImpl implements ShopService {
 	public void updateGoods(Map<String, Object> map, HttpServletRequest request) throws Exception{
 		shopDAO.updateGoods(map);
 		
-		
+		map.put("IDX", map.get("GOODS_NUM"));
+		System.out.println("111****12132* " + map);
 		shopDAO.deleteFileList(map);
+		
 		List<Map<String, Object>> list = fileUtils.parseUpdateFileInfo(map, request);
 		Map<String, Object> tempMap = null;
 		for(int i=0, size=list.size(); i<size; i++) {
@@ -85,7 +87,7 @@ public class ShopServiceImpl implements ShopService {
 				shopDAO.updateFile(tempMap);
 			}
 		}
-		map.put("IDX_SEQ", map.get("GOODS_NUM"));
+		
 		shopDAO.insertGoodsThumbnail(map);
 	}
 	

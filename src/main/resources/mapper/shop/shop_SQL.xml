@@ -81,8 +81,8 @@
 		<include refid="common.pagingPost"/>
 	</select>
 
-	<insert id="insertGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX_SEQ">
-		<selectKey keyProperty="IDX_SEQ" resultType="string" order="BEFORE">
+	<insert id="insertGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
 			SELECT GOODS_SEQ.NEXTVAL FROM DUAL	
 		</selectKey>
 		<![CDATA[
@@ -103,7 +103,7 @@
 			                )
 			VALUES          
 			                (
-			                #{IDX_SEQ},
+			                #{IDX},
 			                (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = #{MEM_ID}),
 			                #{GOODS_TITLE},
 			                #{GOODS_CONTENT},
@@ -146,13 +146,13 @@
 			                    FROM    (
 			                            SELECT  GOODS_IMAGE_STD 
 			                            FROM    GOODS_IMAGE 
-			                            WHERE   GOODS_IMAGE_PARENT = #{IDX_SEQ}
+			                            WHERE   GOODS_IMAGE_PARENT = #{IDX}
 			                            AND     GOODS_IMAGE_DEL_GB = 'N'
 			                            ORDER BY GOODS_IMAGE_NUM ASC
 			                            )
 			                    WHERE   ROWNUM <= 1
 			                    )
-			WHERE   GOODS_NUM = #{IDX_SEQ}
+			WHERE   GOODS_NUM = #{IDX}
 		]]>
 	</update>
 	
@@ -239,7 +239,7 @@
 		<![CDATA[ 
 			UPDATE 	GOODS_IMAGE 
 			SET 	GOODS_IMAGE_DEL_GB = 'Y' 
-			WHERE 	GOODS_IMAGE_PARENT = #{GOODS_NUM} 
+			WHERE 	GOODS_IMAGE_PARENT = #{IDX} 
 		]]> 
 	</update> 
 	<update id="updateFile" parameterType="hashmap"> 
