@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
-	
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -166,22 +164,6 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          </ul>
       </c:when>
      </c:choose>
-     <!-- @RequestMapping(value="/community/qnaList")
-	public ModelAndView qnaList() throws Exception {
-		ModelAndView mv = new ModelAndView("/community/qna/qnaList");
-		String url = "";
-		url = "community";
-		mv.addObject("url",url);
-		return mv;
-	}
-	@RequestMapping(value="/myPage/qnaList")
-	public ModelAndView qnaList2() throws Exception {
-		ModelAndView mv = new ModelAndView("/community/qna/qnaList");
-		String url = "";
-		url = "myPage";
-		mv.addObject("url",url);
-		return mv;
-	} -->
    </div>
    <div id="main-container">
    
@@ -197,8 +179,10 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			<tr>
 				<th scope="col">글번호</th>
 				<th scope="col">제목</th>
+				<th scope="col">작성자</th>
 				<th scope="col">조회수</th>
 				<th scope="col">작성일</th>
+				<th scope="col">답글여부</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -207,10 +191,12 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 					<c:forEach items="${list }" var="row">
 						<tr>
 							<td>${row.QNA_NUM }</td>
-							<td class="title"><a href="#this" name="title">${row.QNA_TITLE }</a>
-								<input type="hidden" id="IDX" value="${row.QNA_NUM }"></td>
+							<td class="title"><a href="#this" name="title">${row.QNA_TITLE }&nbsp;&nbsp;&nbsp;&nbsp;[${row.QNA_TYPE }]</a>
+								<input type="hidden" id="QNA_NUM" value="${row.QNA_NUM }"></td>
+						    <td>${row.MEM_ID }</td>
 							<td>${row.QNA_COUNT }</td>
 							<td>${row.QNA_DATE }</td>
+							<td>${row.QNA_YORN }</td>
 						</tr>
 					</c:forEach>
 				</c:when>
@@ -231,11 +217,10 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	</div>
 	</div>
 
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			fn_selectBoardList(1);
+			/* fn_selectBoardList(1); */
 			$("#write").on("click", function(e) { //글쓰기 버튼
 				e.preventDefault();
 				fn_openBoardWrite();
@@ -257,12 +242,12 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 		function fn_openBoardDetail(obj) {
 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/community/qnaDetail' />");
-			comSubmit.addParam("IDX", obj.parent().find("#IDX").val());
+			comSubmit.addParam("QNA_NUM", obj.parent().find("#QNA_NUM").val());
 			comSubmit.submit();
 		}
-		function fn_selectBoardList(pageNo) {
+	    function fn_selectBoardList(pageNo) {
 			var comAjax = new ComAjax();
-			comAjax.setUrl("<c:url value='/cummunity/selectBoardList.do' />");
+			comAjax.setUrl("<c:url value='/community/qnaList' />");
 			comAjax.setCallback("fn_selectBoardListCallback");
 			comAjax.addParam("PAGE_INDEX", pageNo);
 			comAjax.addParam("PAGE_ROW", 15);
@@ -312,7 +297,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 					fn_openBoardDetail($(this));
 				});
 			}
-		}
+		} 
 	</script>
 </body>
 </html>

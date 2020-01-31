@@ -48,9 +48,18 @@ public class NoticeDAO extends AbstractDAO {
 		update("notice.updateNoticeModify", map);
 	}
 	
+	// 파일 수정
+	public void updateFile(Map<String, Object> map) {
+		update("notice.updateFile", map);
+	}
+	
 	// 공지사항 삭제
 	public void deleteNotice(Map<String, Object> map) throws Exception{
 		update("notice.deleteNotice", map);
+	}
+
+	public void deleteFileList(Map<String, Object> map) {
+		update("notice.deleteFileList", map);
 	}
 
 }
