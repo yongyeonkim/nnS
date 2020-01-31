@@ -118,9 +118,9 @@
 						FILES_SEQ.NEXTVAL,
 						'2',
 						#{BOARD_IDX},
-						#{ORIGINAL_FILE_NAME},
-						#{STORED_FILE_NAME},
-						#{FILE_SIZE}
+						#{FILES_ORG},
+						#{FILES_STD},
+						#{FILES_SIZE}
 						)
 	]]>
 </insert>
@@ -137,6 +137,14 @@
 ]]>
 </update>
 
+<update id="updateFile" parameterType="hashmap">
+	<![CDATA[
+		UPDATE	FILES
+		SET		FILES_DEL = 'N'
+		WHERE	FILES_NUM = #{FILE_IDX}
+	]]>
+</update>
+
 <!-- 공지사항 삭제 -->
 <update id="deleteNotice" parameterType="hashmap" >
 <![CDATA[
@@ -147,4 +155,28 @@
 	
 ]]>
 </update>
+
+<update id="deleteFileList" parameterType="hashmap">
+	<![CDATA[
+		UPDATE	FILES
+		SET		FILES_DEL = 'Y'
+		WHERE	FILES_PARENT = #{IDX}
+	]]>
+</update>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

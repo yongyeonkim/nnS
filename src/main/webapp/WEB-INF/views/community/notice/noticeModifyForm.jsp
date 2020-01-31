@@ -196,14 +196,17 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
                </td>
          	</tr>
          	<tr>
-         		<td></td>
+         		<th scope="row">첨부파일</th>
          		<td colspan="3" >
          		<div id="fileDiv">
-        		 	<p>
-            		<input type="file" name="file_0" id="file">
-            		<a href="#this" class="btn" id="delete" name="delete">삭제</a>
-            		<a href="#this" class="btn" id="addFile">파일 추가</a>
-         			</p>
+         			<c:forEach var="row" items="${list }" varStatus="var">
+	        			<p>
+	        				<input type="hidden" id="FILES_NUM" name="FILES_NUM_${var.index }" value="${row.FILES_NUM }">
+	        				<a href="#this" id="name_${var.index }" name="name_${var.index }">${row.FILES_ORGNAME }</a>
+	        				<input type="file" id="file_${var.index }" name="file_${var.index }">(${row.FILES_SIZE }kb)
+	        				<a href="#this" class="btn" id="delete_${var.index}" name="delete_${var.index }">삭제</a>
+	        			</p>
+         			</c:forEach>
      			 </div>
      			 </td>
          	</tr>
@@ -212,18 +215,19 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       </table>
       
       <br/><br/>
-      <center>
-      <a href="#this" class="btn" id="write">작성하기</a>
+      <div align="center">
+      <a href="#this" class="btn" id="addFile">파일추가</a>
       <a href="#this" class="btn" id="list">목록으로</a>
-      </center>
+      <a href="#this" class="btn" id="write">작성하기</a>
+      </div>
    </form>
-   
-   
-   
   </div>
 </div>
+
+<%@ include file="/WEB-INF/include/include-body.jspf" %>
 <script type="text/javascript">
-      var gfv_count=1;
+		var gfv_count = '${fn:length(list)+1}';
+      
       $(document).ready(function(){
          $("#list").on("click", function(e){ //목록으로 버튼
             e.preventDefault();
@@ -240,7 +244,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
             fn_addFile();
          });
          
-         $("#a[name='delete']").on("click",function(e){ // 파일 삭제버튼
+         $("a[name^='delete']").on("click",function(e){ // 파일 삭제버튼
             e.preventDefault();
             fn_deleteFile($(this));
          });
@@ -259,12 +263,12 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       }
       
       function fn_addFile(){
-         var str = "<p><input type='file' name='file_"+(gfv_count++)+"'><a href='#this' class='btn' name='delete'>삭제</a></p>";
-         $("#fileDiv").append(str);
-         $("a[name='delete']").on("click", function(e){
-            e.preventDefault();
-            fn_deleteFile($(this));
-         });
+			var str = "<p>" + "<input type='file' id='file_"+(gfv_count)+"' name='file_"+(gfv_count)+"'>"+ "<a href='#this' class='btn' id='delete_"+(gfv_count)+"' name='delete_"+(gfv_count)+"'>삭제</a>" + "</p>";
+			$("#fileDiv").append(str);
+			$("#delete_"+(gfv_count++)).on("click", function(e){ //삭제 버튼 
+			e.preventDefault(); 
+			fn_deleteFile($(this)); 
+     });
       }
       function fn_deleteFile(obj){
          obj.parent().remove();

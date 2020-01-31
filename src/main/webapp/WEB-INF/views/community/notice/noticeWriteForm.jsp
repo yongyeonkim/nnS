@@ -189,7 +189,6 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          		<div id="fileDiv">
         		 	<p>
             		<input type="file" name="file_0" id="file">
-            		<a href="#this" class="btn" id="delete" name="delete">삭제</a>
             		<a href="#this" class="btn" id="addFile">파일 추가</a>
          			</p>
      			 </div>
