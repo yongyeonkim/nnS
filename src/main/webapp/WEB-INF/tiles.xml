@@ -32,7 +32,7 @@
 	
 	<!-- Member -->
 	<definition name="joinForm" extends="default2">
-		<put-attribute name="body" value="/WEB-INF/views/member/join/JoinForm.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/member/join/joinForm.jsp" />
 	</definition>
 	
 	<definition name="welcome" extends="default2">

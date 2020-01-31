@@ -32,11 +32,12 @@
 			        FROM     GOODS_LIKE 
 			        GROUP BY GOODS_LIKE_PARENT
 			        ) GL
-			WHERE   G.GOODS_SELLER = M.MEM_NUM
+			WHERE   G.GOODS_SELLER = M.MEM_NUM(+)
 			AND     G.GOODS_NUM = GL.GOODS_LIKE_PARENT(+)
 			AND     G.GOODS_DEL_GB = 'N'
 			AND     G.GOODS_TSTATUS = 'N'
 			]]>
+			<include refid="search"></include>	
 			<!--
 			<if test = #{GOODS_CATEGORY != null>
 			    AND     G.GOODS_CATEGORY = #{GOODS_CATEGORY}
@@ -80,6 +81,14 @@
  			-->
 		<include refid="common.pagingPost"/>
 	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'title'.toString()">AND G.GOODS_TITLE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'content'.toString()">AND G.GOODS_CONTENT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'brand'.toString()">AND G.GOODS_BRAND LIKE '%' || #{keyword} || '%'</if>
+		</if>
+	</sql>
 
 	<insert id="insertGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
 		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
@@ -106,7 +115,7 @@
 			                #{IDX},
 			                (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = #{MEM_ID}),
 			                #{GOODS_TITLE},
-			                #{smarteditor},
+			                #{GOODS_CONTENT},
 			                #{GOODS_PRICE},
 			                #{GOODS_REGION},
 			                #{GOODS_CATEGORY},
@@ -190,7 +199,7 @@
 			         SELECT MEM_NUM, MEM_ID
 			         FROM   MEMBER
 			        ) M
-			WHERE   G.GOODS_SELLER = M.MEM_NUM
+			WHERE   G.GOODS_SELLER = M.MEM_NUM(+)
 			AND     G.GOODS_NUM = #{GOODS_NUM}
 			AND     G.GOODS_DEL_GB = 'N'		
 		]]>
@@ -198,14 +207,11 @@
 	
 	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
 		<![CDATA[
-			SELECT 
-				GOODS_IMAGE_NUM,
-				GOODS_IMAGE_ORG,
-			FROM
-				GOODS_IMAGE 
-			WHERE 
-				GOODS_IMAGE_PARENT = #{GOODS_IMAGE_PARENT} 
-				AND GOODS_IMAGE_DEL_GB = 'N'
+			SELECT 	GOODS_IMAGE_NUM,
+					GOODS_IMAGE_ORG
+			FROM	GOODS_IMAGE 
+			WHERE   GOODS_IMAGE_PARENT = #{GOODS_NUM} 
+			AND 	GOODS_IMAGE_DEL_GB = 'N'
 		]]>
 	</select>
 	
@@ -215,8 +221,14 @@
 			SET     GOODS_TITLE = #{GOODS_TITLE},
 			        GOODS_CONTENT = #{GOODS_CONTENT},
 			        GOODS_PRICE = #{GOODS_PRICE},
-			        GOODS_BRAND = #{GOODS_BRAND}
-			WHERE   GOODS_NUM = #{IDX}
+			        GOODS_REGION = #{GOODS_REGION},
+			        GOODS_CATEGORY = #{GOODS_CATEGORY},
+			        GOODS_HASH = #{GOODS_HASH},
+			        GOODS_DCOST = #{GOODS_DCOST},
+			        GOODS_BRAND = #{GOODS_BRAND},
+			        GOODS_DATE = SYSDATE,
+			        GOODS_STATUS = #{GOODS_STATUS}
+			WHERE   GOODS_NUM = #{GOODS_NUM}
 			AND     GOODS_DEL_GB = 'N'
 			AND     GOODS_TSTATUS = 'N'
 		]]>
@@ -230,6 +242,21 @@
 			WHERE
 				GOODS_NUM = #{GOODS_NUM}
 		]]>
+	</update>
+	
+	<update id="deleteFileList" parameterType="hashmap"> 
+		<![CDATA[ 
+			UPDATE 	GOODS_IMAGE 
+			SET 	GOODS_IMAGE_DEL_GB = 'Y' 
+			WHERE 	GOODS_IMAGE_PARENT = #{IDX} 
+		]]> 
+	</update> 
+	<update id="updateFile" parameterType="hashmap"> 
+		<![CDATA[ 
+			UPDATE 	GOODS_IMAGE 
+			SET 	GOODS_IMAGE_DEL_GB = 'N' 
+			WHERE 	GOODS_IMAGE_NUM = #{FILE_IDX} 
+		]]> 
 	</update>
 	
        
