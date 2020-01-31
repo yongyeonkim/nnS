@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
@@ -23,12 +24,14 @@ public class CommonController {
 	private CommonService commonService;
 	
 	@RequestMapping(value="/common/downloadFile")
-	public void downloadFile(CommandMap commandMap, HttpServletResponse response) throws Exception{
+	public void downloadFile(CommandMap commandMap, HttpServletRequest request ,HttpServletResponse response) throws Exception{
 		Map<String, Object> map = commonService.selectFileInfo(commandMap.getMap());
 		String storedFileName = (String)map.get("FILES_STDNAME");
 		String originalFileName = (String)map.get("FILES_ORGNAME");
 		
-		byte fileByte[] = FileUtils.readFileToByteArray(new File("C:\\dev\\file\\"+storedFileName));
+		String filePath_temp = request.getSession().getServletContext().getRealPath("") + "/file/"; //request.getContextPath() + "/file/";
+		System.out.println(filePath_temp);
+		byte fileByte[] = FileUtils.readFileToByteArray(new File(filePath_temp+storedFileName));
 		
 		response.setContentType("application/octet-strea");
 		response.setContentLength(fileByte.length);
