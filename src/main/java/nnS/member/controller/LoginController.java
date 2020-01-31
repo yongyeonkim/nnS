@@ -42,13 +42,13 @@ public class LoginController {
 
 	@RequestMapping(value = "/loginForm") // 로그인 폼
 	public ModelAndView loginForm() throws Exception {
-		ModelAndView mv = new ModelAndView("loginForm");
+		ModelAndView mv = new ModelAndView("/member/login/loginForm");
 		return mv;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST) // 로그인
 	public ModelAndView login(CommandMap commandMap, HttpServletRequest request) throws Exception {
-		ModelAndView mv = new ModelAndView("login");
+		ModelAndView mv = new ModelAndView("/member/login/login");
 		String message = "";
 		String url = "";
 
@@ -91,13 +91,13 @@ public class LoginController {
 
 	@RequestMapping(value = "/findId") // 아이디 찾기 폼을 보여주는 메소드
 	public ModelAndView findId(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findAccount");
+		ModelAndView mv = new ModelAndView("/member/login/findAccount");
 		return mv;
 	}
 
 	@RequestMapping(value = "/findIdResult", method = RequestMethod.POST) // 입력한 정보에 맞춰서 아이디를 찾아주는 거
 	public ModelAndView findIdResult(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findIdResult");
+		ModelAndView mv = new ModelAndView("/member/login/findIdResult");
 		Map<String, Object> map = loginService.findIdWithEmail(commandMap.getMap());
 		mv.addObject("id", map);
 		return mv;
@@ -107,7 +107,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/findPw") // 비밀번호 찾기 폼을 보여주는 메소드
 	public ModelAndView findPw(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findAccount");
+		ModelAndView mv = new ModelAndView("/member/login/findAccount");
 		return mv;
 	}
 	
