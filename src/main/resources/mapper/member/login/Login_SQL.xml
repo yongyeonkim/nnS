@@ -38,7 +38,6 @@
 		FROM    MEMBER
 		WHERE   MEM_ID = #{MEM_ID}
 		AND     MEM_EMAIL = #{MEM_EMAIL}
-		AND     MEM_VERIFY = #{MEM_VERIFY}
 		AND     MEM_DEL_GB = 'N'
 	]]>
 	</select>
