@@ -22,7 +22,9 @@ public class ShopServiceImpl implements ShopService {
 	private FileUtils fileUtils;
 	
 	@Override
-	public List<Map<String, Object>> selectGoodsList(Map<String, Object> map) throws Exception {
+	public List<Map<String, Object>> selectGoodsList(Map<String, Object> map, String keyword, String searchType) throws Exception {
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
 		return shopDAO.selectGoodsList(map);
 	}
 	

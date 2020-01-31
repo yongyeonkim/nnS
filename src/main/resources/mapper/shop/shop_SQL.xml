@@ -32,11 +32,12 @@
 			        FROM     GOODS_LIKE 
 			        GROUP BY GOODS_LIKE_PARENT
 			        ) GL
-			WHERE   G.GOODS_SELLER = M.MEM_NUM
+			WHERE   G.GOODS_SELLER = M.MEM_NUM(+)
 			AND     G.GOODS_NUM = GL.GOODS_LIKE_PARENT(+)
 			AND     G.GOODS_DEL_GB = 'N'
 			AND     G.GOODS_TSTATUS = 'N'
 			]]>
+			<include refid="search"></include>	
 			<!--
 			<if test = #{GOODS_CATEGORY != null>
 			    AND     G.GOODS_CATEGORY = #{GOODS_CATEGORY}
@@ -80,6 +81,14 @@
  			-->
 		<include refid="common.pagingPost"/>
 	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'title'.toString()">AND G.GOODS_TITLE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'content'.toString()">AND G.GOODS_CONTENT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'brand'.toString()">AND G.GOODS_BRAND LIKE '%' || #{keyword} || '%'</if>
+		</if>
+	</sql>
 
 	<insert id="insertGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
 		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
@@ -190,7 +199,7 @@
 			         SELECT MEM_NUM, MEM_ID
 			         FROM   MEMBER
 			        ) M
-			WHERE   G.GOODS_SELLER = M.MEM_NUM
+			WHERE   G.GOODS_SELLER = M.MEM_NUM(+)
 			AND     G.GOODS_NUM = #{GOODS_NUM}
 			AND     G.GOODS_DEL_GB = 'N'		
 		]]>
