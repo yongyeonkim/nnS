@@ -143,8 +143,8 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 <div id="content">
 	<div id="vertical_tab-container">
 	<ul>
-		<li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
+		<li class="selected"><a href="noticeList">공지사항</a></li>
+         <li><a href="boardList">자유게시판</a></li>
          <li><a href="reportList">신고게시판</a></li>
          <li><a href="qnaList">Q&A게시판</a></li>
 	</ul>
