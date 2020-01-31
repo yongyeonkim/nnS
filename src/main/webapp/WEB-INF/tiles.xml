@@ -98,6 +98,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/community/notice/noticeWriteForm.jsp" />
 	</definition>
 	
+	<definition name="noticeModifyForm" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/community/notice/noticeModifyForm.jsp" />
+	</definition>
+	
 	<!-- board -->
 	<definition name="boardList" extends="default">
 		<put-attribute name="body" value="/WEB-INF/views/community/board/boardList.jsp" />

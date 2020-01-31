@@ -1,14 +1,10 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="<c:url value='/js/common.js?version=3'/>" charset="utf-8"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>notice</title>
-	<meta charset="EUC-KR">
-	<style type="text/css">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
+
+<style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 .container {width: 700px; margin: 10px auto;}
@@ -157,10 +153,10 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	<div id="main-container">
 	<table border="1" align="center" class="notice_list">
 		<colgroup>
-			<col width="10%" />
+			<col width="5%" />
 			<col width="*" />
 			<col width="15%" />
-			<col width="20%" />
+			<col width="25%" />
 			<col width="5%" />
 		</colgroup>
 		<caption><h2>공지사항</h2></caption>
@@ -212,7 +208,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 		function fn_openBoardDetail(obj) {
 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/community/noticeDetail' />");
-			comSubmit.addParam("NUM", obj.parent().find("#NUM").val());
+			comSubmit.addParam("NOTICE_NUM", obj.parent().find("#NOTICE_NUM").val());
 			comSubmit.submit();
 		}
 		function fn_selectBoardList(pageNo) {
@@ -250,24 +246,19 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				function(key, value) {
 					str += "<tr style=\"text-align: center\">"
 							+ "<td>"
-							+ value.RNUM
+							+ value.NOTICE_NUM
 							+ "</td>"
 							+ "<td class='title'>"
 							+ "<a href='#this' name='title'>"
 							+ value.NOTICE_TITLE
 							+ "</a>"
-							+ "<input type='hidden' id='IDX' value=" + value.NOTICE_NUM + ">"
+							+ "<input type='hidden' id='NOTICE_NUM' value=" + value.NOTICE_NUM + ">"
 							+ "</td>" + "<td>" + value.MEM_ID
 							+ "</td>" + "<td>" + new Date(value.NOTICE_DATE).toLocaleString()
 							+ "</td>" + "<td>" + value.NOTICE_COUNT
 							+ "</td>" + "</tr>";
 								});
 				body.append(str);
-
-				$("a[name='title']").on("click", function(e) { //제목
-					e.preventDefault();
-					fn_openBoardDetail($(this));
-				});
 			}
 		}
 	</script>
