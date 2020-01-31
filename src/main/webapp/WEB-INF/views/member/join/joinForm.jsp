@@ -5,81 +5,86 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
 <script type="text/javascript">
-	
+
 $(function(){
-	/*
-	이메일 인증 버튼 클릭시 발생하는 이벤트
-	*/
-	$(document).on("click", "#emailBtn", function(){
+	$(document).on("click", "#emailBtn", function(){ //이메일 발송
+	$.ajax({
+		type:"get",
+		url : "<c:url value='/createEmailAuth'/>",
+		data : "userEmail=" + $("#email1").val()+"@"+$("#email2").val() + "&random=" + $("#random").val(),
+		success : function(data){
+			alert("사용가능한 이메일입니다. 인증번호를 입력해주세요.");
+		},
+		error: function(data){
+			alert("에러가 발생했습니다.");
+			return false;
+		}
+	});
+	});	
 	
-		/* 이메일 중복 체크 후 메일 발송 비동기 처리 */
+	$(document).on("click", "#emailAuthBtn", function(){ //인증번호 확인
 		$.ajax({
-				beforeSend: function(){
-				loadingBarStart();
-				},
-				type:"get",
-				url : "<c:url value='/createEmailCheck'/>",
-				data : "userEmail=" + $("#userEmail").val() + "&random=" + $("#random").val(),
-				//data: "userEmail="+encodeURIComponent($('#userEmail').val()),
-				/* encodeURIComponent
-				예를들어, http://a.com?name=egoing&job=programmer 에서 &job=programmer
-				중 '&'는 하나의 파라미터가 끝나고 다음 파라미터가 온다는 의미이다.
-				그런데 다음과 같이 job의 값에 &가 포함된다면 시스템은 job의 값을 제대로 인식할수 없게 된다. */
-				success : function(data){
-							alert("사용가능한 이메일입니다. 인증번호를 입력해주세요.");
-				},
-				
-				error: function(data){
-						alert("에러가 발생했습니다.");
-						return false;
+			type:"get",
+			url:"<c:url value='/emailConfirm'/>",
+			data:"authCode="+$('#emailAuth').val()+"&random="+$("#random").val(),
+			success:function(data){
+				if(data=="complete"){
+					alert("인증 완료되었습니다.");
+					$('#chkEm').html("이메일 인증 완료").css("color", "blue");  
+				}else if(data=="false"){
+					alert("인증번호를 잘못 입력하셨습니다.");
 				}
+			},
+			error:function(data){
+				alert("에러가 발생했습니다.")
+			}
 		});
 	});
-	
-	/*
-	이메일 인증번호 입력 후 인증 버튼 클릭 이벤트
-	*/
-	$(document).on("click", "#emailAuthBtn", function(){
-		$.ajax({
-				beforeSend: function(){
-				loadingBarStart();
-				},
-				type:"get",
-				url:"<c:url value='/emailAuth'/>",
-				data:"authCode=" + $('#emailAuth').val() + "&random=" + $("#random").val(),
-				success:function(data){
-						if(data=="complete"){
-								alert("인증이 완료되었습니다.");
-						}else if(data == "false"){
-								alert("인증번호를 잘못 입력하셨습니다.")
-						}
-				},
-				complete: function(){
-					loadingBarEnd();
-				},
-				error:function(data){
-					alert("에러가 발생했습니다.");
-				}
-			});
-	});
-	
 });
 
+
+function zipcode() {//우편번호 검색창
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('MEM_ZIP').value = data.zonecode;
+                document.getElementById("MEM_ADD1").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("MEM_ADD2").focus();
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                alert("도로명 주소를 입력해주세요.");
+            	return false;
+            }
+           
+        }
+    }).open();
+}
 
    function back(){
       history.go(-1);
    }
-   $(document).ready(function() {
+   $(document).ready(function() { //id check
       $("#idCheck").on("click", function(e) {
          e.preventDefault();
          fn_idCheck();
       });
    });
-
-   $(function(){   
+ 
+   $(function(){ //email select  
    $(document).ready(function(){
       $('select[name=email]').change(function() {
          if($(this).val()=="self"){
@@ -94,12 +99,12 @@ $(function(){
    });
    });
 
-   function fn_idCheck(){
-       var mem_id = {MEM_ID : $('#mem_id').val()};
+   function fn_idCheck(){ //id check
+       var MEM_ID = {MEM_ID : $('#MEM_ID').val()};
        $.ajax({
            url:"<c:url value='/join/idCheck'/>",
            type:'get',
-           data: mem_id,
+           data: MEM_ID,
            success:function(data){              
                if($.trim(data)=="0"){
                   $('#chkMsg').html("사용가능한 아이디 입니다.").css("color", "blue");         
@@ -112,25 +117,23 @@ $(function(){
            }
        });
    };
-   
-   
-   $(document).ready(function(){
+  
+   $(document).ready(function(){ //email select value
          $("#email").change(function(){
             $("#email2").val($(this).val());
          });
       });
-   
-   
+
    $(document).ready(function() { //비밀번호 일치 확인
         //[1] lblError 레이어 클리어
-        $('#mem_pw').keyup(function() {
+        $('#MEM_PW').keyup(function() {
             //$('#pwr').remove(); // 제거
             $('#pw').text(''); // 제거가 아니라 클리어
                $('#password2').val('');
         });
         //[2] 암호 확인 기능 구현
         $('#password2').keyup(function() {
-            if ($('#mem_pw').val() != $('#password2').val()) {
+            if ($('#MEM_PW').val() != $('#password2').val()) {
                 $('#pw').text(''); // 클리어
                 $('#pw').html("암호가 일치하지 않습니다.").css("color", "red");          //레이어에 HTML 출력
             }
@@ -141,27 +144,27 @@ $(function(){
         });
     });
    
-   $(document).ready(function() { 
+   $(document).ready(function() { //회원가입 버튼 클릭시
       $("#join").on("click", function(e) {
          e.preventDefault();
          fn_join();
       });
    });
    
-   function fn_join(joinForm) {
+   function fn_join(joinForm) { //회원가입 버튼 클릭시(유효성검증, 데이터입력)
       var chk = $("input[name=agree_required]");
-      if(!$("#mem_id").val()){
+      if(!$("#MEM_ID").val()){
          alert("아이디를 입력해주세요.");
-         $("#mem_id").focus();
+         $("#MEM_ID").focus();
          return false;
       }
       if($("#chkMsg").html()!="사용가능한 아이디 입니다."){
          alert("아이디 중복확인을 해주세요.");
          return false;
       }
-      if(!$("#mem_pw").val()){
+      if(!$("#MEM_PW").val()){
          alert("비밀번호를 입력해주세요.");
-         $("#mem_pw").focus();
+         $("#MEM_PW").focus();
          return false;
       }
       if(!$("#password2").val()){
@@ -173,10 +176,23 @@ $(function(){
          alert("암호가 일치하지 않습니다.");
          return false;
       }
-      if(!$("#mem_name").val()){
+      if(!$("#MEM_NAME").val()){
          alert("이름을 입력해주세요.");
-         $("#mem_name").focus();
+         $("#MEM_NAME").focus();
          return false;
+      }
+      if(!$("#MEM_BIRTH").val()){
+          alert("생년월일을 입력해주세요.");
+          $("#MEM_BIRTH").focus();
+          return false;
+       }
+      
+      var MEM_GEN = $('#MEM_GEN_M');
+       
+      if($(':radio[name="MEM_GEN"]:checked').length < 1){
+          alert('성별을 선택해주세요');                        
+          MEM_GEN.focus();
+          return false;
       }
       if(!$("#email1").val() || !$("#email2").val()){
          alert("이메일을 입력해주세요.");
@@ -187,6 +203,10 @@ $(function(){
          }
          return false;
       }
+      if($("#chkEm").html()!="이메일 인증 완료"){
+          alert("이메일 인증을 해주세요.");
+          return false;
+       }
       if(!$("#phone2").val() || !$("#phone3").val()){
          alert("휴대전화를 입력해주세요.");
          if(!$("#phone2").val()){
@@ -196,19 +216,20 @@ $(function(){
          }
          return false;
       }
-      if(!$("#zipcode").val()){
+
+      if(!$("#MEM_ZIP").val()){
           alert("우편번호를 입력해주세요.");
-          $("#zipcode").focus();
+          $("#MEM_ZIP").focus();
           return false;
        }
-      if(!$("#address1").val()){
+      if(!$("#MEM_ADD1").val()){
           alert("집주소 입력해주세요.");
-          $("#address1").focus();
+          $("#MEM_ADD1").focus();
           return false;
        }
-      if(!$("#address2").val()){
+      if(!$("#MEM_ADD2").val()){
           alert("상세주소를 입력해주세요.");
-          $("#address2").focus();
+          $("#MEM_ADD2").focus();
           return false;
        }
       if(chk[0].checked==false){
@@ -216,11 +237,11 @@ $(function(){
          return false;
       }
       var comSubmit = new ComSubmit("joinForm");
-      comSubmit.setUrl("<c:url value='/join/emailAuth'/>");
+      comSubmit.setUrl("<c:url value='/memberVerify'/>");
       var email = $("#email1").val()+"@"+$("#email2").val();
       var phone = $("#phone1").val()+$("#phone2").val()+$("#phone3").val();
-      $("#mem_email").val(email);
-      $("#mem_phone").val(콜);
+      $("#MEM_EMAIL").val(email);
+      $("#MEM_PHONE").val(phone);
       comSubmit.submit();
    }
    $("#joinForm").on("submit",function(e){
@@ -238,13 +259,13 @@ $(function(){
       <form id="joinForm" method="post">
          <div>
             <div>
-               아이디<input type="text" id="mem_id" name="mem_id" > 
+               아이디<input type="text" id="MEM_ID" name="MEM_ID" > 
                <button onclick="fn_idCheck();" type="button">아이디 중복 확인
             </div>
             <span id = "chkMsg"></span>
             
             <div>
-               비밀번호<input type="password" id="mem_pw" name="mem_pw"> 
+               비밀번호<input type="password" id="MEM_PW" name="MEM_PW"> 
             </div>
             
             <div>
@@ -254,22 +275,26 @@ $(function(){
             
             
             <div>
-               이름<input type="text" id="mem_name" name="mem_name"> 
+               이름<input type="text" id="MEM_NAME" name="MEM_NAME"> 
             </div>
             
             <div>
-               생년월일<input type="text" id="mem_birth" name="mem_birth"> 
+
+               생년월일<input type="text" id="MEM_BIRTH" name="MEM_BIRTH" placeholder="ex)19950703"> 
+
             </div>
             
             <div>
                <form>
-                  <input type="radio" name="mem_gen" value="남성"/>남성
-                  <input type="radio" name="mem_gen" value="여성"/>여성
+
+                  <input type="radio" id="MEM_GEN_M" name="MEM_GEN" value="남성"/>남성
+                  <input type="radio" id="MEM_GEN_F" name="MEM_GEN" value="여성"/>여성
+
                </form>
             </div>
             
             <div>
-               <input type="hidden" id="mem_email" name="mem_email">
+               <input type="hidden" id="MEM_EMAIL" name="MEM_EMAIL">
                이메일<input type="text" id="email1" name="email1"> 
                @
                <input type="text" id="email2" name="email2" value=""> 
@@ -280,17 +305,20 @@ $(function(){
                   <option value="hanmail.net">hanmail.net</option>
                   <option value="gmail.com">gmail.com</option>
                   <option value="nate.com">nate.com</option>
-               </select> 
-               
-               <input type="text" id="email" name="email" placeholder="이메일을 입력하세요"/>
+
+               </select>
+
                <button type="button" id="emailBtn">이메일 발송</button>
+               <input type="text" id="emailAuth" name="emailAuth" placeholder="인증번호"/>
                <button type="button" id="emailAuthBtn">이메일 인증</button>
                <input type="hidden" path="random" id="random" value="${random }"/>
+               
+               <span id = "chkEm"></span>
+               
             </div>
-            
             <div>
-               <input type="hidden" id="mem_phone" name="mem_phone">
-               휴대전화<select id="phone1" name="phone1">
+               <input type="hidden" id="MEM_PHONE" name="MEM_PHONE">
+               	휴대전화<select id="phone1" name="phone1">
                   <option value="010">010</option>
                   <option value="011">011</option>
                   <option value="016">016</option>
@@ -305,15 +333,16 @@ $(function(){
             </div>
             
             <div>
-               우편번호<input type="text" id="zipcode" name="zipcode">
+               우편번호<input type="text" id="MEM_ZIP" name="MEM_ZIP">
+               <input type="button" onclick="zipcode()" value="우편번호 찾기"><br>
             </div>
             
             <div>
-               집 주소<input type="text" id="address1" name="address1">
+               집 주소<input type="text" id="MEM_ADD1" name="MEM_ADD1">
             </div>
             
             <div>
-               상세 주소<input type="text" id="address2" name="address2">
+               상세 주소<input type="text" id="MEM_ADD2" name="MEM_ADD2">
             </div>
          
             <div>
