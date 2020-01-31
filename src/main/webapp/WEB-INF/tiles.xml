@@ -32,7 +32,7 @@
 	
 	<!-- Member -->
 	<definition name="joinForm" extends="default2">
-		<put-attribute name="body" value="/WEB-INF/views/member/join/JoinForm.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/member/join/joinForm.jsp" />
 	</definition>
 	
 	<definition name="welcome" extends="default2">
@@ -96,6 +96,10 @@
 	
 	<definition name="noticeWriteForm" extends="default">
 		<put-attribute name="body" value="/WEB-INF/views/community/notice/noticeWriteForm.jsp" />
+	</definition>
+	
+	<definition name="noticeModifyForm" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/community/notice/noticeModifyForm.jsp" />
 	</definition>
 	
 	<!-- board -->

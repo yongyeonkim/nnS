@@ -115,7 +115,7 @@
 			                #{IDX},
 			                (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = #{MEM_ID}),
 			                #{GOODS_TITLE},
-			                #{smarteditor},
+			                #{GOODS_CONTENT},
 			                #{GOODS_PRICE},
 			                #{GOODS_REGION},
 			                #{GOODS_CATEGORY},
@@ -207,14 +207,11 @@
 	
 	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
 		<![CDATA[
-			SELECT 
-				GOODS_IMAGE_NUM,
-				GOODS_IMAGE_ORG,
-			FROM
-				GOODS_IMAGE 
-			WHERE 
-				GOODS_IMAGE_PARENT = #{GOODS_IMAGE_PARENT} 
-				AND GOODS_IMAGE_DEL_GB = 'N'
+			SELECT 	GOODS_IMAGE_NUM,
+					GOODS_IMAGE_ORG
+			FROM	GOODS_IMAGE 
+			WHERE   GOODS_IMAGE_PARENT = #{GOODS_NUM} 
+			AND 	GOODS_IMAGE_DEL_GB = 'N'
 		]]>
 	</select>
 	
@@ -224,8 +221,14 @@
 			SET     GOODS_TITLE = #{GOODS_TITLE},
 			        GOODS_CONTENT = #{GOODS_CONTENT},
 			        GOODS_PRICE = #{GOODS_PRICE},
-			        GOODS_BRAND = #{GOODS_BRAND}
-			WHERE   GOODS_NUM = #{IDX}
+			        GOODS_REGION = #{GOODS_REGION},
+			        GOODS_CATEGORY = #{GOODS_CATEGORY},
+			        GOODS_HASH = #{GOODS_HASH},
+			        GOODS_DCOST = #{GOODS_DCOST},
+			        GOODS_BRAND = #{GOODS_BRAND},
+			        GOODS_DATE = SYSDATE,
+			        GOODS_STATUS = #{GOODS_STATUS}
+			WHERE   GOODS_NUM = #{GOODS_NUM}
 			AND     GOODS_DEL_GB = 'N'
 			AND     GOODS_TSTATUS = 'N'
 		]]>
@@ -239,6 +242,21 @@
 			WHERE
 				GOODS_NUM = #{GOODS_NUM}
 		]]>
+	</update>
+	
+	<update id="deleteFileList" parameterType="hashmap"> 
+		<![CDATA[ 
+			UPDATE 	GOODS_IMAGE 
+			SET 	GOODS_IMAGE_DEL_GB = 'Y' 
+			WHERE 	GOODS_IMAGE_PARENT = #{IDX} 
+		]]> 
+	</update> 
+	<update id="updateFile" parameterType="hashmap"> 
+		<![CDATA[ 
+			UPDATE 	GOODS_IMAGE 
+			SET 	GOODS_IMAGE_DEL_GB = 'N' 
+			WHERE 	GOODS_IMAGE_NUM = #{FILE_IDX} 
+		]]> 
 	</update>
 	
        

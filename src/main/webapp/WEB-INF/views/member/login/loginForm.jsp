@@ -1,6 +1,41 @@
 <%@ page language="java" contentType="text/html; charset=euc-kr"%>
 <html>
 <head><title>로그인</title>
+   <style>
+   @import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+	
+	html {
+		height: 100%;
+	}
+	
+	body {
+	    width:100%;
+	    height:100%;
+	    margin: 0;
+  		padding-top: 80px;
+  		padding-bottom: 40px;
+  		font-family: "Nanum Gothic", arial, helvetica, sans-serif;
+  		background-repeat: no-repeat;
+  		background:linear-gradient(to bottom right, #ffffff, #ffffff);
+	}
+	
+    .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	}
+	
+	.form-signin .form-control {
+  		position: relative;
+  		height: auto;
+  		-webkit-box-sizing: border-box;
+     	-moz-box-sizing: border-box;
+        	 box-sizing: border-box;
+  		padding: 10px;
+  		font-size: 16px;
+	}
+
    
    </style>
    <%-- <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script> --%>
@@ -102,30 +137,43 @@
     	    return unescape(cookieValue);
     	}
    </script>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   
 </head>
-<BODY onload="begin()">
-<form name="myform" action="login" method="post">
+<body onload="begin()" cellpadding="0" cellspacing="0" marginleft="0" margintop="0" width="100%" height="100%" align="center">
+	<form name="myform" action="login" method="post" class="form-signin">
+		<div class="card align-middle" style="width:20rem; border-radius:20px;">
+			<div>
+				<div class="card-title" style="margin-top:30px;">
+					<h2 class="card-title text-center" style="color:#113366;">로그인 폼</h2>
+				</div>
+				
+				<div class="card-body">	
+					<INPUT type="text" name="MEM_ID" id="MEM_ID" size="15" maxlength="12" class="form-control" placeholder="Your ID"><br>  
+				</div>
+   
+				<div class="card-body">
+					<INPUT type=password name="MEM_PW" id="MEM_PW" size="15" maxlength="12" class="form-control" placeholder="Password"> <br>
+				</div>
+			
+				<div class="card-body">
+					<input type="button" class="btn btn-lg btn-primary btn-block" value="로그인" onclick="fsubmit();">
+				</div>
+			
+				<div class="checkbox" align="center">
+					<label>
+						<input type="checkbox" value="remember-me" >아이디저장
+					</label>
+				</div> 
 
-   <div>
-   아이디 <INPUT type="text" name="MEM_ID" id="MEM_ID" size="15" maxlength="12">
-   
-   </div>
-   
-   <div>
-     비밀번호<INPUT type=password name="MEM_PW" id="MEM_PW" size="15" maxlength="12">
-   </div>
-   <div>
-      <input type="button" value="로그인" onclick="fsubmit();">
-   </div>
-    <div>
-      <input type="checkbox" value="idSaveCheck">아이디저장
-    </div> 
-    <div>
-      <a href="joinForm">회원가입</a>|<a href="findId">ID/PW 찾기</a>
+    
+			</div>
+		</div>
+	</form>
+	
+	<div align="center">
+		<input type="button" value="회원가입" onclick="location.href='/nnS/joinForm'"/><input type="button" value="ID/PW 찾기" onclick="location.href='/nnS/findId'"/>
     </div>
-</form>
 
-</BODY>
+</body>
 </HTML>

@@ -31,7 +31,7 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public void insertGoods(Map<String, Object> map, HttpServletRequest request) throws Exception {
 		shopDAO.insertGoods(map);
-		
+		System.out.println("****12132* " + map);
 		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(map, request);
 		for(int i = 0, size=list.size(); i < size; i++) {
 			shopDAO.insertFile(list.get(i));
@@ -64,10 +64,9 @@ public class ShopServiceImpl implements ShopService {
 		Map<String, Object> tempMap = shopDAO.selectGoodsDetail(map);
 		resultMap.put("map", tempMap);
 		
-		/*
-		 * List<Map<String, Object>> list = shopDAO.selectFileList(map);
-		 * resultMap.put("list", list);
-		 */
+		List<Map<String, Object>> list = shopDAO.selectFileList(map);
+		resultMap.put("list", list);
+		 
 		
 		return resultMap;
 	}
@@ -76,8 +75,10 @@ public class ShopServiceImpl implements ShopService {
 	public void updateGoods(Map<String, Object> map, HttpServletRequest request) throws Exception{
 		shopDAO.updateGoods(map);
 		
-		/*
+		map.put("IDX", map.get("GOODS_NUM"));
+		System.out.println("111****12132* " + map);
 		shopDAO.deleteFileList(map);
+		
 		List<Map<String, Object>> list = fileUtils.parseUpdateFileInfo(map, request);
 		Map<String, Object> tempMap = null;
 		for(int i=0, size=list.size(); i<size; i++) {
@@ -88,7 +89,8 @@ public class ShopServiceImpl implements ShopService {
 				shopDAO.updateFile(tempMap);
 			}
 		}
-		*/
+		
+		shopDAO.insertGoodsThumbnail(map);
 	}
 	
 	@Override

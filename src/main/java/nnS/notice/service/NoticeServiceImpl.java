@@ -1,13 +1,19 @@
 package nnS.notice.service;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import nnS.common.util.FileUtils;
 import nnS.notice.dao.NoticeDAO;;
 
 @Service("noticeService")
@@ -16,6 +22,9 @@ public class NoticeServiceImpl implements NoticeService {
 	
 	@Resource(name="noticeDAO")
 	private NoticeDAO noticeDAO;
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
 
 	@Override
 	public List<Map<String, Object>> selectNoticeList(Map<String, Object> map) throws Exception {
@@ -24,13 +33,25 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public Map<String, Object> selectNoticeDetail(Map<String, Object> map) throws Exception {
-		Map<String, Object> resultMap = noticeDAO.selectNoticeDetail(map);
+		noticeDAO.updateCount(map);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> tempMap = noticeDAO.selectNoticeDetail(map);
+		resultMap.put("map", tempMap);
+		
+		List<Map<String,Object>> list = noticeDAO.selectFileList(map);
+		resultMap.put("list", list);
+		
 		return resultMap;
 	}
 
 	@Override
-	public void insertNoticeWrite(Map<String, Object> map) throws Exception {
+	public void insertNoticeWrite(Map<String, Object> map, HttpServletRequest request) throws Exception {
 		noticeDAO.insertNotice(map);
+		
+		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(map, request);
+		for(int i=0, size=list.size(); i<size; i++) {
+			noticeDAO.insertFile(list.get(i));
+		}
 	}
 
 	@Override
