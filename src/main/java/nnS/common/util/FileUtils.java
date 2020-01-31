@@ -89,19 +89,20 @@ public class FileUtils {
 				multipartFile.transferTo(new File(filePath_temp + storedFileName)); 
 				listMap = new HashMap<String,Object>(); 
 				listMap.put("IS_NEW",  "Y");
-				listMap.put("BOARD_IDX", boardIdx); 
+				listMap.put("BOARD_IDX", Integer.parseInt(boardIdx)); 
 				listMap.put("FILES_ORG", originalFileName); 
 				listMap.put("FILES_STD", storedFileName); 
 				listMap.put("FILE_SIZE", multipartFile.getSize()); 
 				list.add(listMap); 
 			}
 			else {
+				System.out.println("**********!*!*!*!*!*!*!***********!*!*!*!*!*!*!***********!*!*!*!*!*!*!***********!*!*!*!*!*!*!*");
 				requestName = multipartFile.getName();
 				idx = "IDX_"+requestName.substring(requestName.indexOf("_")+1); 
 				if(map.containsKey(idx) == true && map.get(idx) != null){ 
 					listMap = new HashMap<String,Object>(); 
 					listMap.put("IS_NEW", "N"); 
-					listMap.put("FILE_IDX", map.get(idx)); 
+					listMap.put("FILE_IDX", Integer.parseInt((String)map.get(idx))); 
 					list.add(listMap); 
 				} 
 			}

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="EUC-KR">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
@@ -178,18 +178,21 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          	</tr>
          	<tr>
          		<td>작성자</td>
-         		<td><input type="text" id="writer" name="WRITER" class="wdp_90" value="${map.WRITER}"></input></td>         	
+         		<td>관리자</td>         	
          	</tr>
          	
          	<tr>
          		<td>제목</td>
-         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90" value="${map.TITLE}"/></td>
+         		<td colspan="3">
+       				<input type="text" id="NOTICE_TITLE" name="NOTICE_TITLE" class="wdp_90" value="${map.NOTICE_TITLE}"/>
+	         		<input type="hidden" id="NOTICE_NUM" name="NOTICE_NUM" value="${map.NOTICE_NUM }"/>
+         		</td>
          	</tr>
          	
          	<tr>
          		<td>내용</td>
          		<td colspan="3" class="view_text">
-                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS" value="${map.CONTNET}"></textarea>
+                  <textarea rows="20" cols="100" title="내용" id="NOTICE_CONTENT" name="NOTICE_CONTENT">${map.NOTICE_CONTENT}</textarea>
                </td>
          	</tr>
          	<tr>
@@ -231,11 +234,13 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
             e.preventDefault();
             fn_insertNotice();
          });
-         $("#addFile").on("click", function(e){
+         
+         $("#addFile").on("click", function(e){ // 파일 추가버튼
             e.preventDefault();
             fn_addFile();
          });
-         $("#a[name='delete']").on("click",function(e){
+         
+         $("#a[name='delete']").on("click",function(e){ // 파일 삭제버튼
             e.preventDefault();
             fn_deleteFile($(this));
          });
@@ -243,13 +248,13 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       
       function fn_openNoticeList(){
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/cummunity/noticeList' />");
+         comSubmit.setUrl("<c:url value='/community/noticeList' />");
          comSubmit.submit();
       }
       
       function fn_insertNotice(){
          var comSubmit = new ComSubmit("frm");
-         comSubmit.setUrl("<c:url value='/nnS/community/noticeWrite' />");
+         comSubmit.setUrl("<c:url value='/community/noticeModify' />");
          comSubmit.submit();
       }
       

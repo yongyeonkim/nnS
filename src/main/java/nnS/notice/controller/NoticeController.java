@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -53,9 +54,8 @@ public class NoticeController {
 		ModelAndView mv = new ModelAndView("noticeDetail");
 		
 		Map<String, Object> map = noticeService.selectNoticeDetail(commandMap.getMap());
-		String str = map.get("NOTICE_CONTENT").toString().replace("\n", "<br>");
-		map.replace("NOTICE_CONTENT", str);
-		mv.addObject("map", map);
+		mv.addObject("map", map.get("map"));
+		mv.addObject("list", map.get("list"));
 		
 		return mv;		
 	}
@@ -70,9 +70,9 @@ public class NoticeController {
 	
 	// 공지사항 작성
 	@RequestMapping(value = "/community/noticeWrite")
-	public ModelAndView noticeWrite(CommandMap commandMap) throws Exception {
+	public ModelAndView noticeWrite(CommandMap commandMap, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/community/noticeList");
-		noticeService.insertNoticeWrite(commandMap.getMap());
+		noticeService.insertNoticeWrite(commandMap.getMap(), request);
 		
 		return mv;		
 	}
@@ -80,9 +80,9 @@ public class NoticeController {
 	// 공지사항 수정폼
 	@RequestMapping(value = "/community/noticeModifyForm")
 	public ModelAndView noticeModifyForm(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("noticeWriteForm");
+		ModelAndView mv = new ModelAndView("noticeModifyForm");
 		Map<String, Object> map = noticeService.selectNoticeDetail(commandMap.getMap());
-		mv.addObject("map", map);
+		mv.addObject("map", map.get("map"));
 		
 		return mv;		
 	}
@@ -92,7 +92,10 @@ public class NoticeController {
 	public ModelAndView noticeModify(CommandMap commandMap) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/community/noticeDetail");
 		noticeService.updateNoticeModify(commandMap.getMap());
-		mv.addObject("num", commandMap.get("num"));
+		mv.addObject("NOTICE_NUM", commandMap.get("NOTICE_NUM"));
+		System.out.println(commandMap.get("NOTICE_NUM"));
+		System.out.println();
+		
 		return mv;		
 	}
 	
@@ -101,6 +104,7 @@ public class NoticeController {
 	public ModelAndView noticeDelete(CommandMap commandMap) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/community/noticeList");
 		noticeService.deleteNotice(commandMap.getMap());
+		
 		return mv;		
 	}
 

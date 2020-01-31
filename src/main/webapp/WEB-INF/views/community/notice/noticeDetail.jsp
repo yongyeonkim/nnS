@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>notice</title>
-	<meta charset="EUC-KR">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
@@ -161,33 +160,46 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 		<tbody>
 			<tr>
 				<th scope="row">글 번호</th>
-				<td>${map.NUM }
-				<input type="hidden" id="NUM" name="NUM" value="${map.NUM }"></td>
+				<td>${map.NOTICE_NUM }
+				<input type="hidden" id="NOTICE_NUM" name="NOTICE_NUM" value="${map.NOTICE_NUM }"></td>
 				<th scope="row">조회수</th>
-				<td>${map.COUNT }</td>
+				<td>${map.NOTICE_COUNT }</td>
 			</tr>
 			<tr>
 				<th scope="row">작성자</th>
-				<td>${map.WRITER }</td>
+				<td>${map.MEM_ID }</td>
 				<th scope="row">작성일자</th>
-				<td>${map.DATE }</td>
+				<td>${map.NOTICE_DATE }</td>
 			</tr>
 			<tr>
 				<th scope="row">제목</th>
-				<td colspan="3">${map.TITLE }</td>
+				<td colspan="3">${map.NOTICE_TITLE }</td>
 			</tr>
 			<tr>
-				<td colspan="4"><pre>${map.CONTENT }</pre></td>
+				<td colspan="4" height="600px" style="vertical-align:top;"><pre style="overflow:hidden;  white-space: pre-wrap">${map.NOTICE_CONTENT }</pre></td>
+			</tr>
+			<tr>
+				<th scope="row">첨부파일</th>
+				<td colspan="3">
+					<c:forEach var="row" items="${list }">
+						<input type="hidden" id="FILES_NUM" value="${row.FILES_NUM }">
+						<a href="#this" name="file">${row.FILES_ORGNAME }</a>
+						(${row.FILES_SIZE}kb)
+					</c:forEach>
+				</td>
 			</tr>
 		</tbody>
 	</table>
+	<center>
+		<a href="#this" class="btn" id="list">목록으로</a>
+		<!-- <:if test="${session_member_name == 'admin' }"> -->
+		<a href="#this" class="btn" id="modify">수정하기</a>
+		<a href="#this" class="btn" id="delete">삭제하기</a>
+			<!-- </:if> -->
+	</center>
 	</div>
 	</div>
 	
-	<a href="#this" class="btn" id="list">목록으로</a>
-	<%-- <c:if test="${session_member_name == 'admin' }"> 
-	<a href="#this" class="btn" id="delete">삭제하기</a>
-	</c:if> --%>
 	
 	
 	<script type="text/javascript">
@@ -196,27 +208,69 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				e.preventDefault();
 				fn_openBoardList();
 			});
+			
+			$("#modify").on("click", function(e){ //수정하기 버튼
+				e.preventDefault();
+				fn_modifyBoard();
+			});
 		
 			$("#delete").on("click", function(e){ //삭제하기 버튼
 				e.preventDefault();
 				fn_deleteBoard();
 			});
+			
+			$("a[name='file']").on("click", function(e){
+				e.preventDefault();
+				fn_downloadFile($(this));
+			});
 		});
 		
 		function fn_openBoardList(){
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/noticeList' />");
+			comSubmit.setUrl("<c:url value='/community/noticeList' />");
 			comSubmit.submit();
 		}
 		
+		function fn_modifyBoard(){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/community/noticeModifyForm' />")
+			comSubmit.addParam("NOTICE_NUM", $("#NOTICE_NUM").val());
+			comSubmit.submit();
+		}
 	
 		function fn_deleteBoard(){
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/deleteBoard' />");
-			comSubmit.addParam("NUM", $("#NUM").val());
+			comSubmit.setUrl("<c:url value='/community/noticeDelete' />");
+			comSubmit.addParam("NOTICE_NUM", $("#NOTICE_NUM").val());
 			comSubmit.submit();
 			
+		}
+		
+		function fn_downloadFile(obj){
+			var idx = obj.parent().find("#FILES_NUM").val();
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/common/downloadFile' />");
+			comSubmit.addParam("FILES_NUM", $("#FILES_NUM").val());
+			comSubmit.submit();
 		}
 	</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
