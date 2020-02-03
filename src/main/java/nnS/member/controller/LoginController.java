@@ -48,12 +48,11 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST) // 로그인
 	public ModelAndView login(CommandMap commandMap, HttpServletRequest request) throws Exception {
-		ModelAndView mv = new ModelAndView("login");
+		ModelAndView mv = new ModelAndView("/member/login/login");
 		String message = "";
 		String url = "";
 
 		HttpSession session = request.getSession();
-
 		
 		Map<String, Object> chk = loginService.loginCheck(commandMap.getMap());
 		//Map<String, Object> banChk = adminBanService.banDateCheck(commandMap.getMap());
@@ -61,14 +60,7 @@ public class LoginController {
 			message = "해당 아이디가 존재하지 않습니다.";
 		} else {
 			if (chk.get("MEM_PW").equals(commandMap.get("MEM_PW"))) {
-				if (chk.get("MEM_VERIFY").equals("Y")) { // 이메일 인증을 했을ㄸ ㅐ
-						session.setAttribute("MEM_ID", commandMap.get("MEM_ID")); 
-						session.setAttribute("MEM_KIND", chk.get("MEM_KIND"));
-				} else { // 이메일 인증을 완료하지 않았을 떄
-					message = "이메일 인증을 완료해주세요.";
-					url = "/main";
-				}
-
+						session.setAttribute("session_MEM_ID", commandMap.get("MEM_ID")); 
 			} else { // 비밀번호가 일치하지 않을 때
 				message = "비밀번호가 맞지 않습니다.";
 			}
@@ -91,13 +83,13 @@ public class LoginController {
 
 	@RequestMapping(value = "/findId") // 아이디 찾기 폼을 보여주는 메소드
 	public ModelAndView findId(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findAccount");
+		ModelAndView mv = new ModelAndView("/member/login/findAccount");
 		return mv;
 	}
 
 	@RequestMapping(value = "/findIdResult", method = RequestMethod.POST) // 입력한 정보에 맞춰서 아이디를 찾아주는 거
 	public ModelAndView findIdResult(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findIdResult");
+		ModelAndView mv = new ModelAndView("/member/login/findIdResult");
 		Map<String, Object> map = loginService.findIdWithEmail(commandMap.getMap());
 		mv.addObject("id", map);
 		return mv;
@@ -107,7 +99,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/findPw") // 비밀번호 찾기 폼을 보여주는 메소드
 	public ModelAndView findPw(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findAccount");
+		ModelAndView mv = new ModelAndView("/member/login/findAccount");
 		return mv;
 	}
 	

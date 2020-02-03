@@ -143,7 +143,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
   <div id="content">
    <div id="vertical_tab-container">
       <ul>
-         <li><a href="accountModifyForm">회원정보 변경</a></li>
+         <li><a href="accountDetail">회원정보 변경</a></li>
          <li class="selected"><a href="pwModifyForm">비밀번호 변경</a></li>
          <li><a href="myInfoDelete">회원탈퇴</a></li>
          <li><a href="reportList">신고내역</a></li>
