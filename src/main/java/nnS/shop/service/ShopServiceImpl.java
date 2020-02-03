@@ -62,7 +62,12 @@ public class ShopServiceImpl implements ShopService {
 		shopDAO.updateHitCnt(map);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Map<String, Object> tempMap = shopDAO.selectGoodsDetail(map);
+		
 		resultMap.put("map", tempMap);
+		
+		Map<String, Object> goodsLikeMap = shopDAO.selectGoodsLike(map);
+		resultMap.put("goodsLikeMap", goodsLikeMap);
+		
 		
 		List<Map<String, Object>> list = shopDAO.selectFileList(map);
 		resultMap.put("list", list);
@@ -98,5 +103,14 @@ public class ShopServiceImpl implements ShopService {
 		shopDAO.deleteGoods(map);
 	}
 	
+	@Override
+	public void insertGoodsLike(Map<String, Object> map) throws Exception{
+		shopDAO.insertGoodsLike(map);
+	}
+	
+	@Override
+	public void deleteGoodsLike(Map<String, Object> map) throws Exception{
+		shopDAO.deleteGoodsLike(map);
+	}
 
 }
