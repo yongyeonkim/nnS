@@ -9,7 +9,6 @@
 </script>
 
 <!--  Header 영역 -->
-
 <div class="header_area">
 	<h1><a href="" title="nnS#"><img class="main_image" src="<c:url value="/resources/images/mainlogo.png"/>" alt="nnS#"/></a></h1>
 	<div class="search_main">
@@ -31,17 +30,17 @@
 	</div>
 	<div class="top_menu">
 		<ul>
-
+			<!-- href="" 링크 채워넣어야 함 -->
 			<c:if test="${session_MEM_ID == null }"> <!-- 변수명은 나중에 맞춰서 변경 -->
 				<li><a href="${contextPath}/nnS/loginForm">로그인</a></li> 
 				<li><a href="${contextPath}/nnS/joinForm">회원가입</a> </li>
-				<li><a href="">ID/PW찾기</a></li>
+				<li><a href="${contextPath}/nnS/findId">ID/PW찾기</a></li>
 			</c:if>
 			<c:if test="${session_MEM_ID != null }">
 				<li>${session_MEM_ID}&nbsp;님</li>
-				<li><a href="${contextPath }/nnS/logout">로그아웃</a></li>
-				<li><a href="${contextPath }/nnS/myPage">마이페이지</a></li> 
-				<li><a href="">내상점</a></li> 
+				<li><a href="${contextPath}/nnS/logout">로그아웃</a></li>
+				<li><a href="${contextPath}/nnS/myPage">마이페이지</a></li> 
+				<li><a href="${contextPath}/nnS/myshop">내상점</a></li> 
 				<li><a href="">알림버튼</a></li> 
 			</c:if>
 		</ul>

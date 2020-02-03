@@ -139,6 +139,34 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 }
 </style>
 </head>
+<link rel="stylesheet" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function() { //비밀번호 일치 확인
+    //[1] lblError 레이어 클리어
+    $('#MEM_PW_NEW').keyup(function() {
+        //$('#pwr').remove(); // 제거
+        $('#pw').text(''); // 제거가 아니라 클리어
+           $('#MEM_PW_NEW2').val('');
+    });
+    //[2] 암호 확인 기능 구현
+    $('#MEM_PW_NEW2').keyup(function() {
+        if ($('#MEM_PW_NEW').val() != $('#MEM_PW_NEW2').val()) {
+            $('#pw').text(''); // 클리어
+            $('#pw').html("암호가 일치하지 않습니다.").css("color", "red");          //레이어에 HTML 출력
+        }
+        else {
+            $('#pw').text(''); // 클리어
+            $('#pw').html("암호가 일치합니다.").css("color", "blue");
+        }
+    });
+});
+
+
+</script>
 <body>
   <div id="content">
    <div id="vertical_tab-container">
@@ -158,26 +186,28 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
             <tbody>
             <tr>
             	<td>
-               * 기존 비밀번호 &nbsp;&nbsp;&nbsp;   <input type="password" id="mem_check_pw" name="mem_check_pw">
+               * 기존 비밀번호 &nbsp;&nbsp;&nbsp;   <input type="password" id="MEM_PW" name="MEM_PW">
                </td>
                </tr>
                <tr>
                <td>
-               * 새 비밀번호 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <input type="password" id="mem_check_pw1" name="mem_check_pw1">
+               * 새 비밀번호 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                <input type="password" id="MEM_PW_NEW" name="MEM_PW_NEW">
                </td>
                </tr>
 
                <tr>
                <td>
-               * 새 비밀번호 확인 <input type="password" id="mem_check_pw2" name="mem_check_pw2">
+               * 새 비밀번호 확인 <input type="password" id="MEM_PW_NEW2" name="MEM_PW_NEW2">
                </td>
                </tr>
+               <tr><td><span id="pw"></span><tr><td>
                
             <br/><br/>
             <tr>
             <td align="center">
             <br/>
-            <input type="button" value="변경 완료" />
+            <input type="button" value="변경 완료" id="pwchange"/>
             <input type="button" value="취소하기" onclick="document.location.href='/nnS/main'"/>
             </td>
             </tr>
