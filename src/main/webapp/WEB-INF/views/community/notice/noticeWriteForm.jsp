@@ -158,20 +158,19 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          </colgroup>
          <center><h2>공지사항 작성</h2></center>
          <tbody>
-         	<tr>
+<!--          	<tr>
          		<td scope="row">분류</td>
          		
          		<td>
             		<select name="keyField">
-					
-					<!-- <option value="choice">선택</option>-->
+					<option value="choice">선택</option>
 					<option value="notice">공지사항</option>
 					<option value="board">자유게시판</option>
 					<option value="report">신고게시판</option>
 					<option value="qna">Q&A게시판</option>
 				</select>
             	</td>
-         	</tr>
+         	</tr> -->
          	<tr>
          		<td>제목</td>
          		<td colspan="3"><input type="text" id="NOTICE_TITLE" name="NOTICE_TITLE" class="wdp_90"/></td>

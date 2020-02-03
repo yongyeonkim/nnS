@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>board</title>
-	<meta charset="EUC-KR">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 	<style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
@@ -152,10 +151,11 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	<div id="main-container">
 	<table border="1" align="center" class="board_list">
 		<colgroup>
-			<col width="10%" />
+			<col width="5%" />
 			<col width="*" />
 			<col width="15%" />
-			<col width="20%" />
+			<col width="25%" />
+			<col width="5%" />
 		</colgroup>
 		<caption><h2>자유게시판</h2></caption>
 		<thead>
@@ -168,36 +168,17 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			</tr>
 		</thead>
 		<tbody>
-			<%-- <c:choose>
-				<c:when test="${fn:length(list) > 0}">
-					<c:forEach items="${list }" var="row">
-						<tr>
-							<td>${row.NUM }</td>
-							<td class="title"><a href="#this" name="title">${row.TITLE }</a>
-								<input type="hidden" id="IDX" value="${row.NUM }"></td>
-							<td>${row.WRITER }</td>
-							<td>${row.DATE }</td>
-							<td>${row.COUNT }</td>
-						</tr>
-					</c:forEach>
-				</c:when>
-				<c:otherwise> --%>
-	
-					<tr>
-						<td colspan="5">조회된 결과가 없습니다.</td>
-					</tr>
- 			<!-- 	/c:otherwise /c:choose -->
+			<!-- 스크립트를 통해 게시글에 대한 정보가 담김 -->
 		</tbody>
 	</table>
-	</div>
-	</div>
 	<div id="PAGE_NAVI"></div>
 	<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
-
+	<div align="right">
+		<a href="#this" class="btn" id="write">글쓰기</a>
+	</div>
+	</div>
+	</div>
 	<br />
- 
-
-	<a href="#this" class="btn" id="write">글쓰기</a>
 
 	
 
@@ -217,19 +198,19 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 
 		function fn_openBoardWrite() {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/boardWriteForm' />");
+			comSubmit.setUrl("<c:url value='/community/boardWriteForm' />");
 			comSubmit.submit();
 		}
 	
 		function fn_openBoardDetail(obj) {
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/boardDetail' />");
-			comSubmit.addParam("NUM", obj.parent().find("#NUM").val());
+			comSubmit.setUrl("<c:url value='/community/boardDetail' />");
+			comSubmit.addParam("BOARD_NUM", obj.parent().find("#BOARD_NUM").val());
 			comSubmit.submit();
 		}
 		function fn_selectBoardList(pageNo) {
 			var comAjax = new ComAjax();
-			comAjax.setUrl("<c:url value='/nnS/community/selectBoardList' />");
+			comAjax.setUrl("<c:url value='/community/boardListPaging' />");
 			comAjax.setCallback("fn_selectBoardListCallback");
 			comAjax.addParam("PAGE_INDEX", pageNo);
 			comAjax.addParam("PAGE_ROW", 15);
@@ -241,7 +222,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			var body = $("table>tbody");
 			body.empty();
 			if (total == 0) {
-				var str = "<tr>" + "<td colspan='4'>조회된 결과가 없습니다.</td>"
+				var str = "<tr align=\"center\">" + "<td colspan='5'>조회된 결과가 없습니다.</td>"
 						+ "</tr>";
 				body.append(str);
 			} else {
@@ -259,25 +240,21 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				$.each(
 								data.list,
 								function(key, value) {
-									str += "<tr>"
+										str += "<tr style=\"text-align: center\">"
 											+ "<td>"
-											+ value.NUM
+											+ value.BOARD_NUM
 											+ "</td>"
 											+ "<td class='title'>"
 											+ "<a href='#this' name='title'>"
-											+ value.TITLE
+											+ value.BOARD_TITLE
 											+ "</a>"
-											+ "<input type='hidden' id='NUM' value=" + value.NUM + ">"
-											+ "</td>" + "<td>" + value.COUNT
-											+ "</td>" + "<td>" + value.DATE
+											+ "<input type='hidden' id='BOARD_NUM' value=" + value.BOARD_NUM + ">"
+											+ "</td>" + "<td>" + value.MEM_ID
+											+ "</td>" + "<td>" + new Date(value.BOARD_DATE).toLocaleString()
+											+ "</td>" + "<td>" + value.BOARD_COUNT
 											+ "</td>" + "</tr>";
 								});
 				body.append(str);
-
-				$("a[name='title']").on("click", function(e) { //제목
-					e.preventDefault();
-					fn_openBoardDetail($(this));
-				});
 			}
 		}
 	</script>

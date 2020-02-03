@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<title>board</title>
-	<meta charset="EUC-KR">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
@@ -162,31 +161,33 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 		<tbody>
 			<tr>
 				<th scope="row">글 번호</th>
-				<td>${map.NUM }
-				<input type="hidden" id="NUM" name="NUM" value="${map.NUM }"></td>
+				<td>${map.BOARD_NUM }
+				<input type="hidden" id="BOARD_NUM" name="BOARD_NUM" value="${map.BOARD_NUM }"></td>
 				<th scope="row">조회수</th>
-				<td>${map.COUNT }</td>
+				<td>${map.BOARD_COUNT }</td>
 			</tr>
 			<tr>
 				<th scope="row">작성자</th>
-				<td>${map.WRITER }</td>
+				<td>${map.MEM_ID }</td>
 				<th scope="row">작성일자</th>
-				<td>${map.DATE }</td>
+				<td>${map.BOARD_DATE }</td>
 			</tr>
 			<tr>
 				<th scope="row">제목</th>
-				<td colspan="3">${map.TITLE }</td>
+				<td colspan="3">${map.BOARD_TITLE }</td>
 			</tr>
 			<tr>
-				<td colspan="4"><pre>${map.CONTENT }</pre></td>
+				<td colspan="4" height="600px" style="vertical-align:top;"><pre style="overflow:hidden;  white-space: pre-wrap">${map.BOARD_CONTENT }</pre></td>
 			</tr>
 			<tr>
 				<th scope="row">첨부파일</th>
 				<td colspan="3">
 					<c:forEach var="row" items="${list }">
-						<input type="hidden" id="NUM" value="${row.NUM }">
-						<a href="#this" id="${row.NUM }" name="file">${row.ORG}</a>
-						(${file.SIZE }kb)
+						<div>
+							<input type="hidden" id="FILES_NUM" value="${row.FILES_NUM }">
+							<a href="#this" name="file">${row.FILES_ORGNAME }</a>
+							(${row.FILES_SIZE}kb)
+						</div>
 					</c:forEach>
 				</td>
 			</tr>
@@ -195,34 +196,32 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	<center>
 	<br/>
 	<a href="#this" class="btn" id="list">목록으로</a>
-	<a href="#this" class="btn" id="update">수정하기</a>
+	<a href="#this" class="btn" id="modify">수정하기</a>
 	<a href="#this" class="btn" id="delete">삭제하기</a>
 	</center>
 	<br/>
-	<center>
+	<div align="center">
 		<table>
-					<tr align=center>
-						<td>코멘트 작성</td>
-						<td colspan=2>
-							<textarea name=commentt rows="6" cols="40"></textarea>
-							
-							<%-- <input type=hidden name=content_num value=<%=article.getNum() %>>
-							<input type=hidden name=p_num value=<%=pageNum%>>
-							<input type=hidden name=comment_num value=<%=count+1%>> --%>
-						</td>
-						<td align=center>
-							작성자<br/>
-							<input type=text name=commenter size=10><br/>
-							<input type=submit value=코멘트달기>
-						</td>
-					</tr>
-					</table>
-					</center>
+			<tr align=center>
+				<td>코멘트 작성</td>
+				<td colspan=2>
+					<textarea name=commentt rows="6" cols="40"></textarea>
+					
+					<%-- <input type=hidden name=content_num value=<%=article.getNum() %>>
+					<input type=hidden name=p_num value=<%=pageNum%>>
+					<input type=hidden name=comment_num value=<%=count+1%>> --%>
+				</td>
+				<td align=center>
+					<a href="#this" name="comment">코멘트달기</a>
+				</td>
+			</tr>
+		</table>
+	</div>
 					
 	</div>
 </div>
 	
-
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#list").on("click", function(e){ //목록으로 버튼
@@ -230,9 +229,9 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				fn_openBoardList();
 			});
 			
-			$("#update").on("click", function(e){ //수정하기 버튼
+			$("#modify").on("click", function(e){ //수정하기 버튼
 				e.preventDefault();
-				fn_openBoardUpdate();
+				fn_openBoardModify();
 			});
 			$("#delete").on("click", function(e){ //삭제하기 버튼
 				e.preventDefault();
@@ -240,38 +239,61 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			});
 			$("a[name='file']").on("click", function(e){
 				e.preventDefault();
-				fn_downloadFile($(this).attr('id'));
+				fn_downloadFile($(this));
+			});
+			$("#comment").on("click", function(e){
+				e.preventDefault();
+				fn_writeComment();
 			});
 		});
 		
 		function fn_openBoardList(){
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/boardList' />");
+			comSubmit.setUrl("<c:url value='/community/boardList' />");
 			comSubmit.submit();
 		}
 		
-		function fn_openBoardUpdate(){
-			var idx = "${map.NUM}";
+		function fn_openBoardModify(){
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/boardUpate' />");
-			comSubmit.addParam("NUM", num);
+			comSubmit.setUrl("<c:url value='/community/boardModifyForm' />");
+			comSubmit.addParam("BOARD_NUM", $("#BOARD_NUM").val());
 			comSubmit.submit();
 		}
 	
 		function fn_deleteBoard(){
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/community/deleteBoard' />");
-			comSubmit.addParam("NUM", $("#NUM").val());
+			comSubmit.setUrl("<c:url value='/community/boardDelete' />");
+			comSubmit.addParam("BOARD_NUM", $("#BOARD_NUM").val());
 			comSubmit.submit();
 			
 		}
 		function fn_downloadFile(obj){
-			var idx=obj;
+			var idx=obj.parent().find("#FILES_NUM").val();
 			var comSubmit = new ComSubmit();
-			comSubmit.setUrl("<c:url value='/nnS/common/downloadFile'/>");
-			comSubmit.addParam("NUM",num);
+			comSubmit.setUrl("<c:url value='/common/downloadFile'/>");
+			comSubmit.addParam("FILES_NUM",idx);
 			comSubmit.submit();
 		}
+		function fn_writeComment(){
+			var comSubmit = new Comsubmit();
+			comSubmit.setUrl("<c:url value='/community/boardDetail/commentWrite'/>");
+			comSubmit.addParam("BOARD_NUM", $("#BOARD_NUM").val());
+			comSubmit.submit();			
+		}
+		
 	</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

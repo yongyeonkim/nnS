@@ -24,30 +24,30 @@ public class NoticeController {
 	private NoticeService noticeService;
 	
 	//공지사항	
-		// 공지사항 리스트
-		@RequestMapping(value = "/community/noticeList")
-		public ModelAndView noticeList(CommandMap commandMap) throws Exception {
-			ModelAndView mv = new ModelAndView("noticeList");
-			
-			return mv;		
-		}
+	// 공지사항 리스트
+	@RequestMapping(value = "/community/noticeList")
+	public ModelAndView noticeList(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("noticeList");
 		
-		//목록
-		@RequestMapping(value="/community/noticeListPaging")
-		public ModelAndView noticeListPaging(CommandMap commandMap) throws Exception{
-			ModelAndView mv=new ModelAndView("jsonView");
-			
-			List<Map<String,Object>> list=noticeService.selectNoticeList(commandMap.getMap());
-			mv.addObject("list",list);	
-			if(list.size() > 0){
-	    		mv.addObject("TOTAL", list.get(0).get("TOTAL_COUNT"));
-	    	}
-	    	else{
-	    		mv.addObject("TOTAL", 0);
-	    	}
-			return mv;
-		}   
+		return mv;		
+	}
 	
+	//목록
+	@RequestMapping(value="/community/noticeListPaging")
+	public ModelAndView noticeListPaging(CommandMap commandMap) throws Exception{
+		ModelAndView mv=new ModelAndView("jsonView");
+		
+		List<Map<String,Object>> list=noticeService.selectNoticeList(commandMap.getMap());
+		mv.addObject("list",list);	
+		if(list.size() > 0){
+    		mv.addObject("TOTAL", list.get(0).get("TOTAL_COUNT"));
+    	}
+    	else{
+    		mv.addObject("TOTAL", 0);
+    	}
+		return mv;
+	}   
+
 	// 공지사항 상세보기
 	@RequestMapping(value = "/community/noticeDetail")
 	public ModelAndView noticeDetail(CommandMap commandMap) throws Exception {

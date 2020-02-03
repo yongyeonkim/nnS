@@ -213,7 +213,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			
 			$("#modify").on("click", function(e){ //수정하기 버튼
 				e.preventDefault();
-				fn_modifyBoard();
+				fn_openBoardModify();
 			});
 		
 			$("#delete").on("click", function(e){ //삭제하기 버튼
@@ -233,7 +233,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			comSubmit.submit();
 		}
 		
-		function fn_modifyBoard(){
+		function fn_openBoardModify(){
 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/community/noticeModifyForm' />")
 			comSubmit.addParam("NOTICE_NUM", $("#NOTICE_NUM").val());
