@@ -237,7 +237,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			</tr>
 		</tbody>
 	</table>
-   </div>ㅇ
+   </div>
 </div>
 	
 
