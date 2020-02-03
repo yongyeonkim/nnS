@@ -12,8 +12,9 @@ public class ShopDAO extends AbstractDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectGoodsList(Map<String, Object> map) throws Exception {
+		System.out.println(map);
 		return (List<Map<String, Object>>)selectPagingList("shop.selectGoodsList", map);
-	}
+	} 
 
 	public void insertGoods(Map<String, Object> map) throws Exception{
 		insert("shop.insertGoods", map);
@@ -55,5 +56,19 @@ public class ShopDAO extends AbstractDAO {
 	
 	public void updateFile(Map<String, Object> map) throws Exception{ 
 		update("shop.updateFile", map); 
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectGoodsLike(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>) selectOne("shop.selectGoodsLike", map);
+	}
+	
+	public void insertGoodsLike(Map<String, Object> map) throws Exception{
+		insert("shop.insertGoodsLike", map);
+	}
+	
+	public void deleteGoodsLike(Map<String, Object> map) throws Exception{
+		delete("shop.deleteGoodsLike", map);
 	}
 }

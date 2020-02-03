@@ -22,7 +22,9 @@ public class ShopServiceImpl implements ShopService {
 	private FileUtils fileUtils;
 	
 	@Override
-	public List<Map<String, Object>> selectGoodsList(Map<String, Object> map) throws Exception {
+	public List<Map<String, Object>> selectGoodsList(Map<String, Object> map, String keyword, String searchType) throws Exception {
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
 		return shopDAO.selectGoodsList(map);
 	}
 	
@@ -60,7 +62,12 @@ public class ShopServiceImpl implements ShopService {
 		shopDAO.updateHitCnt(map);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Map<String, Object> tempMap = shopDAO.selectGoodsDetail(map);
+		
 		resultMap.put("map", tempMap);
+		
+		Map<String, Object> goodsLikeMap = shopDAO.selectGoodsLike(map);
+		resultMap.put("goodsLikeMap", goodsLikeMap);
+		
 		
 		List<Map<String, Object>> list = shopDAO.selectFileList(map);
 		resultMap.put("list", list);
@@ -96,5 +103,14 @@ public class ShopServiceImpl implements ShopService {
 		shopDAO.deleteGoods(map);
 	}
 	
+	@Override
+	public void insertGoodsLike(Map<String, Object> map) throws Exception{
+		shopDAO.insertGoodsLike(map);
+	}
+	
+	@Override
+	public void deleteGoodsLike(Map<String, Object> map) throws Exception{
+		shopDAO.deleteGoodsLike(map);
+	}
 
 }

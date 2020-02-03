@@ -201,6 +201,16 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 						<input type="button" id="buy" name="buy" value="바로구매" /> 
 						<input type="button" id="like" name="like" value="좋아요" /> 
 						<input type="button" id="report" name="report" value="신고하기" />
+						
+						<c:choose>
+							<c:when test="${goodsLikeMap.GOODS_LIKE_YN eq 0}">
+						    	<a href='javascript: like_func();'><img src=<c:url value="/resources/images/unlike_btn.png"/> id='unlike_img' style="width:30px; height:30px"></a>
+						  	</c:when>
+						  	<c:otherwise>
+						    	<a href='javascript: unlike_func();'><img src=<c:url value="/resources/images/like_btn.png"/> id='like_img' style="width:30px; height:30px"></a>
+						  	</c:otherwise>
+						</c:choose>						
+						
 					</p>
 					<div class="container">
 					    <ul class="goodsTabs">
@@ -306,6 +316,31 @@ $(document).ready(function() {
 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/common/downloadFile.do'/>");
 			comSubmit.addParam("IDX",idx);
+			comSubmit.submit();
+		}
+		
+		/* 좋아요 */
+		function like_func(){
+			var GOODS_NUM = "${map.GOODS_NUM}";
+			var MEM_ID = 1234;
+			
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop/goodsDetail/goodsLike'/>");
+			comSubmit.addParam("LIKE_GOODS_NUM", GOODS_NUM);
+			comSubmit.addParam("LIKE_MEM_ID", MEM_ID);
+			alert(GOODS_NUM + " " + MEM_ID)
+			comSubmit.submit();
+		}
+		
+		function unlike_func(){
+			var GOODS_NUM = "${map.GOODS_NUM}";
+			var MEM_ID = 1234;
+			
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/shop/goodsDetail/goodsUnlike'/>");
+			comSubmit.addParam("LIKE_GOODS_NUM", GOODS_NUM);
+			comSubmit.addParam("LIKE_MEM_ID", MEM_ID);
+			alert(GOODS_NUM + " " + MEM_ID)
 			comSubmit.submit();
 		}
 	</script>

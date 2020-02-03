@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="qna">
+
+    <select id="selectMyQnaList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+					SELECT  A.*, 
+		        DECODE(B.QNA_NUM, A.QNA_NUM, 'Y', 'N') AS QNA_YORN
+		FROM    (
+		        SELECT  Q.QNA_NUM,
+		                Q.QNA_TITLE,
+		                M.MEM_ID,
+		                Q.QNA_DATE,
+		                TO_CHAR(Q.QNA_DATE,'hh24:mi:ss') AS QNA_TIME,
+		                Q.QNA_TYPE,
+		                Q.QNA_PARENT,
+		                Q.QNA_COUNT
+		        FROM    QNA Q,
+		                (
+		                 SELECT MEM_NUM, MEM_ID
+		                 FROM   MEMBER
+		                ) M
+		        WHERE   Q.QNA_WRITER = M.MEM_NUM
+		        AND     Q.QNA_PARENT IS NULL
+		        AND     Q.QNA_DEL_GB = 'N'
+		        AND     M.MEM_ID='TEST'
+		        ORDER BY Q.QNA_NUM
+		        ) A
+		LEFT OUTER JOIN
+		        (
+		        SELECT  DISTINCT  A.QNA_NUM
+		        FROM    QNA A, QNA B
+		        WHERE   A.QNA_NUM = B.QNA_PARENT
+		        ) B
+		ON  A.QNA_NUM = B.QNA_NUM
+		]]>
+	</select>
+	
+	<select id="selectQnaList" parameterType="hashmap" resultType="hashmap">
+		
+		<![CDATA[
+					SELECT  A.*, 
+		        DECODE(B.QNA_NUM, A.QNA_NUM, 'Y', 'N') AS QNA_YORN
+		FROM    (
+		        SELECT  Q.QNA_NUM,
+		                Q.QNA_TITLE,
+		                M.MEM_ID,
+		                Q.QNA_DATE,
+		                TO_CHAR(Q.QNA_DATE,'hh24:mi:ss') AS QNA_TIME,
+		                Q.QNA_TYPE,
+		                Q.QNA_PARENT,
+		                Q.QNA_COUNT
+		        FROM    QNA Q,
+		                (
+		                 SELECT MEM_NUM, MEM_ID
+		                 FROM   MEMBER
+		                ) M
+		        WHERE   Q.QNA_WRITER = M.MEM_NUM
+		        AND     Q.QNA_PARENT IS NULL
+		        AND     Q.QNA_DEL_GB = 'N'
+		         ORDER BY Q.QNA_NUM
+		        ) A
+		LEFT OUTER JOIN
+		        (
+		        SELECT  DISTINCT  A.QNA_NUM
+		        FROM    QNA A, QNA B
+		        WHERE   A.QNA_NUM = B.QNA_PARENT
+		        ) B
+		ON  A.QNA_NUM = B.QNA_NUM
+		]]>
+		
+	</select>
+	
+	
+	<insert id="insertQnaBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="QNA_NUM">
+		<selectKey keyProperty="QNA_NUM" resultType="string" order="BEFORE">
+			SELECT QNA_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	<![CDATA[
+			INSERT
+	INTO    QNA     (
+	                QNA_NUM,
+	                QNA_TITLE,
+	                QNA_WRITER,
+	                QNA_CONTENT,
+	                QNA_TYPE
+	                )
+	VALUES          (
+	                #{QNA_NUM},
+	                #{QNA_TITLE},
+	                (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = 'TEST'),
+	                #{QNA_CONTENT},
+	                #{QNA_TYPE}
+	                )
+	]]>
+	</insert>
+	
+	<update id="updateQnaCount" parameterType="hashmap">
+		<![CDATA[
+			UPDATE QNA
+			SET
+				QNA_COUNT = NVL(QNA_COUNT, 0) + 1
+			WHERE
+				QNA_NUM = #{QNA_NUM}	
+		]]>
+	</update>
+	
+	<select id="selectQnaDetail" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+					SELECT  A.*, 
+		        DECODE(B.QNA_NUM, A.QNA_NUM, 'Y', 'N') AS QNA_YORN
+		FROM    (
+		        SELECT  Q.QNA_NUM,
+		            Q.QNA_TITLE,
+		            M.MEM_ID,
+		            Q.QNA_DATE,
+		            TO_CHAR(Q.QNA_DATE,'hh24:mi:ss') AS QNA_TIME,
+		            Q.QNA_PARENT,
+		            Q.QNA_CONTENT,
+		            Q.QNA_TYPE,
+		            Q.QNA_COUNT
+		        FROM    QNA Q,
+		                (
+		                 SELECT MEM_NUM, MEM_ID
+		                 FROM   MEMBER
+		                ) M
+		        WHERE   Q.QNA_WRITER = M.MEM_NUM
+		        AND     Q.QNA_PARENT IS NULL
+		        AND     Q.QNA_NUM = #{QNA_NUM}
+		        ) A
+		LEFT OUTER JOIN
+		        (
+		        SELECT  DISTINCT  A.QNA_NUM
+		        FROM    QNA A, QNA B
+		        WHERE   A.QNA_NUM = B.QNA_PARENT
+		        ) B
+		ON  A.QNA_NUM = B.QNA_NUM
+		]]>
+	</select>
+	
+	<update id="updateQnaModify" parameterType="hashmap">
+		<![CDATA[
+					UPDATE  QNA
+		SET     QNA_TITLE = #{QNA_TITLE},
+		        QNA_CONTENT = #{QNA_CONTENT},
+		        QNA_TYPE = #{QNA_TYPE}
+		WHERE   QNA_NUM = #{QNA_NUM}
+		]]>
+	</update>
+	
+	<update id="deleteQna" parameterType="hashmap">
+		<![CDATA[
+					UPDATE  QNA
+		SET     QNA_DEL_GB = 'Y'
+		WHERE   QNA_NUM = #{QNA_NUM}
+		]]>
+	</update>
+	
+	<insert id="insertQnaAnswer" parameterType="hashmap">
+	  
+	   <![CDATA[
+		   INSERT 
+	   INTO QNA  (
+				   QNA_NUM,
+				   QNA_TITLE,
+				   QNA_WRITER,
+				   QNA_CONTENT,
+				   QNA_TYPE,
+				   QNA_PARENT 
+				  )
+		VALUES
+	              ( 
+	                QNA_SEQ.NEXTVAL,
+	                #{QNA_TITLE},
+	                (SELECT MEM_NUM FROM MEMBER  WHERE MEM_LEVEL=2 AND MEM_ID = 'TEST2'),
+	                #{QNA_CONTENT},
+	                #{QNA_TYPE},
+	                #{QNA_NUM}
+	              )
+	   ]]>
+	</insert>
+	
+	<select id="selectQnaAnswer" parameterType="hashmap" resultType="hashmap">
+	   <![CDATA[
+	    SELECT  Q.QNA_NUM,
+                Q.QNA_TITLE,
+                M.MEM_ID,
+                Q.QNA_DATE,
+                TO_CHAR(Q.QNA_DATE,'hh24:mi:ss') AS QNA_TIME,
+                Q.QNA_TYPE,
+                Q.QNA_CONTENT,
+                Q.QNA_PARENT
+        FROM    QNA Q,
+                (
+                 SELECT MEM_NUM, MEM_ID
+                 FROM   MEMBER
+                ) M
+        WHERE   Q.QNA_WRITER = M.MEM_NUM
+        AND     Q.QNA_DEL_GB = 'N'
+        AND     Q.QNA_PARENT= #{QNA_NUM}
+	   ]]>
+	</select>
+	
+	
+	
+</mapper>

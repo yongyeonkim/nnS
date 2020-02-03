@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="report">
+
+    <select id="selectReportList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+							SELECT  R.REPORT_NUM,
+		        R.REPORT_TITLE,
+		        M.MEM_ID,
+		        R.REPORT_DATE,
+		        R.REPORT_COUNT,
+		        R.REPORT_TYPE,
+		        TO_CHAR(R.REPORT_DATE,'hh24:mi:ss') AS REPORT_TIME,
+		        R.REPORT_STATUS
+		FROM    REPORT R, 
+		        (
+		         SELECT MEM_NUM, MEM_ID
+		         FROM   MEMBER
+		         ) M
+		WHERE   R.REPORT_DEL_GB = 'N'
+		AND     R.REPORT_WRITER = M.MEM_NUM
+		ORDER BY R.REPORT_NUM
+		]]>
+	</select>
+	
+	<select id="selectMyReportList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+							SELECT  R.REPORT_NUM,
+		        R.REPORT_TITLE,
+		        M.MEM_ID,
+		        R.REPORT_DATE,
+		        R.REPORT_COUNT,
+		        R.REPORT_TYPE,
+		        TO_CHAR(R.REPORT_DATE,'hh24:mi:ss') AS REPORT_TIME,
+		        R.REPORT_STATUS
+		FROM    REPORT R, 
+		        (
+		         SELECT MEM_NUM, MEM_ID
+		         FROM   MEMBER
+		         ) M
+		WHERE   R.REPORT_DEL_GB = 'N'
+		AND     R.REPORT_WRITER = M.MEM_NUM
+		AND     M.MEM_ID='TEST'
+		ORDER BY R.REPORT_NUM
+		]]>
+	</select>
+	
+	<insert id="insertReportBoard" parameterType="hashmap">
+	   <![CDATA[
+			   INSERT
+		INTO    REPORT  (
+		                REPORT_NUM,
+		                REPORT_TITLE,
+		                REPORT_WRITER,
+		                REPORT_CONTENT,
+		                REPORT_TYPE,
+		                REPORT_PRONUM
+		                )
+		VALUES          (
+		                REPORT_SEQ.nextval,
+		                #{REPORT_TITLE},
+		                (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = 'TEST'),
+		                #{REPORT_CONTENT},
+		                #{REPORT_TYPE},
+		                #{REPORT_PRONUM}
+		                )
+	   ]]>
+	</insert>
+	
+	<select id="selectReportDetail" parameterType="hashmap" resultType="hashmap">
+	  <![CDATA[
+			  SELECT  R.REPORT_NUM,
+		        R.REPORT_TITLE,
+		        M.MEM_ID,
+		        R.REPORT_DATE,
+		        R.REPORT_STATUS,
+		        R.REPORT_CONTENT,
+		        R.REPORT_COUNT,
+		        R.REPORT_PRONUM,
+		        R.REPORT_TYPE
+		FROM    REPORT R, 
+		        (
+		         SELECT MEM_NUM, MEM_ID
+		         FROM   MEMBER
+		         ) M
+		WHERE   R.REPORT_WRITER = M.MEM_NUM
+		AND     R.REPORT_NUM = #{REPORT_NUM}
+	  ]]>
+	</select>
+	
+	<update id="updateReportCount" parameterType="hashmap">
+		<![CDATA[
+			UPDATE REPORT
+			SET
+				REPORT_COUNT = NVL(REPORT_COUNT, 0) + 1
+			WHERE
+				REPORT_NUM = #{REPORT_NUM}	
+		]]>
+	</update>
+	
+	<update id="deleteReport" parameterType="hashmap">
+	   <![CDATA[
+			   UPDATE  REPORT
+		SET     REPORT_DEL_GB = 'Y'
+		WHERE   REPORT_NUM = #{REPORT_NUM}
+	   ]]>
+	</update>
+	
+</mapper>

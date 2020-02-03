@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <html lang="ko">
 <head>
-   <title>board</title>
    <meta charset="EUC-KR">
 <style type="text/css">
 
@@ -144,8 +144,8 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
    <div id="vertical_tab-container">
    <ul>
       <li><a href="noticeList">공지사항</a></li>
-         <li class="selected"><a href="boardList">자유게시판</a></li>
-         <li><a href="reportList">신고게시판</a></li>
+         <li><a href="boardList">자유게시판</a></li>
+         <li  class="selected"><a href="reportList">신고게시판</a></li>
          <li><a href="qnaList">Q&A게시판</a></li>
    </ul>
    </div>
@@ -157,60 +157,55 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          <col width="15%"/>
          <col width="35%"/>
       </colgroup>
-      <caption><h2>자유게시판</h2></caption>
+      <caption><h2>신고게시판</h2></caption>
       <p/>
       <tbody>
          <tr>
             <th scope="row">글 번호</th>
-            <td>${map.NUM }
-            <input type="hidden" id="NUM" name="NUM" value="${map.NUM }"></td>
+            <td>${map.REPORT_NUM }
+            <input type="hidden" id="REPORT_NUM" name="REPORT_NUM" value="${map.REPORT_NUM }"></td>
             <th scope="row">조회수</th>
-            <td>${map.COUNT }</td>
+            <td>${map.REPORT_COUNT }</td>
          </tr>
          <tr>
             <th scope="row">작성자</th>
-            <td>${map.WRITER }</td>
+            <td>${map.MEM_ID }</td>
             <th scope="row">작성일자</th>
-            <td>${map.DATE }</td>
+            <td>${map.REPORT_DATE }</td>
          </tr>
          <tr>
             <th scope="row">제목</th>
-            <td colspan="3">${map.TITLE }</td>
+            <td colspan="3">${map.REPORT_TITLE }</td>
          </tr>
          <tr>
-            <td colspan="4"><pre>${map.CONTENT }</pre></td>
+            <td colspan="4"><pre>${map.REPORT_CONTENT }</pre></td>
          </tr>
          <tr>
             <th scope="row">첨부파일</th>
             <td colspan="3">
                <c:forEach var="row" items="${list }">
-                  <input type="hidden" id="NUM" value="${row.NUM }">
-                  <a href="#this" id="${row.NUM }" name="file">${row.ORG}</a>
+                  <input type="hidden" id="REPORT_NUM" value="${row.REPORT_NUM }">
+                  <a href="#this" id="${row.REPORT_NUM }" name="file">${row.ORG}</a>
                   (${file.SIZE }kb)
                </c:forEach>
             </td>
          </tr>
       </tbody>
    </table>
+   <a href="#this" class="btn" id="list">목록으로</a>
+   <a href="#this" class="btn" id="delete">삭제하기</a>
    </div>
 </div>
    
-   <a href="#this" class="btn" id="list">목록으로</a>
-   <a href="#this" class="btn" id="update">수정하기</a>
-   <a href="#this" class="btn" id="delete">삭제하기</a>
    
-   
-   <script type="text/javascript">
+    <%@ include file="/WEB-INF/include/include-body.jspf" %>
+    <script type="text/javascript">
       $(document).ready(function(){
          $("#list").on("click", function(e){ //목록으로 버튼
             e.preventDefault();
             fn_openBoardList();
          });
          
-         $("#update").on("click", function(e){ //수정하기 버튼
-            e.preventDefault();
-            fn_openBoardUpdate();
-         });
          $("#delete").on("click", function(e){ //삭제하기 버튼
             e.preventDefault();
             fn_deleteBoard();
@@ -223,29 +218,23 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       
       function fn_openBoardList(){
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/community/boardList' />");
+         comSubmit.setUrl("<c:url value='/community/reportList' />");
          comSubmit.submit();
       }
       
-      function fn_openBoardUpdate(){
-         var idx = "${map.NUM}";
-         var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/community/boardUpate' />");
-         comSubmit.addParam("NUM", num);
-         comSubmit.submit();
-      }
    
       function fn_deleteBoard(){
+    	 var idx="${map.REPORT_NUM}";
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/sample/deleteBoard.do' />");
-         comSubmit.addParam("NUM", $("#NUM").val());
+         comSubmit.setUrl("<c:url value='/community/reportDelete' />");
+         comSubmit.addParam("REPORT_NUM",idx);
          comSubmit.submit();
          
       }
       function fn_downloadFile(obj){
          var idx=obj;
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/common/downloadFile.do'/>");
+         comSubmit.setUrl("<c:url value='/common/downloadFile.do'/>");
          comSubmit.addParam("NUM",num);
          comSubmit.submit();
       }

@@ -95,7 +95,7 @@
 						</li>
 						<li>
 							배송 메모 <br/>
-							<textarea cols="50" rows="10" name="content" style="margin-left:93px" readonly>$${불러올내용 }</textarea>
+							<textarea cols="50" rows="10" name="content" style="margin-left:93px" readonly>불러올내용</textarea>
 						</li>
 					</td>
 				</tr>
