@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+function gfn_isNull(str) {
+	if (str == null) return true;
+	if (str == "NaN") return true;
+	if (new String(str).valueOf() == "undefined") return true;    
+    var chkStr = new String(str);
+    if( chkStr.valueOf() == "undefined" ) return true;
+    if (chkStr == null) return true;    
+    if (chkStr.toString().length == 0 ) return true;   
+    return false; 
+}
+
+function ComSubmit(opt_formId) {
+	this.formId = gfn_isNull(opt_formId) == true ? "commonForm" : opt_formId;
+	this.url = "";
+	
+	if(this.formId == "commonForm"){
+		$("#commonForm")[0].reset();
+		$("#commonForm").empty();
+=======
 function gfn_isNull(str){ //null 값을 체크하는 함수
 	if(str==null) return true;
 	if(str=="NaN") return true;
@@ -22,6 +42,7 @@ function ComSubmit(opt_formId){
 		}
 		var str = "<form id='commonForm' name='commonForm'></form>";
 		$('body').append(str);
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
 	}
 	
 	this.setUrl = function setUrl(url){
@@ -29,13 +50,70 @@ function ComSubmit(opt_formId){
 	};
 	
 	this.addParam = function addParam(key, value){
+<<<<<<< HEAD
+		$("#"+this.formId).append($("<input type='hidden' name='"+key+"' id='"+key+"' value='"+value+"' >"));
+=======
 		$("#"+this.formId).append($("<input type='hidden' name='"+key+"' id='"+key+"' value='"+value+"'>"));
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
 	};
 	
 	this.submit = function submit(){
 		var frm = $("#"+this.formId)[0];
 		frm.action = this.url;
 		frm.method = "post";
+<<<<<<< HEAD
+		frm.submit();	
+	};
+}
+var gfv_ajaxCallback = "";
+function ComAjax(opt_formId){
+    this.url = "";     
+    this.formId = gfn_isNull(opt_formId) == true ? "commonForm" : opt_formId;
+    this.param = "";
+     
+    if(this.formId == "commonForm"){
+        var frm = $("#commonForm");
+        if(frm.length > 0){
+            frm.remove();
+        }
+        var str = "<form id='commonForm' name='commonForm'></form>";
+        $('body').append(str);
+    }
+     
+    this.setUrl = function setUrl(url){
+        this.url = url;
+    };
+     
+    this.setCallback = function setCallback(callBack){
+        fv_ajaxCallback = callBack;
+    };
+ 
+    this.addParam = function addParam(key,value){
+        this.param = this.param + "&" + key + "=" + value;
+    };
+     
+    this.ajax = function ajax(){
+        if(this.formId != "commonForm"){
+            this.param += "&" + $("#" + this.formId).serialize();
+        }
+        $.ajax({
+            url : this.url,   
+            type : "POST",  
+            data : this.param,
+            async : false,
+            success : function(data, status) {
+                if(typeof(fv_ajaxCallback) == "function"){
+                    fv_ajaxCallback(data);
+                }
+                else {
+                    eval(fv_ajaxCallback + "(data);");
+                }
+            }
+        });
+    };
+}
+
+=======
 		if(this.check==true){
 			frm.submit();
 		}else{
@@ -109,6 +187,7 @@ function ComAjax(opt_formId){
 }
 /* paging tag */
 /*
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
 /*
 divId : 페이징 태그가 그려질 div
 pageIndx : 현재 페이지 위치가 저장될 input 태그 id
@@ -129,7 +208,11 @@ function gfn_renderPaging(params){
 	
 	var recordCount = params.recordCount; //페이지당 레코드 수
 	if(gfn_isNull(recordCount) == true){
+<<<<<<< HEAD
+		recordCount = 15;
+=======
 		recordCount = 20;
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
 	}
 	var totalIndexCount = Math.ceil(totalCount / recordCount); // 전체 인덱스 수
 	gfv_eventName = params.eventName;
@@ -140,7 +223,11 @@ function gfn_renderPaging(params){
 	var str = "";
 	
 	var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
+<<<<<<< HEAD
+	var last = (parseInt(totalIndexCount/10) < parseInt(currentIndex)/10) ? totalIndexCount%10 : 10;
+=======
 	var last = (parseInt(totalIndexCount/10) == parseInt((currentIndex-1)/10)) ? totalIndexCount%10 : 10;
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
 	var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; 
 	var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount;
 	
@@ -179,6 +266,9 @@ function _movePage(value){
 	else {
 		eval(gfv_eventName + "(value);");
 	}
+<<<<<<< HEAD
+}
+=======
 }
 
 // 검색
@@ -252,3 +342,4 @@ function fn_back(){
 	history.go(-1);
 }
 
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd

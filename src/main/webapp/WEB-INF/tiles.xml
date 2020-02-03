@@ -27,12 +27,12 @@
 	
 	<!-- main -->
 	<definition name="main" extends="default">
-		<put-attribute name="body" value="/WEB-INF/views/layout/main.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/member/main/main.jsp" />
 	</definition>
 	
 	<!-- Member -->
 	<definition name="joinForm" extends="default2">
-		<put-attribute name="body" value="/WEB-INF/views/member/join/JoinForm.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/member/join/joinForm.jsp" />
 	</definition>
 	
 	<definition name="welcome" extends="default2">
@@ -51,6 +51,10 @@
 	<definition name="pwCheckForm" extends="default2">
 		<put-attribute name="body" value="/WEB-INF/views/member/myPage/pwCheckForm.jsp" />
 	</definition>
+	
+	<definition name="accountDetail" extends="default2">
+		<put-attribute name="body" value="/WEB-INF/views/member/myPage/accountDetail.jsp" />
+	</definition> 
 	
 	<definition name="accountModifyForm" extends="default2">
 		<put-attribute name="body" value="/WEB-INF/views/member/myPage/accountModifyForm.jsp" />

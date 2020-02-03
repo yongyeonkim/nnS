@@ -2,20 +2,25 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<<<<<<< HEAD
 <title>nnS #</title>
+=======
 <title>nnS#</title>
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
 
+<<<<<<< HEAD
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.css'/>" />
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
-
+=======
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/ui.css'/>" />
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="<c:url value='/resources/js/common.js'/>" charset="utf-8"></script>
+>>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd

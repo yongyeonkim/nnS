@@ -8,11 +8,14 @@ import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,9 @@ public class LoginController {
 
 	@Resource(name = "loginService")
 	private LoginService loginService;
+	
+	@Inject
+	private JavaMailSender mailSender;
 
 	// @Resource(name = "mailSender")
 	// private JavaMailSender mailSender;
@@ -48,7 +54,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST) // 로그인
 	public ModelAndView login(CommandMap commandMap, HttpServletRequest request) throws Exception {
-		ModelAndView mv = new ModelAndView("login");
+		ModelAndView mv = new ModelAndView("/member/login/login");
 		String message = "";
 		String url = "";
 
@@ -61,14 +67,7 @@ public class LoginController {
 			message = "해당 아이디가 존재하지 않습니다.";
 		} else {
 			if (chk.get("MEM_PW").equals(commandMap.get("MEM_PW"))) {
-				if (chk.get("MEM_VERIFY").equals("Y")) { // 이메일 인증을 했을ㄸ ㅐ
-						session.setAttribute("MEM_ID", commandMap.get("MEM_ID")); 
-						session.setAttribute("MEM_KIND", chk.get("MEM_KIND"));
-				} else { // 이메일 인증을 완료하지 않았을 떄
-					message = "이메일 인증을 완료해주세요.";
-					url = "/main";
-				}
-
+				session.setAttribute("session_MEM_ID", commandMap.get("MEM_ID"));
 			} else { // 비밀번호가 일치하지 않을 때
 				message = "비밀번호가 맞지 않습니다.";
 			}
@@ -97,7 +96,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/findIdResult", method = RequestMethod.POST) // 입력한 정보에 맞춰서 아이디를 찾아주는 거
 	public ModelAndView findIdResult(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findIdResult");
+		ModelAndView mv = new ModelAndView("/member/login/findIdResult");
 		Map<String, Object> map = loginService.findIdWithEmail(commandMap.getMap());
 		mv.addObject("id", map);
 		return mv;
@@ -107,7 +106,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/findPw") // 비밀번호 찾기 폼을 보여주는 메소드
 	public ModelAndView findPw(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("findAccount");
+		ModelAndView mv = new ModelAndView("/member/login/findAccount");
 		return mv;
 	}
 	
@@ -123,7 +122,7 @@ public class LoginController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/createEmailAuth1" ,method=RequestMethod.GET)
+	@RequestMapping(value = "/passwordEmail" ,method=RequestMethod.GET)
 	   @ResponseBody
 	   public boolean createEmailAuth(@RequestParam String userEmail, @RequestParam int random, HttpServletRequest req) {
 		
@@ -133,14 +132,29 @@ public class LoginController {
 	      String authCode = String.valueOf(ran);
 	      session.setAttribute("authCode", authCode);
 	      session.setAttribute("random", random);
-	      String subject = "비밀번호 변경 인증 코드 발급 안내 입니다.";
+	      String subject = "임시 비밀번호 발급 안내 입니다.";
 	      StringBuilder sb = new StringBuilder();
-	      sb.append("귀하의 인증 코드는 " + authCode + "입니다.");
+	      sb.append("귀하의 임시 비밀번호는 " + authCode + " 입니다.");
 	      return mailService.send(subject, sb.toString(),"cwjjgl183@gmail.com", userEmail, null);
 	   }
 	
+	@RequestMapping(value="/passwordAuth", method=RequestMethod.GET)//인증번호확인
+	   @ResponseBody
+	   public ResponseEntity<String> emailConfirm(@RequestParam String authCode, @RequestParam String random, HttpSession session){
+	      String originalJoinCode = (String) session.getAttribute("authCode");
+	      String originalRandom = Integer.toString((Integer) session.getAttribute("random"));
+	      if(originalJoinCode.equals(authCode) && originalRandom.equals(random)) 
+	       
+	         return new ResponseEntity<String>("complete", HttpStatus.OK);   
+	      
+	      else return new ResponseEntity<String>("false", HttpStatus.OK);
+	   }
 	
-	
-
+	 @RequestMapping(value = "/emailAuth", method = RequestMethod.GET) 
+	   public ModelAndView join(CommandMap commandMap) throws Exception { //이메일 인증기능 처리
+	     ModelAndView mv = new ModelAndView("member/join/welcome");
+	     
+	     return mv; 
+	   }
 
 }
