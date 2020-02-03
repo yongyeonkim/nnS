@@ -92,11 +92,12 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 		</colgroup>
 		<thead>
 			<tr>
-				<th scope="col">글번호</th>
-				<th scope="col">제목</th>
-				<th scope="col">조회수</th>
-				<th scope="col">작성일</th>
-				<th scope="col">작성시간</th>
+				<th bgcolor="#e9e9e9">글번호</th>
+				<th bgcolor="#e9e9e9">이미지</th>
+				<th bgcolor="#e9e9e9">제목</th>
+				<th bgcolor="#e9e9e9">조회수</th>
+				<th bgcolor="#e9e9e9">작성일</th>
+				<th bgcolor="#e9e9e9">작성시간</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -105,10 +106,12 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 					<c:forEach items="${list}" var="row">
 						<tr>
 							<td>${row.GOODS_NUM}</td>
+							<td>${이미지}</td>
 							<td class="title"><a href="#this" name="title">${row.GOODS_TITLE}</a>
 								<input type="hidden" id="IDX" value="${row.GOODS_NUM}"></td>
 							<td>${row.GOODS_COUNT}</td>
 							<td>${row.GOODS_DATE}</td>
+							<td>${row.GOODS_TIME}</td>
 						</tr>
 					</c:forEach>
 				</c:when>
@@ -120,6 +123,21 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 			</c:choose>
 		</tbody>
 		</table>
+		<form action="/nnS/shop" method="post">
+			<fieldset>
+				<legend>검색</legend>
+				<select name="searchType" id="searchType">
+					<option value="nothing">-----</option>
+					<option value="title" <c:out value="${searchType eq 'title'?'selected':''}"/>>상품명</option>
+					<option value="content" <c:out value="${searchType eq 'content'?'selected':''}"/>>내용</option>
+					<option value="brand" <c:out value="${searchType eq 'brand'?'selected':''}"/>>브랜드</option>
+				</select>
+				<input type="text" class="txt" placeholder="Search" name="keyword" id="keyword" value="${keyword}"/>&nbsp;
+				<input type="submit" value="검색" class="search_btn" onClick="onSearch()"/>
+			</fieldset>
+		</form>
+		<div id="PAGE_NAVI" align="center"></div>
+		<input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
    
 	<!-- <table border="1" align="center">
 		<li>
@@ -170,16 +188,15 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 	</table> -->
    </div>
    
-	<div id="PAGE_NAVI"></div>
-    <input type="hidden" id="PAGE_INDEX" name="PAGE_INDEX" />
+	
     
     <%@ include file="/WEB-INF/include/include-body.jspf" %>
-    
 	
 
 
 <script type="text/javascript">
 		$(document).ready(function() {
+			
 			fn_selectGoodsList(1);
 			
 			$("#write").on("click", function(e) { //상품등록 버튼
@@ -213,6 +230,8 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 			comAjax.setCallback("fn_selectGoodsListCallback");
 			comAjax.addParam("PAGE_INDEX", pageNo);
 			comAjax.addParam("PAGE_ROW", 15);
+			comAjax.addParam("keyword", $('#keyword').val());
+			comAjax.addParam("searchType", $('#searchType').val());
 			comAjax.ajax();
 		}
 
@@ -241,6 +260,9 @@ h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
 									str += "<tr>"
 											+ "<td>"
 											+ value.GOODS_NUM
+											+ "</td>"
+											+ "<td>"
+											+ "<img src='https://m.sandboxstore.net/web/product/big/201812/fc5894526dadbe5e309f0eb69df14097.jpg' alt='' width='50' height='50'>"
 											+ "</td>"
 											+ "<td class='title'>"
 											+ "<a href='#this' name='title'>"

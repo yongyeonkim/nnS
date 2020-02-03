@@ -42,7 +42,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/loginForm") // 로그인 폼
 	public ModelAndView loginForm() throws Exception {
-		ModelAndView mv = new ModelAndView("loginForm");
+		ModelAndView mv = new ModelAndView("/member/login/loginForm");
 		return mv;
 	}
 

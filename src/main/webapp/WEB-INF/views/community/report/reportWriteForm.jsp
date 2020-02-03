@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <html lang="ko">
 <head>
 <meta charset="EUC-KR">
@@ -173,38 +174,37 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 
 				</select>
             	</td>
+            	<td scope="row" align="left">신고할 상품번호(임시)&nbsp;&nbsp;
+            	<input type="number" id="REPORT_PRONUM" name="REPORT_PRONUM" placeholder="상품에서넘어와야함"></td>
          		
-         		<td scope="row" align="left">사유</td>
+         		<th scope="row" align="left">사유</th>
          		
          		<td>
-            		<select name="keyField">
+            		<select id="REPORT_TYPE" name="REPORT_TYPE">
 					
 					<!-- <option value="choice">선택</option>-->
 					
-					<option value="sagi">거래사기</option>
+					<option value="거래사기">거래사기</option>
 
-					<option value="yok">언어폭력</option>
+					<option value="언어폭력">언어폭력</option>
 
-					<option value="etc">기타</option>
+					<option value="기타">기타</option>
 
 				</select>
             	</td>
          		
          	</tr>
-         	<tr>
-         		<td>작성자</td>
-         		<td><input type="text" id="writer" name="WRITER" class="wdp_90"></input></td>         	
-         	</tr>
          	
          	<tr>
          		<td>제목</td>
-         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90"/></td>
+         		<input type="hidden" id="REPORT_NUM" name="REPORT_NUM">
+         		<td colspan="3"><input type="text" id="REPORT_TITLE" name="REPORT_TITLE" class="wdp_90"/></td>
          	</tr>
          	
          	<tr>
          		<td>내용</td>
          		<td colspan="3" class="view_text">
-                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
+                  <textarea rows="20" cols="100" title="내용" id="REPORT_CONTENT" name="REPORT_CONTENT"></textarea>
                </td>
          	</tr>
          	<tr>
@@ -234,6 +234,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
    
   </div>
 </div>
+<%@ include file="/WEB-INF/include/include-body.jspf" %>
 <script type="text/javascript">
       var gfv_count=1;
       $(document).ready(function(){
@@ -258,13 +259,13 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       
       function fn_openReportList(){
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/cummunity/reportList' />");
+         comSubmit.setUrl("<c:url value='/community/reportList' />");
          comSubmit.submit();
       }
       
       function fn_insertReport(){
          var comSubmit = new ComSubmit("frm");
-         comSubmit.setUrl("<c:url value='/nnS/community/reportWrite' />");
+         comSubmit.setUrl("<c:url value='/shop/goodsDetail/reportWrite' />");
          comSubmit.submit();
       }
       

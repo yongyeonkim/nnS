@@ -13,7 +13,7 @@ public interface NoticeService {
 	
 	void insertNoticeWrite(Map<String, Object> map, HttpServletRequest request) throws Exception;
 	
-	void updateNoticeModify(Map<String, Object> map) throws Exception;
+	void updateNoticeModify(Map<String, Object> map, HttpServletRequest request) throws Exception;
 	
 	void deleteNotice(Map<String, Object> map) throws Exception;
 }

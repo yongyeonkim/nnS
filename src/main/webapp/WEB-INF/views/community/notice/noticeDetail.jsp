@@ -182,9 +182,11 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 				<th scope="row">첨부파일</th>
 				<td colspan="3">
 					<c:forEach var="row" items="${list }">
-						<input type="hidden" id="FILES_NUM" value="${row.FILES_NUM }">
-						<a href="#this" name="file">${row.FILES_ORGNAME }</a>
-						(${row.FILES_SIZE}kb)
+						<div>
+							<input type="hidden" id="FILES_NUM" value="${row.FILES_NUM }">
+							<a href="#this" name="file">${row.FILES_ORGNAME }</a>
+							(${row.FILES_SIZE}kb)
+						</div>
 					</c:forEach>
 				</td>
 			</tr>
@@ -201,7 +203,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 	</div>
 	
 	
-	
+	<%@ include file="/WEB-INF/include/include-body.jspf" %>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#list").on("click", function(e){ //목록으로 버튼
@@ -250,7 +252,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			var idx = obj.parent().find("#FILES_NUM").val();
 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/common/downloadFile' />");
-			comSubmit.addParam("FILES_NUM", $("#FILES_NUM").val());
+			comSubmit.addParam("FILES_NUM", idx);
 			comSubmit.submit();
 		}
 	</script>

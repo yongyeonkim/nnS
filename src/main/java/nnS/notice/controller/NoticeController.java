@@ -73,7 +73,6 @@ public class NoticeController {
 	public ModelAndView noticeWrite(CommandMap commandMap, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/community/noticeList");
 		noticeService.insertNoticeWrite(commandMap.getMap(), request);
-		
 		return mv;		
 	}
 	
@@ -83,18 +82,17 @@ public class NoticeController {
 		ModelAndView mv = new ModelAndView("noticeModifyForm");
 		Map<String, Object> map = noticeService.selectNoticeDetail(commandMap.getMap());
 		mv.addObject("map", map.get("map"));
+		mv.addObject("list", map.get("list"));
 		
 		return mv;		
 	}
 	
 	// 공지사항 수정
 	@RequestMapping(value = "/community/noticeModify")
-	public ModelAndView noticeModify(CommandMap commandMap) throws Exception {
+	public ModelAndView noticeModify(CommandMap commandMap, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/community/noticeDetail");
-		noticeService.updateNoticeModify(commandMap.getMap());
+		noticeService.updateNoticeModify(commandMap.getMap(), request);
 		mv.addObject("NOTICE_NUM", commandMap.get("NOTICE_NUM"));
-		System.out.println(commandMap.get("NOTICE_NUM"));
-		System.out.println();
 		
 		return mv;		
 	}
