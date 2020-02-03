@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -141,20 +142,19 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 </head>
 <link rel="stylesheet" type="text/css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() { //비밀번호 일치 확인
     //[1] lblError 레이어 클리어
-    $('#MEM_PW_NEW').keyup(function() {
+    $('#MEM_TEMP_PW').keyup(function() {
         //$('#pwr').remove(); // 제거
         $('#pw').text(''); // 제거가 아니라 클리어
-           $('#MEM_PW_NEW2').val('');
+           $('#MEM_TEMP_PW2').val('');
     });
     //[2] 암호 확인 기능 구현
-    $('#MEM_PW_NEW2').keyup(function() {
-        if ($('#MEM_PW_NEW').val() != $('#MEM_PW_NEW2').val()) {
+    $('#MEM_TEMP_PW2').keyup(function() {
+        if ($('#MEM_TEMP_PW').val() != $('#MEM_TEMP_PW2').val()) {
             $('#pw').text(''); // 클리어
             $('#pw').html("암호가 일치하지 않습니다.").css("color", "red");          //레이어에 HTML 출력
         }
@@ -163,6 +163,38 @@ $(document).ready(function() { //비밀번호 일치 확인
             $('#pw').html("암호가 일치합니다.").css("color", "blue");
         }
     });
+});
+
+$(document).ready(function() { //id check
+    $("#pwchange").on("click", function(e) {
+       e.preventDefault();
+       fn_pwchangeCheck();
+    });
+ });
+
+function fn_pwchangeCheck(){ //pw check
+    var MEM_PW = {MEM_PW : $('#MEM_PW').val()};
+    $.ajax({
+        url:"<c:url value='/myPage/pwchangeCheck'/>",
+        type:'get',
+        data: MEM_PW,
+        success:function(data){              
+            if($.trim(data)=="1"){
+            	var comSubmit = new ComSubmit("pwchangeform");
+            	comSubmit.setUrl("<c:url value='/myPage/modifySuccess'/>");
+            	comSubmit.submit();
+            }else{
+               $('#pwc').html("비밀번호가 틀렸습니다.").css("color", "red");
+            }
+        },
+        error:function(){
+                alert("에러입니다");
+        }
+    });
+};
+
+$("#pwchangeform").on("submit",function(e){
+	
 });
 
 
@@ -180,25 +212,27 @@ $(document).ready(function() { //비밀번호 일치 확인
    </div>
    <div id="main-container">
    <center>
+   <form id="pwchangeform" method="post">
          <table border="0" class="pwModify">
          <br/><br/><br/>
         <h2>비밀번호 변경</h2>
             <tbody>
             <tr>
             	<td>
-               * 기존 비밀번호 &nbsp;&nbsp;&nbsp;   <input type="password" id="MEM_PW" name="MEM_PW">
+               * 기존 비밀번호 &nbsp;&nbsp;&nbsp;   
+               <input type="password" id="MEM_PW" name="MEM_PW">
                </td>
                </tr>
                <tr>
                <td>
                * 새 비밀번호 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                <input type="password" id="MEM_PW_NEW" name="MEM_PW_NEW">
+                <input type="password" id="MEM_TEMP_PW" name="MEM_TEMP_PW">
                </td>
                </tr>
 
                <tr>
                <td>
-               * 새 비밀번호 확인 <input type="password" id="MEM_PW_NEW2" name="MEM_PW_NEW2">
+               * 새 비밀번호 확인 <input type="password" id="MEM_TEMP_PW2" name="MEM_TEMP_PW2">
                </td>
                </tr>
                <tr><td><span id="pw"></span><tr><td>
@@ -213,6 +247,7 @@ $(document).ready(function() { //비밀번호 일치 확인
             </tr>
             </tbody>
          </table>
+         </form>
          </center>
    </div>
   </div>
