@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -132,91 +132,106 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 }
 #main-container
 {
-   min-height: 400px;
+   min-height: 600px;
    margin: 0 0 0 125px;
    padding: 20px;
    background-color: #fff;
    border: 1px solid #888;
 }
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
-<script type="text/javascript">
-
-$(document).ready(function() { //변경 버튼 클릭시
-    $("#delete").on("click", function(e) {
-       e.preventDefault();
-       fn_delete();
-    });
- });
- 
- function fn_delete(deleteAccountForm) { //변경 버튼 클릭시(유효성검증, 데이터입력)
-	 var MEM_PW = {MEM_PW : $('#MEM_PW').val()};
-     $.ajax({
-         url:"<c:url value='/myPage/deletePw'/>",
-         type:'get',
-         data: MEM_PW,
-         success:function(data){              
-             if($.trim(data)=="1"){
-            	 var comSubmit = new ComSubmit("deleteAccountForm");
-            	 comSubmit.setUrl("<c:url value='/myPage/deleteAccountCheck'/>");
-            	 comSubmit.submit();  
-             }else{
-                alert("비밀번호가 틀렸습니다.");
-             }
-         },
-         error:function(){
-                 alert("에러입니다");
-         }
-     });
- };
- 
- $("#deleteAccountForm").on("submit",function(e){
- });
-
-</script>
 </head>
 <body>
+
   <div id="content">
    <div id="vertical_tab-container">
       <ul>
-         <li><a href="accountDetail">회원정보 변경</a></li>
+         <li class="selected"><a href="accountDetail">회원 정보 변경</a></li>
          <li><a href="pwModifyForm">비밀번호 변경</a></li>
-         <li class="selected"><a href="deleteAccount">회원탈퇴</a></li>
-         <li><a href="reportList">신고내역</a></li>
+         <li><a href="deleteAccount">회원 탈퇴</a></li>
+         <li><a href="reportList">신고 내역</a></li>
          <li><a href="qnaList">Q&A</a></li>
       </ul>
    </div>
    <div id="main-container">
-   <center>
-   <form id="deleteAccountForm" method="post">
-   		<table border="0" class="deleteAccount">
-   		<br/><br/><br/>
-		  <h2>회원탈퇴</h2>
-		  <br/>
-   			<tbody>
-   				*비밀번호 <input type="password" id="MEM_PW" name="MEM_PW">
-   				<br/><br/>
-   				<table border="1px" width="40%">
-					<tbody>
-						<tr>
-							<th>
-							<div style="color:black;">
-								한 번 탈퇴하시면 회원님의 정보를 복구할 수 없습니다.<br/>
-								신중히 선택해 주시길 바랍니다.
-							</div>
-							</th>
-						</tr>
-					</tbody>
-				</table>
-				<br/><br/>
-				<button id="delete">회원 탈퇴</button>
-				<input type="button" value="취소하기" onclick="document.location.href='/nnS/main'"/>
-   			</tbody>
-   		</table>
-   		</form>
-   		</center>
+					<form id="accountModify" method="post">
+					<h2>회원 정보 변경</h2>
+
+				<div>
+					아이디 ${map.MEM_ID } 
+				</div>
+				
+				<div>
+					이름 ${map.MEM_NAME }
+				</div>
+				
+				<div>
+					생년월일 ${map.MEM_BIRTH } 
+				</div>
+				
+				<div>			
+					성별 ${map.MEM_GEN }		
+				</div>
+				
+				<div>
+				
+               이메일 ${map.MEM_EMAIL }
+  
+				</div>
+				
+				<div>
+					휴대전화 ${map.MEM_PHONE }
+				</div>
+							
+				<div>
+					우편번호 ${map.MEM_ZIP }		
+				</div>
+				
+				<div>
+					집 주소 ${map.MEM_ADD1 }
+				</div>
+				
+				<div>
+					상세 주소 ${map.MEM_ADD2 }
+				</div>									
+				<p/>
+			<button type="button" onclick="ch_info();">수정하기</button>
+			<button onclick="back();" type="button">취소하기</button>
+									
+				
+		</tbody>
    </div>
-  </div>
+</div>
+	
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+
+function ch_info(){
+	document.location.href= "http://localhost:8000/nnS/myPage/accountModifyForm";   
+}
+
+$(document).ready(function() {
+
+	//Default Action
+	$(".goodsTab_content").hide(); //Hide all content
+	$("ul.goodsTabs li:first").addClass("active").show(); //Activate first goodsTab
+	$(".goodsTab_content:first").show(); //Show first goodsTab content
+	
+	//On Click Event
+	$("ul.goodsTabs li").click(function() {
+		$("ul.goodsTabs li").removeClass("active"); //Remove any "active" class
+		$(this).addClass("active"); //Add "active" class to selected goodsTab
+		$(".goodsTab_content").hide(); //Hide all goodsTab content
+		var activegoodsTab = $(this).find("a").attr("href"); //Find the rel attribute value to identify the active goodsTab + content
+		$(activegoodsTab).fadeIn(); //Fade in the active content
+		return false;
+	});
+
+});
+
+function back(){
+	history.go(-1);
+}
+</script>
 </body>
+</html>
