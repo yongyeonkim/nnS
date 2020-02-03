@@ -59,6 +59,7 @@ public class LoginController {
 		String url = "";
 
 		HttpSession session = request.getSession();
+
 		
 		Map<String, Object> chk = loginService.loginCheck(commandMap.getMap());
 		//Map<String, Object> banChk = adminBanService.banDateCheck(commandMap.getMap());
@@ -66,11 +67,7 @@ public class LoginController {
 			message = "해당 아이디가 존재하지 않습니다.";
 		} else {
 			if (chk.get("MEM_PW").equals(commandMap.get("MEM_PW"))) {
-
 				session.setAttribute("session_MEM_ID", commandMap.get("MEM_ID"));
-
-						session.setAttribute("session_MEM_ID", commandMap.get("MEM_ID")); 
-
 			} else { // 비밀번호가 일치하지 않을 때
 				message = "비밀번호가 맞지 않습니다.";
 			}
@@ -109,14 +106,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/findPw") // 비밀번호 찾기 폼을 보여주는 메소드
 	public ModelAndView findPw(CommandMap commandMap) throws Exception {
-		
 		ModelAndView mv = new ModelAndView("/member/login/findAccount");
-		
-		int ran = new Random().nextInt(900000)+1000;
-		
-		mv.setViewName("findAccount");
-		mv.addObject("random", ran);
-		
 		return mv;
 	}
 	
@@ -125,7 +115,7 @@ public class LoginController {
 		
 		System.out.println(commandMap.getMap());
 		
-	    String mv = String.valueOf(loginService.findPwWithEmail(commandMap.getMap()));
+	    	String mv = String.valueOf(loginService.findPwWithEmail(commandMap.getMap()));
 
 		System.out.println(mv);
 		
@@ -147,7 +137,7 @@ public class LoginController {
 	      sb.append("귀하의 임시 비밀번호는 " + authCode + " 입니다.");
 	      return mailService.send(subject, sb.toString(),"cwjjgl183@gmail.com", userEmail, null);
 	   }
-	 
+	
 	@RequestMapping(value="/passwordAuth", method=RequestMethod.GET)//인증번호확인
 	   @ResponseBody
 	   public ResponseEntity<String> emailConfirm(@RequestParam String authCode, @RequestParam String random, HttpSession session){
