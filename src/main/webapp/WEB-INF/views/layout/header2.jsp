@@ -20,7 +20,7 @@
 				<c:if test="${session_member_name == 'admin' }">
 					<li><a href="/nnS/main">관리자페이지</a></li> 	
 				</c:if>
-			<li><a href="${contextPath}/nnS/main" class="log">로그아웃</a></li> 
+			<li><a href="${contextPath}/nnS/logout" class="log">로그아웃</a></li> 
 			<li><a href="${contextPath}/nnS/myPage">마이페이지</a></li>
 			<li><a href="${contextPath}/nnS/myshop">내상점</a></li> 
 			</c:if>
