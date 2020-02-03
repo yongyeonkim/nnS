@@ -69,15 +69,31 @@ public class MyPageController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/myPage/pwModifyForm")
-	public ModelAndView pwModifyForm(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("member/myPage/pwModifyForm");
-		return mv;
+	@RequestMapping(value = "/myPage/pwModifyForm") //비밀번호 변경
+	public ModelAndView pwModifyForm(CommandMap commandMap, HttpServletRequest request) throws Exception {
+		ModelAndView mv = new ModelAndView("pwModifyForm");
+		HttpSession session = request.getSession();
+		commandMap.put("MEM_ID", session.getAttribute("session_MEM_ID"));
+		Map<String,Object> map = myPageService.selectAccountInfo(commandMap.getMap());	
+		mv.addObject("map",map);
+		return mv; 
 	}
+	
+	 @RequestMapping(value = "/myPage/pwchangeCheck") // 비밀번호 변경 시 현재 비밀번호 입력
+	 public @ResponseBody String pwchangeCheck(CommandMap commandMap, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		commandMap.put("MEM_ID", session.getAttribute("session_MEM_ID"));
+		String pwCheck = String.valueOf(myPageService.selectPwCheck(commandMap.getMap()));  
+		System.out.println(pwCheck);
+		return pwCheck;
+	 }
 
-	@RequestMapping(value = "/myPage/modify")
-	public ModelAndView accountModify(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("redirect:/member/main/main");
+	@RequestMapping(value = "/myPage/modifySuccess")
+	public ModelAndView pwchange(CommandMap commandMap, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		commandMap.put("MEM_ID", session.getAttribute("session_MEM_ID"));
+		myPageService.updatePwModify(commandMap.getMap());	
+		ModelAndView mv = new ModelAndView("modifySuccess");
 		return mv;
 	}
 
