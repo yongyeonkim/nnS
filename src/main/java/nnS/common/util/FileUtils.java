@@ -92,7 +92,7 @@ public class FileUtils {
 				listMap.put("BOARD_IDX", Integer.parseInt(boardIdx)); 
 				listMap.put("FILES_ORG", originalFileName); 
 				listMap.put("FILES_STD", storedFileName); 
-				listMap.put("FILE_SIZE", multipartFile.getSize()); 
+				listMap.put("FILES_SIZE", multipartFile.getSize()); 
 				list.add(listMap); 
 			}
 			else {
