@@ -101,7 +101,7 @@ function fn_pwCheck(){ //pw check
         data: MEM_PW,
         success:function(data){              
             if($.trim(data)=="1"){
-            	document.location.href= "http://localhost:8000/nnS/myPage/accountDetail";   
+            	document.location.href= "http://localhost:8080/nnS/myPage/accountDetail";   
             }else{
                $('#pwc').html("비밀번호가 틀렸습니다.").css("color", "red");
             }

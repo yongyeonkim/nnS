@@ -157,25 +157,18 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          </colgroup>
          <center><h2>공지사항 수정</h2></center>
          <tbody>
-         	<tr>
+<!--          	<tr>
          		<td scope="row">분류</td>
-         		
          		<td>
             		<select name="keyField">
-					
-					<!-- <option value="choice">선택</option>-->
+					<option value="choice">선택</option>
 					<option value="notice">공지사항</option>
-					
 					<option value="board">자유게시판</option>
-
 					<option value="report">신고게시판</option>
-
 					<option value="qna">Q&A게시판</option>
-
 				</select>
             	</td>
-         		
-         	</tr>
+         	</tr> -->
          	<tr>
          		<td>작성자</td>
          		<td>관리자</td>         	
@@ -201,7 +194,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          		<div id="fileDiv">
          			<c:forEach var="row" items="${list }" varStatus="var">
 	        			<p>
-	        				<input type="hidden" id="FILES_NUM" name="FILES_NUM_${var.index }" value="${row.FILES_NUM }">
+	        				<input type="hidden" id="IDX" name="IDX_${var.index }" value="${row.FILES_NUM }">
 	        				<a href="#this" id="name_${var.index }" name="name_${var.index }">${row.FILES_ORGNAME }</a>
 	        				<input type="file" id="file_${var.index }" name="file_${var.index }">(${row.FILES_SIZE }kb)
 	        				<a href="#this" class="btn" id="delete_${var.index}" name="delete_${var.index }">삭제</a>
@@ -268,7 +261,7 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 			$("#delete_"+(gfv_count++)).on("click", function(e){ //삭제 버튼 
 			e.preventDefault(); 
 			fn_deleteFile($(this)); 
-     });
+    	 });
       }
       function fn_deleteFile(obj){
          obj.parent().remove();

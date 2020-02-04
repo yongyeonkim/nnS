@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="EUC-KR">
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <style type="text/css">
 
 h1 {font-size: 3em; margin: 20px 0; color: #FFF;}
@@ -157,38 +157,27 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          </colgroup>
          <center><h2>자유게시판 작성</h2></center>
          <tbody>
-         	<tr>
+<!--          	<tr>
          		<td scope="row">분류</td>
-         		
          		<td>
             		<select name="keyField">
-					
-					<!-- <option value="choice">선택</option>-->
-					
+					<option value="choice">선택</option>
 					<option value="board">자유게시판</option>
-
 					<option value="report">신고게시판</option>
-
 					<option value="qna">Q&A게시판</option>
-
 				</select>
             	</td>
-         		
-         	</tr>
-         	<tr>
-         		<td>작성자</td>
-         		<td><input type="text" id="writer" name="WRITER" class="wdp_90"></input></td>         	
-         	</tr>
+         	</tr> -->
          	
          	<tr>
          		<td>제목</td>
-         		<td colspan="3"><input type="text" id="title" name="TITLE" class="wdp_90"/></td>
+         		<td colspan="3"><input type="text" id="BOARD_TITLE" name="BOARD_TITLE" class="wdp_90"/></td>
          	</tr>
          	
          	<tr>
          		<td>내용</td>
          		<td colspan="3" class="view_text">
-                  <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
+                  <textarea rows="20" cols="100" title="내용" id="BOARD_CONTENT" name="BOARD_CONTENT"></textarea>
                </td>
          	</tr>
          	<tr>
@@ -197,13 +186,11 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
          		<div id="fileDiv">
         		 	<p>
             		<input type="file" name="file_0" id="file">
-            		<a href="#this" class="btn" id="delete" name="delete">삭제</a>
             		<a href="#this" class="btn" id="addFile">파일 추가</a>
          			</p>
      			 </div>
      			 </td>
          	</tr>
-            
          </tbody>
       </table>
       
@@ -242,13 +229,13 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
       
       function fn_openBoardList(){
          var comSubmit = new ComSubmit();
-         comSubmit.setUrl("<c:url value='/nnS/cummunity/boardList' />");
+         comSubmit.setUrl("<c:url value='/community/boardList' />");
          comSubmit.submit();
       }
       
       function fn_insertBoard(){
          var comSubmit = new ComSubmit("frm");
-         comSubmit.setUrl("<c:url value='/nnS/community/boardWrite' />");
+         comSubmit.setUrl("<c:url value='/community/boardWrite' />");
          comSubmit.submit();
       }
       

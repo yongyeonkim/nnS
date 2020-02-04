@@ -27,7 +27,7 @@
 	
 	<!-- main -->
 	<definition name="main" extends="default">
-		<put-attribute name="body" value="/WEB-INF/views/member/main/main.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/layout/main.jsp" />
 	</definition>
 	
 	<!-- Member -->
@@ -51,10 +51,6 @@
 	<definition name="pwCheckForm" extends="default2">
 		<put-attribute name="body" value="/WEB-INF/views/member/myPage/pwCheckForm.jsp" />
 	</definition>
-	
-	<definition name="accountDetail" extends="default2">
-		<put-attribute name="body" value="/WEB-INF/views/member/myPage/accountDetail.jsp" />
-	</definition> 
 	
 	<definition name="accountModifyForm" extends="default2">
 		<put-attribute name="body" value="/WEB-INF/views/member/myPage/accountModifyForm.jsp" />
@@ -119,6 +115,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/community/board/boardWriteForm.jsp" />
 	</definition>
 	
+	<definition name="boardModifyForm" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/community/board/boardModifyForm.jsp" />
+	</definition>
+
 	<!-- qna -->
 	<definition name="qnaList" extends="default">
 		<put-attribute name="body" value="/WEB-INF/views/community/qna/qnaList.jsp" />

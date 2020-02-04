@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="/WEB-INF/include/include-header.jspf" %>
 <meta charset="EUC-KR">
 <style type="text/css">
 
@@ -141,9 +142,6 @@ html ul.goodsTabs li.active, html ul.goodsTabs li.active a:hover  {
 </style>
 </head>
 <link rel="stylesheet" type="text/css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() { //비밀번호 일치 확인
     //[1] lblError 레이어 클리어
@@ -211,7 +209,6 @@ $("#pwchangeform").on("submit",function(e){
       </ul>
    </div>
    <div id="main-container">
-   <center>
    <form id="pwchangeform" method="post">
          <table border="0" class="pwModify">
          <br/><br/><br/>
@@ -248,7 +245,6 @@ $("#pwchangeform").on("submit",function(e){
             </tbody>
          </table>
          </form>
-         </center>
    </div>
   </div>
 </body>

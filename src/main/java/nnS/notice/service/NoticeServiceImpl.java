@@ -62,10 +62,14 @@ public class NoticeServiceImpl implements NoticeService {
 		
 		noticeDAO.deleteFileList(map);
 		List<Map<String, Object>> list = fileUtils.parseUpdateFileInfo(map, request);
+		System.out.println("====================list===============");
+		System.out.println(list);
 		Map<String, Object> tempMap = null;
 		for(int i=0, size=list.size(); i<size; i++) {
 			tempMap = list.get(i);
-			System.out.println(tempMap);
+			System.out.println("=============tempMap=========="+i);
+			System.out.print(tempMap);
+			System.out.println(size);
 			if(tempMap.get("IS_NEW").equals("Y")) {
 				noticeDAO.insertFile(tempMap);
 			} else {

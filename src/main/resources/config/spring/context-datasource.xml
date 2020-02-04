@@ -6,18 +6,11 @@
     
     <bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
-<<<<<<< HEAD
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+
+        <property name="url" value="jdbc:oracle:thin:@localhost:49161:XE"/>
 		<property name="username" value="NNS_ADMIN" />
 		<property name="password" value="WONDERLAND" />
     </bean>                             
-=======
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
-		<property name="username" value="NNS_ADMIN" />
-		<property name="password" value="WONDERLAND" />
-    </bean>
->>>>>>> 2a2ca99d087dc79657799bed3916b8a821f059fd
-    
     
     <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
 		<constructor-arg ref="dataSourceSpied" />
