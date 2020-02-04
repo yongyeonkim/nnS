@@ -259,6 +259,41 @@
 		]]> 
 	</update>
 	
-       
+	
+	<!-- 좋아요버튼 -->
+	<select id="selectGoodsLike" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT	COUNT(*) AS GOODS_LIKE_YN
+			FROM	GOODS_LIKE
+			WHERE	GOODS_LIKE_PARENT = #{GOODS_NUM}
+			AND		GOODS_LIKE_USER = (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = 1234)
+		]]>
+		
+	</select>   
+    
+    <insert id="insertGoodsLike" parameterType="hashmap"> 
+		<![CDATA[ 
+			INSERT
+			INTO    GOODS_LIKE  (
+			                    GOODS_LIKE_NUM,
+			                    GOODS_LIKE_USER,
+			                    GOODS_LIKE_PARENT
+			                    )
+			VALUES              (
+			                    GOODS_LIKE_SEQ.NEXTVAL,
+			                    (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = #{LIKE_MEM_ID}),
+			                    #{LIKE_GOODS_NUM}
+			                    )
+		]]> 
+	</insert>
+	
+	<delete id="deleteGoodsLike" parameterType="hashmap">
+		<![CDATA[
+			DELETE 
+			FROM    GOODS_LIKE 
+			WHERE   GOODS_LIKE_USER = (SELECT MEM_NUM FROM MEMBER WHERE MEM_ID = #{LIKE_MEM_ID})
+			AND     GOODS_LIKE_PARENT = #{LIKE_GOODS_NUM}
+		]]>
+	</delete>
 </mapper>
 

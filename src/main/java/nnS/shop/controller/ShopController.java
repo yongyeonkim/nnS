@@ -85,14 +85,14 @@ public class ShopController{
 	
 	@RequestMapping(value="/shop/goodsWriteForm")
 	public ModelAndView goodsWriteForm(CommandMap commandMap) throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
+		ModelAndView mv = new ModelAndView("goodsWriteForm");
 		mv.addObject("request_type", "write");
 		return mv;
 	}
 
 	@RequestMapping(value="/shop/goodsWrite", method = RequestMethod.POST)
 	public ModelAndView goodsWrite(CommandMap commandMap, HttpServletRequest request) throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteResult");
+		ModelAndView mv = new ModelAndView("goodsWriteResult");
 
 		shopService.insertGoods(commandMap.getMap(), request);
 		
@@ -101,7 +101,7 @@ public class ShopController{
 	
 	@RequestMapping(value="/shop/goodsModifyForm")
 	public ModelAndView goodsModifyForm(CommandMap commandMap) throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteForm");
+		ModelAndView mv = new ModelAndView("goodsWriteForm");
 
 		Map<String,Object> map = shopService.selectGoodsDetail(commandMap.getMap());
 		mv.addObject("map", map.get("map"));
@@ -114,7 +114,7 @@ public class ShopController{
 	
 	@RequestMapping(value="/shop/goodsModify")
 	public ModelAndView goodsModify(CommandMap commandMap, HttpServletRequest request) throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsWriteResult");
+		ModelAndView mv = new ModelAndView("goodsWriteResult");
 
 		shopService.updateGoods(commandMap.getMap(), request);
 		mv.addObject("IDX", commandMap.get("IDX"));
@@ -134,25 +134,31 @@ public class ShopController{
 	// 상품 상세보기
 	@RequestMapping(value="/shop/goodsDetail")
 	public ModelAndView goodsDetail(CommandMap commandMap) throws Exception{
-		ModelAndView mv = new ModelAndView("/shop/goods/goodsDetail"); 
+		ModelAndView mv = new ModelAndView("goodsDetail"); 
 		
 		Map<String,Object> map = shopService.selectGoodsDetail(commandMap.getMap());
+		
 		mv.addObject("map", map.get("map"));
+		mv.addObject("goodsLikeMap", map.get("goodsLikeMap"));
 		/* mv.addObject("list",map.get("list")); */
 		
 		return mv;
 	}
 	
-	@RequestMapping(value="/shop/goodsDetail/goodsLike")
-	public ModelAndView goodsLike() throws Exception{
+	@RequestMapping(value="/shop/goodsDetail/goodsLike", method = RequestMethod.POST)
+	public ModelAndView goodsLike(CommandMap commandMap) throws Exception{
 		ModelAndView mv = new ModelAndView("redirect:/shop/goodsDetail");
-
+		mv.addObject("GOODS_NUM", commandMap.getMap().get("LIKE_GOODS_NUM"));
+		shopService.insertGoodsLike(commandMap.getMap());
 		return mv;
 	}
 	
 	@RequestMapping(value="/shop/goodsDetail/goodsUnlike")
-	public ModelAndView goodsUnlike() throws Exception{
+	public ModelAndView goodsUnlike(CommandMap commandMap) throws Exception{
 		ModelAndView mv = new ModelAndView("redirect:/shop/goodsDetail");
+		mv.addObject("GOODS_NUM", commandMap.getMap().get("LIKE_GOODS_NUM"));
+		
+		shopService.deleteGoodsLike(commandMap.getMap());
 
 		return mv;
 	}
